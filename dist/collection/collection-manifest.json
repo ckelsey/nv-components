@@ -1,0 +1,451 @@
+{
+  "components": [
+    {
+      "tag": "material-icon",
+      "dependencies": [],
+      "componentClass": "MaterialIcon",
+      "componentPath": "components/material-icon/material-icon.js",
+      "styles": {
+        "$": {
+          "stylePaths": [
+            "components/material-icon/material-icon.scss"
+          ]
+        }
+      },
+      "props": [
+        {
+          "name": "color",
+          "type": "String",
+          "attr": "color"
+        },
+        {
+          "name": "size",
+          "type": "String",
+          "attr": "size"
+        },
+        {
+          "name": "type",
+          "type": "String",
+          "attr": "type"
+        }
+      ],
+      "methods": [
+        {
+          "name": "findDupes"
+        },
+        {
+          "name": "getIcon"
+        },
+        {
+          "name": "icons"
+        },
+        {
+          "name": "iconsToJson"
+        }
+      ],
+      "context": [
+        {
+          "name": "iconJSON",
+          "id": "iconJSON"
+        }
+      ],
+      "shadow": true
+    },
+    {
+      "tag": "nv-checkbox",
+      "dependencies": [
+        "material-icon"
+      ],
+      "componentClass": "NvCheckbox",
+      "componentPath": "components/nv-checkbox/nv-checkbox.js",
+      "styles": {
+        "$": {
+          "stylePaths": [
+            "components/nv-checkbox/nv-checkbox.scss"
+          ]
+        }
+      },
+      "props": [
+        {
+          "name": "disabled",
+          "type": "Boolean",
+          "attr": "disabled"
+        },
+        {
+          "name": "label",
+          "type": "String",
+          "attr": "label"
+        },
+        {
+          "name": "parentDisabled",
+          "type": "Boolean",
+          "attr": "parent-disabled"
+        },
+        {
+          "name": "value",
+          "type": "Any",
+          "attr": "value"
+        },
+        {
+          "name": "whenUpdate",
+          "attr": "when-update"
+        }
+      ],
+      "methods": [
+        {
+          "name": "toggle"
+        }
+      ],
+      "hostElement": {
+        "name": "element"
+      },
+      "events": [
+        {
+          "event": "change"
+        }
+      ],
+      "shadow": true
+    },
+    {
+      "tag": "nv-checkbox-array",
+      "dependencies": [
+        "nv-checkbox"
+      ],
+      "componentClass": "NvCheckboxArray",
+      "componentPath": "components/nv-checkbox-array/nv-checkbox-array.js",
+      "styles": {
+        "$": {
+          "stylePaths": [
+            "components/nv-checkbox-array/nv-checkbox-array.scss"
+          ]
+        }
+      },
+      "props": [
+        {
+          "name": "disabled",
+          "type": "Boolean",
+          "attr": "disabled"
+        },
+        {
+          "name": "label",
+          "type": "String",
+          "attr": "label"
+        },
+        {
+          "name": "parentDisabled",
+          "type": "Boolean",
+          "attr": "parent-disabled"
+        },
+        {
+          "name": "values",
+          "attr": "values"
+        },
+        {
+          "name": "whenUpdate",
+          "attr": "when-update"
+        }
+      ],
+      "hostElement": {
+        "name": "element"
+      },
+      "events": [
+        {
+          "event": "change"
+        }
+      ],
+      "shadow": true
+    },
+    {
+      "tag": "nv-image",
+      "dependencies": [],
+      "componentClass": "NvImage",
+      "componentPath": "components/nv-image/nv-image.js",
+      "styles": {
+        "$": {
+          "stylePaths": [
+            "components/nv-image/nv-image.scss"
+          ]
+        }
+      },
+      "props": [
+        {
+          "name": "cover",
+          "type": "Boolean",
+          "attr": "cover"
+        },
+        {
+          "name": "url",
+          "type": "String",
+          "attr": "url"
+        }
+      ],
+      "shadow": true
+    },
+    {
+      "tag": "nv-progress",
+      "dependencies": [],
+      "componentClass": "NvProgress",
+      "componentPath": "components/nv-progress/nv-progress.js",
+      "styles": {
+        "$": {
+          "stylePaths": [
+            "components/nv-progress/nv-progress.scss"
+          ]
+        }
+      },
+      "props": [
+        {
+          "name": "message",
+          "type": "String",
+          "attr": "message"
+        },
+        {
+          "name": "showCount",
+          "type": "Boolean",
+          "attr": "show-count"
+        },
+        {
+          "name": "speed",
+          "type": "Number",
+          "attr": "speed"
+        },
+        {
+          "name": "start",
+          "type": "Number",
+          "attr": "start"
+        },
+        {
+          "name": "state",
+          "type": "String",
+          "attr": "state"
+        },
+        {
+          "name": "timer",
+          "type": "String",
+          "attr": "timer"
+        },
+        {
+          "name": "type",
+          "type": "String",
+          "attr": "type"
+        },
+        {
+          "name": "value",
+          "type": "Number",
+          "attr": "value"
+        }
+      ],
+      "methods": [
+        {
+          "name": "reset"
+        }
+      ],
+      "hostElement": {
+        "name": "element"
+      },
+      "shadow": true
+    },
+    {
+      "tag": "nv-tab-content",
+      "dependencies": [],
+      "componentClass": "NvTabContent",
+      "componentPath": "components/nv-tab-content/nv-tab-content.js",
+      "styles": {
+        "$": {
+          "stylePaths": [
+            "components/nv-tab-content/nv-tab-content.scss"
+          ]
+        }
+      },
+      "hostElement": {
+        "name": "element"
+      }
+    },
+    {
+      "tag": "nv-tabs",
+      "dependencies": [],
+      "componentClass": "NvTabs",
+      "componentPath": "components/nv-tabs/nv-tabs.js",
+      "styles": {
+        "$": {
+          "stylePaths": [
+            "components/nv-tabs/nv-tabs.scss"
+          ]
+        }
+      },
+      "props": [
+        {
+          "name": "initial",
+          "type": "Number",
+          "attr": "initial"
+        }
+      ],
+      "hostElement": {
+        "name": "element"
+      }
+    },
+    {
+      "tag": "nv-tooltip",
+      "dependencies": [],
+      "componentClass": "NvTootltip",
+      "componentPath": "components/nv-tooltip/nv-tooltip.js",
+      "styles": {
+        "$": {
+          "stylePaths": [
+            "components/nv-tooltip/nv-tooltip.scss"
+          ]
+        }
+      },
+      "props": [
+        {
+          "name": "active",
+          "type": "Boolean",
+          "attr": "active"
+        },
+        {
+          "name": "delay",
+          "type": "Number",
+          "attr": "delay"
+        },
+        {
+          "name": "hideAfter",
+          "type": "Number",
+          "attr": "hide-after"
+        },
+        {
+          "name": "position",
+          "type": "String",
+          "attr": "position"
+        },
+        {
+          "name": "triggerOn",
+          "type": "String",
+          "attr": "trigger-on"
+        }
+      ],
+      "hostElement": {
+        "name": "element"
+      },
+      "shadow": true
+    }
+  ],
+  "collections": [
+    {
+      "name": "@ionic/core",
+      "tags": [
+        "ion-action-sheet",
+        "ion-action-sheet-controller",
+        "ion-alert",
+        "ion-alert-controller",
+        "ion-anchor",
+        "ion-animation-controller",
+        "ion-app",
+        "ion-avatar",
+        "ion-back-button",
+        "ion-backdrop",
+        "ion-badge",
+        "ion-button",
+        "ion-buttons",
+        "ion-card",
+        "ion-card-content",
+        "ion-card-header",
+        "ion-card-subtitle",
+        "ion-card-title",
+        "ion-checkbox",
+        "ion-chip",
+        "ion-chip-button",
+        "ion-chip-icon",
+        "ion-col",
+        "ion-content",
+        "ion-datetime",
+        "ion-fab",
+        "ion-fab-button",
+        "ion-fab-list",
+        "ion-footer",
+        "ion-grid",
+        "ion-header",
+        "ion-hide-when",
+        "ion-img",
+        "ion-infinite-scroll",
+        "ion-infinite-scroll-content",
+        "ion-input",
+        "ion-item",
+        "ion-item-divider",
+        "ion-item-group",
+        "ion-item-option",
+        "ion-item-options",
+        "ion-item-sliding",
+        "ion-label",
+        "ion-list",
+        "ion-list-header",
+        "ion-loading",
+        "ion-loading-controller",
+        "ion-menu",
+        "ion-menu-button",
+        "ion-menu-controller",
+        "ion-menu-toggle",
+        "ion-modal",
+        "ion-modal-controller",
+        "ion-nav",
+        "ion-nav-pop",
+        "ion-nav-push",
+        "ion-nav-set-root",
+        "ion-note",
+        "ion-picker",
+        "ion-picker-column",
+        "ion-picker-controller",
+        "ion-popover",
+        "ion-popover-controller",
+        "ion-radio",
+        "ion-radio-group",
+        "ion-range",
+        "ion-refresher",
+        "ion-refresher-content",
+        "ion-reorder",
+        "ion-reorder-group",
+        "ion-ripple-effect",
+        "ion-route",
+        "ion-route-redirect",
+        "ion-router",
+        "ion-router-outlet",
+        "ion-row",
+        "ion-searchbar",
+        "ion-segment",
+        "ion-segment-button",
+        "ion-select",
+        "ion-select-option",
+        "ion-select-popover",
+        "ion-show-when",
+        "ion-skeleton-text",
+        "ion-slide",
+        "ion-slides",
+        "ion-spinner",
+        "ion-split-pane",
+        "ion-tab",
+        "ion-tabbar",
+        "ion-tabs",
+        "ion-text",
+        "ion-textarea",
+        "ion-thumbnail",
+        "ion-title",
+        "ion-toast",
+        "ion-toast-controller",
+        "ion-toggle",
+        "ion-toolbar",
+        "ion-virtual-scroll"
+      ]
+    },
+    {
+      "name": "ionicons",
+      "tags": [
+        "ion-icon"
+      ]
+    }
+  ],
+  "compiler": {
+    "name": "@stencil/core",
+    "version": "0.11.0",
+    "typescriptVersion": "2.9.2"
+  },
+  "bundles": []
+}

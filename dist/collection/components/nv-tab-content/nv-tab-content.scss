@@ -1,0 +1,31 @@
+:host {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.nv-tab-content {
+    height: 0px;
+    max-height: 0px;
+    width: 100%;
+    padding: 0px;
+    opacity: 0;
+    pointer-events: none;
+    box-sizing: border-box;
+    font-size: $fontSize;
+    font-family: $fontFamily;
+    font-weight: $fontWeight;
+    line-height: $lineHeight;
+    color: $lightGray2;
+    &.nv-tab-active,
+    &.nv-tab-activating {
+        height: auto;
+        max-height: 100vh;
+        padding: 32px;
+        opacity: 1;
+        pointer-events: all;
+    }
+    &.nv-tab-active {
+        max-height: 10000000000px;
+    }
+}

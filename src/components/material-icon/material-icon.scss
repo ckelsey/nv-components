@@ -1,0 +1,13 @@
+:host{
+    line-height: 0px;
+    display: inline-block;
+}
+
+.material-icon {
+    display: inline-block;
+    svg {
+        width: 100%;
+        height: 100%;
+        fill: currentColor;
+    }
+}

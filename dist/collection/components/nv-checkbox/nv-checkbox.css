@@ -1,0 +1,130 @@
+@font-face {
+  font-family: "Roboto";
+  src: url(assets/fonts/Roboto-Regular.ttf) format("truetype");
+  font-weight: 400;
+  font-style: normal; }
+
+@font-face {
+  font-family: "Roboto";
+  src: url(assets/fonts/Roboto-Italic.ttf) format("truetype");
+  font-weight: 400;
+  font-style: italic; }
+
+@font-face {
+  font-family: "Roboto";
+  src: url(assets/fonts/Roboto-Bold.ttf) format("truetype");
+  font-weight: 700;
+  font-style: normal; }
+
+@font-face {
+  font-family: "Roboto";
+  src: url(assets/fonts/Roboto-BoldItalic.ttf) format("truetype");
+  font-weight: 700;
+  font-style: italic; }
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0; }
+  40% {
+    opacity: 0.5; }
+  60% {
+    opacity: 0.8; }
+  100% {
+    opacity: 0.0; } }
+
+@keyframes fade {
+  from {
+    opacity: 0.24; } }
+
+@keyframes pulsing {
+  from {
+    opacity: 0.05;
+    transform: scale3d(2, 2, 2); } }
+
+@keyframes pulsingLight {
+  to {
+    opacity: 0.2;
+    transform: scale3d(1.2, 1.2, 1.2); } }
+
+@keyframes pulsingLighter {
+  from {
+    opacity: 0.1;
+    transform: scale3d(1.1, 1.1, 1.1); } }
+
+.nv-component-disabled {
+  opacity: 0.3;
+  pointer-events: none; }
+  .nv-component-disabled * {
+    pointer-events: none; }
+
+:host {
+  width: auto;
+  height: auto;
+  display: inline-block; }
+
+.nv-checkbox-container {
+  display: flex;
+  align-items: center;
+  margin: 7px 0px;
+  outline: none !important;
+  font-size: 14px;
+  font-family: "Roboto", sans-serif;
+  font-weight: normal;
+  line-height: 1.4em;
+  color: rgba(255, 255, 255, 0.75);
+  cursor: pointer; }
+  .nv-checkbox-container .nv-checkbox-box {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    position: relative;
+    color: rgba(255, 255, 255, 0.75); }
+    .nv-checkbox-container .nv-checkbox-box .nv-checkbox-box-hover,
+    .nv-checkbox-container .nv-checkbox-box .nv-checkbox-box-ripple {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0px;
+      left: 0px;
+      border-radius: 50%;
+      box-shadow: 0px 0px 0px 6px rgba(255, 255, 255, 0.45);
+      background: rgba(255, 255, 255, 0.45);
+      opacity: 0;
+      transform: scale3d(0, 0, 0);
+      transition: all 0.2s ease-out;
+      pointer-events: none; }
+    .nv-checkbox-container .nv-checkbox-box .nv-checkbox-box-hover.pulseIn {
+      opacity: 0.16;
+      transform: scale3d(0.9, 0.9, 0.9);
+      transition: all 1s ease-out; }
+    .nv-checkbox-container .nv-checkbox-box .nv-checkbox-box-hover.pulseOut {
+      opacity: 0.08;
+      transform: scale3d(1.1, 1.1, 1.1); }
+    .nv-checkbox-container .nv-checkbox-box .nv-checkbox-box-ripple.rippling {
+      transition: opacity 0.15s ease-out, transform 0.4s ease-out; }
+    .nv-checkbox-container .nv-checkbox-box .nv-checkbox-box-ripple.rippling.rippleIn {
+      opacity: 0;
+      transform: scale3d(0.6, 0.6, 0.6); }
+    .nv-checkbox-container .nv-checkbox-box .nv-checkbox-box-ripple.rippling.rippleMiddle {
+      opacity: 0.32; }
+    .nv-checkbox-container .nv-checkbox-box .nv-checkbox-box-ripple.rippling.rippleOut {
+      opacity: 0.04; }
+    .nv-checkbox-container .nv-checkbox-box .nv-checkbox-box-ripple.rippling.rippleGrow {
+      transform: scale3d(1.2, 1.2, 1.2); }
+  .nv-checkbox-container.selected .nv-checkbox-box {
+    color: #76b900; }
+    .nv-checkbox-container.selected .nv-checkbox-box .nv-checkbox-box-hover {
+      box-shadow: 0px 0px 0px 6px #76b900;
+      background: #76b900; }
+  .nv-checkbox-container.selected.nv-component-disabled .nv-checkbox-box {
+    color: rgba(255, 255, 255, 0.75); }
+  .nv-checkbox-container label {
+    padding: 0px 32px;
+    cursor: pointer; }
+  .nv-checkbox-container .nv-checkbox-checkbox-native {
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    width: 0px;
+    height: 0px;
+    margin: 0px; }

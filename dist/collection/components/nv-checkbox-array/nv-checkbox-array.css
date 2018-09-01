@@ -1,0 +1,68 @@
+@font-face {
+  font-family: "Roboto";
+  src: url(assets/fonts/Roboto-Regular.ttf) format("truetype");
+  font-weight: 400;
+  font-style: normal; }
+
+@font-face {
+  font-family: "Roboto";
+  src: url(assets/fonts/Roboto-Italic.ttf) format("truetype");
+  font-weight: 400;
+  font-style: italic; }
+
+@font-face {
+  font-family: "Roboto";
+  src: url(assets/fonts/Roboto-Bold.ttf) format("truetype");
+  font-weight: 700;
+  font-style: normal; }
+
+@font-face {
+  font-family: "Roboto";
+  src: url(assets/fonts/Roboto-BoldItalic.ttf) format("truetype");
+  font-weight: 700;
+  font-style: italic; }
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0; }
+  40% {
+    opacity: 0.5; }
+  60% {
+    opacity: 0.8; }
+  100% {
+    opacity: 0.0; } }
+
+@keyframes fade {
+  from {
+    opacity: 0.24; } }
+
+@keyframes pulsing {
+  from {
+    opacity: 0.05;
+    transform: scale3d(2, 2, 2); } }
+
+@keyframes pulsingLight {
+  to {
+    opacity: 0.2;
+    transform: scale3d(1.2, 1.2, 1.2); } }
+
+@keyframes pulsingLighter {
+  from {
+    opacity: 0.1;
+    transform: scale3d(1.1, 1.1, 1.1); } }
+
+.nv-component-disabled {
+  opacity: 0.3;
+  pointer-events: none; }
+  .nv-component-disabled * {
+    pointer-events: none; }
+
+:host {
+  width: auto;
+  height: auto;
+  display: inline-block; }
+
+.nv-checkbox-array .nv-checkbox-array-children {
+  display: flex;
+  flex-direction: column;
+  padding-left: 53px; }

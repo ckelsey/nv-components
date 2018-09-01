@@ -1,0 +1,7 @@
+.nv-component-disabled {
+    opacity: 0.3;
+    pointer-events: none;
+    & *{
+        pointer-events: none;
+    }
+}

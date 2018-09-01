@@ -1,0 +1,176 @@
+@font-face {
+  font-family: "Roboto";
+  src: url(assets/fonts/Roboto-Regular.ttf) format("truetype");
+  font-weight: 400;
+  font-style: normal; }
+
+@font-face {
+  font-family: "Roboto";
+  src: url(assets/fonts/Roboto-Italic.ttf) format("truetype");
+  font-weight: 400;
+  font-style: italic; }
+
+@font-face {
+  font-family: "Roboto";
+  src: url(assets/fonts/Roboto-Bold.ttf) format("truetype");
+  font-weight: 700;
+  font-style: normal; }
+
+@font-face {
+  font-family: "Roboto";
+  src: url(assets/fonts/Roboto-BoldItalic.ttf) format("truetype");
+  font-weight: 700;
+  font-style: italic; }
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0; }
+  40% {
+    opacity: 0.5; }
+  60% {
+    opacity: 0.8; }
+  100% {
+    opacity: 0.0; } }
+
+@keyframes fade {
+  from {
+    opacity: 0.24; } }
+
+@keyframes pulsing {
+  from {
+    opacity: 0.05;
+    transform: scale3d(2, 2, 2); } }
+
+@keyframes pulsingLight {
+  to {
+    opacity: 0.2;
+    transform: scale3d(1.2, 1.2, 1.2); } }
+
+@keyframes pulsingLighter {
+  from {
+    opacity: 0.1;
+    transform: scale3d(1.1, 1.1, 1.1); } }
+
+.nv-component-disabled {
+  opacity: 0.3;
+  pointer-events: none; }
+  .nv-component-disabled * {
+    pointer-events: none; }
+
+:host {
+  width: 100%;
+  height: auto;
+  display: block; }
+
+.nv-tabs-wrapper {
+  position: relative;
+  width: 100%;
+  height: auto;
+  display: block; }
+  .nv-tabs-wrapper .nv-tabs {
+    display: none;
+    opacity: 0;
+    position: relative;
+    outline: none !important;
+    font-size: 14px;
+    font-family: "Roboto", sans-serif;
+    font-weight: normal;
+    line-height: 1.4em;
+    color: rgba(255, 255, 255, 0.75); }
+    .nv-tabs-wrapper .nv-tabs.nv-tabs-ready {
+      opacity: 1;
+      display: block; }
+    .nv-tabs-wrapper .nv-tabs.nv-tabs-tabs {
+      display: flex;
+      width: 100%;
+      flex-wrap: nowrap;
+      align-items: center;
+      justify-content: flex-start; }
+      .nv-tabs-wrapper .nv-tabs.nv-tabs-tabs.nv-tabs-center {
+        justify-content: center; }
+    .nv-tabs-wrapper .nv-tabs .nv-tab {
+      position: relative;
+      cursor: pointer;
+      padding: 12px 24px;
+      box-sizing: border-box;
+      opacity: 0.625;
+      outline: none !important;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      flex-shrink: 0;
+      line-height: 2em;
+      transition: opacity 0.2s ease-in-out; }
+      .nv-tabs-wrapper .nv-tabs .nv-tab .nv-tabs-active-ripple,
+      .nv-tabs-wrapper .nv-tabs .nv-tab .nv-tabs-active-ripple2 {
+        width: 40px;
+        height: 40px;
+        margin: -20px;
+        top: calc(50% - 20px);
+        left: calc(50% - 20px);
+        opacity: 0;
+        position: absolute;
+        transform: scale3d(0, 0, 0);
+        transform-origin: 50% 50%;
+        transition: margin 0.5s ease-in-out 0.4s, transform .4s ease-in-out 0.2s, opacity .4s ease-in-out;
+        pointer-events: none;
+        border-radius: 50%;
+        background: radial-gradient(circle at center, #76b900 80%, rgba(118, 185, 0, 0) 80%); }
+      .nv-tabs-wrapper .nv-tabs .nv-tab .nv-tabs-active-ripple2 {
+        width: 30px;
+        height: 30px;
+        margin: -15px;
+        top: calc(50% - 15px);
+        left: calc(50% - 15px);
+        transition: margin 0.5s ease-in-out, transform .5s ease-in-out 0.5s, opacity .5s ease-in-out; }
+      .nv-tabs-wrapper .nv-tabs .nv-tab .nv-tabs-active-tab-indicator {
+        position: absolute;
+        height: 2px;
+        background: #76b900;
+        width: 100%;
+        pointer-events: none;
+        bottom: 0px;
+        opacity: 0; }
+      .nv-tabs-wrapper .nv-tabs .nv-tab:hover {
+        opacity: 0.75; }
+      .nv-tabs-wrapper .nv-tabs .nv-tab.nv-tab-rippling, .nv-tabs-wrapper .nv-tabs .nv-tab.nv-tab-pulsing, .nv-tabs-wrapper .nv-tabs .nv-tab.nv-tab-activating, .nv-tabs-wrapper .nv-tabs .nv-tab.nv-tab-active {
+        opacity: 1; }
+      .nv-tabs-wrapper .nv-tabs .nv-tab.nv-tab-active {
+        animation: ripple 2s ease-in-out; }
+        .nv-tabs-wrapper .nv-tabs .nv-tab.nv-tab-active .nv-tabs-active-tab-indicator {
+          opacity: 1; }
+      .nv-tabs-wrapper .nv-tabs .nv-tab.nv-tab-pulsing-start .nv-tabs-active-ripple {
+        opacity: 0.03;
+        transform: scale3d(1.8, 1.8, 1.8);
+        transition: all .4s;
+        top: calc(50% - 20px) !important;
+        left: calc(50% - 20px) !important;
+        margin: 0px;
+        background: radial-gradient(circle at center, rgba(255, 255, 255, 0.75) 80%, rgba(255, 255, 255, 0) 80%); }
+      .nv-tabs-wrapper .nv-tabs .nv-tab.nv-tab-pulsing .nv-tabs-active-ripple {
+        animation-name: pulsing;
+        animation-duration: 1.2s;
+        animation-iteration-count: infinite;
+        animation-direction: alternate; }
+      .nv-tabs-wrapper .nv-tabs .nv-tab.nv-tab-rippling .nv-tabs-active-ripple {
+        opacity: 0.05;
+        transform: scale3d(5, 5, 5);
+        transition: transform .4s ease-in-out 0s, opacity .4s ease-in-out; }
+      .nv-tabs-wrapper .nv-tabs .nv-tab.nv-tab-rippling .nv-tabs-active-ripple2 {
+        opacity: 0.025;
+        transform: scale3d(3, 3, 3);
+        transition: transform .5s ease-in-out 0s, opacity .5s ease-in-out; }
+  .nv-tabs-wrapper .active-indicator {
+    position: absolute;
+    height: 2px;
+    background: #76b900;
+    width: 0%;
+    pointer-events: none;
+    bottom: 0px;
+    transition: left 0.2s ease-in-out, width 0.3s ease-in-out;
+    opacity: 0; }
+    .nv-tabs-wrapper .active-indicator.nv-tabs-activating {
+      opacity: 1; }

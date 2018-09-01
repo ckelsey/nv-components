@@ -1,0 +1,85 @@
+@font-face {
+  font-family: "Roboto";
+  src: url(assets/fonts/Roboto-Regular.ttf) format("truetype");
+  font-weight: 400;
+  font-style: normal; }
+
+@font-face {
+  font-family: "Roboto";
+  src: url(assets/fonts/Roboto-Italic.ttf) format("truetype");
+  font-weight: 400;
+  font-style: italic; }
+
+@font-face {
+  font-family: "Roboto";
+  src: url(assets/fonts/Roboto-Bold.ttf) format("truetype");
+  font-weight: 700;
+  font-style: normal; }
+
+@font-face {
+  font-family: "Roboto";
+  src: url(assets/fonts/Roboto-BoldItalic.ttf) format("truetype");
+  font-weight: 700;
+  font-style: italic; }
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0; }
+  40% {
+    opacity: 0.5; }
+  60% {
+    opacity: 0.8; }
+  100% {
+    opacity: 0.0; } }
+
+@keyframes fade {
+  from {
+    opacity: 0.24; } }
+
+@keyframes pulsing {
+  from {
+    opacity: 0.05;
+    transform: scale3d(2, 2, 2); } }
+
+@keyframes pulsingLight {
+  to {
+    opacity: 0.2;
+    transform: scale3d(1.2, 1.2, 1.2); } }
+
+@keyframes pulsingLighter {
+  from {
+    opacity: 0.1;
+    transform: scale3d(1.1, 1.1, 1.1); } }
+
+.nv-component-disabled {
+  opacity: 0.3;
+  pointer-events: none; }
+  .nv-component-disabled * {
+    pointer-events: none; }
+
+:host {
+  width: 100%;
+  height: auto;
+  display: block; }
+
+.nv-tab-content {
+  height: 0px;
+  max-height: 0px;
+  width: 100%;
+  padding: 0px;
+  opacity: 0;
+  pointer-events: none;
+  box-sizing: border-box;
+  font-size: 14px;
+  font-family: "Roboto", sans-serif;
+  font-weight: normal;
+  line-height: 1.4em;
+  color: rgba(255, 255, 255, 0.75); }
+  .nv-tab-content.nv-tab-active, .nv-tab-content.nv-tab-activating {
+    height: auto;
+    max-height: 100vh;
+    padding: 32px;
+    opacity: 1;
+    pointer-events: all; }
+  .nv-tab-content.nv-tab-active {
+    max-height: 10000000000px; }

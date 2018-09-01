@@ -1,0 +1,112 @@
+@font-face {
+  font-family: "Roboto";
+  src: url(assets/fonts/Roboto-Regular.ttf) format("truetype");
+  font-weight: 400;
+  font-style: normal; }
+
+@font-face {
+  font-family: "Roboto";
+  src: url(assets/fonts/Roboto-Italic.ttf) format("truetype");
+  font-weight: 400;
+  font-style: italic; }
+
+@font-face {
+  font-family: "Roboto";
+  src: url(assets/fonts/Roboto-Bold.ttf) format("truetype");
+  font-weight: 700;
+  font-style: normal; }
+
+@font-face {
+  font-family: "Roboto";
+  src: url(assets/fonts/Roboto-BoldItalic.ttf) format("truetype");
+  font-weight: 700;
+  font-style: italic; }
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0; }
+  40% {
+    opacity: 0.5; }
+  60% {
+    opacity: 0.8; }
+  100% {
+    opacity: 0.0; } }
+
+@keyframes fade {
+  from {
+    opacity: 0.24; } }
+
+@keyframes pulsing {
+  from {
+    opacity: 0.05;
+    transform: scale3d(2, 2, 2); } }
+
+@keyframes pulsingLight {
+  to {
+    opacity: 0.2;
+    transform: scale3d(1.2, 1.2, 1.2); } }
+
+@keyframes pulsingLighter {
+  from {
+    opacity: 0.1;
+    transform: scale3d(1.1, 1.1, 1.1); } }
+
+.nv-component-disabled {
+  opacity: 0.3;
+  pointer-events: none; }
+  .nv-component-disabled * {
+    pointer-events: none; }
+
+:host {
+  width: 0px;
+  height: 0px;
+  position: relative;
+  pointer-events: none; }
+
+.tooltip-container {
+  position: fixed;
+  top: 0px;
+  height: 0px;
+  transition: left 0.2s, right 0.2s, top 0.2s, bottom 0.2s, transform 0.3s ease-in-out, opacity 0.2s ease-in-out 0.1s;
+  transform: scale3d(0, 0, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: 50% 100%;
+  opacity: 0; }
+  .tooltip-container.open {
+    transform: scale3d(1, 1, 1);
+    opacity: 1; }
+  .tooltip-container .tooltip-content {
+    display: inline-block;
+    background: #2c3338;
+    padding: 0px 8px;
+    line-height: 32px;
+    position: relative;
+    top: calc(100% + 10px);
+    font-size: 10px;
+    font-family: "Roboto", sans-serif;
+    font-weight: normal;
+    line-height: 24px;
+    color: rgba(255, 255, 255, 0.75); }
+  .tooltip-container[device="mobile"] .tooltip-content {
+    font-size: 14px;
+    line-height: 32px;
+    padding: 0px 16px; }
+  .tooltip-container[position="right"] {
+    justify-content: flex-start;
+    transform-origin: 100% 50%; }
+    .tooltip-container[position="right"] .tooltip-content {
+      top: 0px;
+      right: calc(-100% - 10px); }
+  .tooltip-container[position="left"] {
+    justify-content: flex-end;
+    transform-origin: 0% 50%; }
+    .tooltip-container[position="left"] .tooltip-content {
+      top: 0px;
+      left: calc(-100% - 10px); }
+  .tooltip-container[position="top"] {
+    align-items: flex-end;
+    transform-origin: 50% 0%; }
+    .tooltip-container[position="top"] .tooltip-content {
+      top: calc(-100% - 10px); }

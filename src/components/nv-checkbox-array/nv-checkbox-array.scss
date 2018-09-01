@@ -1,0 +1,13 @@
+:host {
+    width: auto;
+    height: auto;
+    display: inline-block;
+}
+
+.nv-checkbox-array{
+    .nv-checkbox-array-children{
+        display: flex;
+        flex-direction: column;
+        padding-left: 53px;
+    }
+}

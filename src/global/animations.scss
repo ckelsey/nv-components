@@ -1,0 +1,42 @@
+@import './colors.scss';
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+    }
+    40% {
+        opacity: 0.5;
+    }
+    60% {
+        opacity: 0.8;
+    }
+    100% {
+        opacity: 0.0;
+    }
+}
+
+@keyframes fade {
+    from {
+        opacity: 0.24;
+    }
+}
+
+@keyframes pulsing {
+    from {
+        opacity: 0.05;
+        transform: scale3d(2, 2, 2);
+    }
+}
+
+@keyframes pulsingLight {
+    to {
+        opacity: 0.2;
+        transform: scale3d(1.2, 1.2, 1.2);
+    }
+}
+
+@keyframes pulsingLighter {
+    from {
+        opacity: 0.1;
+        transform: scale3d(1.1, 1.1, 1.1);
+    }
+}
