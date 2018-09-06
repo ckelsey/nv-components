@@ -1,5 +1,7 @@
 import { Component, Prop, Method } from '@stencil/core'
 
+/** @desc renders a material design icon with given color, size, and type */
+
 @Component({
     tag: 'material-icon',
     styleUrl: 'material-icon.scss',
@@ -7,16 +9,25 @@ import { Component, Prop, Method } from '@stencil/core'
 })
 export class MaterialIcon {
 
-    @Prop() type: string
-    @Prop() color: string
-    @Prop() size: string
-    @Prop({ context: 'iconJSON' }) private iconJSON: any;
+    /** @desc The key of the icon to use */
+    @Prop() type: string = 'close'
 
-    get svgIcon() {
-        return this.getIcon(this.type) || ``
+    /** @desc color of icon, defaults to inherited color */
+    @Prop() color: string = `inherit`
+
+    /** @desc size of icon */
+    @Prop() size: string = `24px`
+
+    /** @desc icon strings object */
+    @Prop({ context: 'iconJSON' }) private iconJSON: { [key: string]: string };
+
+    /** @desc The icon svg string */
+    get svgIcon(): string {
+        return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24">${this.getIcon(this.type) || ``}</svg>`
     }
 
-    get styles() {
+    /** @desc The styles object for the icon */
+    get styles(): { [key: string]: string } {
         return {
             color: this.color || `inherit`,
             height: this.size || `24px`,
@@ -24,40 +35,19 @@ export class MaterialIcon {
         }
     }
 
+    /** @desc renders the component markup */
     render() {
         return (
-            <span class="material-icon" innerHTML={`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24">${this.svgIcon}</svg>`} style={this.styles}></span>
+            <span class="material-icon" innerHTML={this.svgIcon} style={this.styles}></span>
         );
     }
 
+    /** 
+     * @desc As many of the material icons are the same but go by different names, this function maps them to one name to save on space 
+     * @param key The key to get
+     * */
     @Method()
-    iconsToJson() {
-        console.log(JSON.stringify(this.icons()))
-    }
-
-    @Method()
-    findDupes() {
-        var keys = Object.keys(this.icons());
-        var vals = {};
-        var dupes = {};
-
-        keys.forEach(key => {
-            if (vals[this.icons()[key]]) {
-                if (!dupes[this.icons()[key]]) {
-                    dupes[this.icons()[key]] = []
-                }
-
-                dupes[this.icons()[key]].push(key)
-            }
-
-            vals[this.icons()[key]] = true
-        })
-
-        console.log(dupes)
-    }
-
-    @Method()
-    getIcon(key) {
+    getIcon(key: string): string {
         switch (key) {
             case 'schedule':
             case 'query_builder':
@@ -222,8 +212,35 @@ export class MaterialIcon {
         }
     }
 
+    /** @desc Returns the icon data JSON */
     @Method()
-    icons() {
+    icons(): { [key: string]: string } {
         return this.iconJSON
     }
 }
+
+// @Method()
+// iconsToJson() {
+//     console.log(JSON.stringify(this.icons()))
+// }
+
+// @Method()
+// findDupes() {
+//     var keys = Object.keys(this.icons());
+//     var vals = {};
+//     var dupes = {};
+
+//     keys.forEach(key => {
+//         if (vals[this.icons()[key]]) {
+//             if (!dupes[this.icons()[key]]) {
+//                 dupes[this.icons()[key]] = []
+//             }
+
+//             dupes[this.icons()[key]].push(key)
+//         }
+
+//         vals[this.icons()[key]] = true
+//     })
+
+//     console.log(dupes)
+// }

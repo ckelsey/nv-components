@@ -34,10 +34,8 @@ declare global {
   namespace StencilComponents {
     interface MaterialIcon {
       'color': string;
-      'findDupes': () => void;
-      'getIcon': (key: any) => any;
-      'icons': () => any;
-      'iconsToJson': () => void;
+      'getIcon': (key: string) => string;
+      'icons': () => { [key: string]: string; };
       'size': string;
       'type': string;
     }
@@ -160,6 +158,7 @@ declare global {
   namespace StencilComponents {
     interface NvImage {
       'cover': boolean;
+      'placeholder': string;
       'url': string;
     }
   }
@@ -184,7 +183,56 @@ declare global {
   namespace JSXElements {
     export interface NvImageAttributes extends HTMLAttributes {
       'cover'?: boolean;
+      'placeholder'?: string;
       'url'?: string;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
+    interface NvMenu {
+      'active': boolean;
+      'anchor': string | HTMLElement;
+      'options': string | Array<string>;
+      'position': string;
+      'whenActivated': Function;
+      'whenClicked': Function;
+      'whenDeactivated': Function;
+    }
+  }
+
+  interface HTMLNvMenuElement extends StencilComponents.NvMenu, HTMLStencilElement {}
+
+  var HTMLNvMenuElement: {
+    prototype: HTMLNvMenuElement;
+    new (): HTMLNvMenuElement;
+  };
+  interface HTMLElementTagNameMap {
+    'nv-menu': HTMLNvMenuElement;
+  }
+  interface ElementTagNameMap {
+    'nv-menu': HTMLNvMenuElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'nv-menu': JSXElements.NvMenuAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface NvMenuAttributes extends HTMLAttributes {
+      'active'?: boolean;
+      'anchor'?: string | HTMLElement;
+      'onWhenClosed'?: (event: CustomEvent) => void;
+      'onWhenOpened'?: (event: CustomEvent) => void;
+      'onWhenOptionClicked'?: (event: CustomEvent) => void;
+      'options'?: string | Array<string>;
+      'position'?: string;
+      'whenActivated'?: Function;
+      'whenClicked'?: Function;
+      'whenDeactivated'?: Function;
     }
   }
 }
@@ -309,9 +357,12 @@ declare global {
   namespace StencilComponents {
     interface NvTooltip {
       'active': boolean;
+      'boxShadow': boolean;
       'delay': number;
       'hideAfter': number;
+      'padding': number;
       'position': string;
+      'triggerElement': HTMLElement | string;
       'triggerOn': string;
     }
   }
@@ -336,9 +387,14 @@ declare global {
   namespace JSXElements {
     export interface NvTooltipAttributes extends HTMLAttributes {
       'active'?: boolean;
+      'boxShadow'?: boolean;
       'delay'?: number;
       'hideAfter'?: number;
+      'onWhenClosed'?: (event: CustomEvent) => void;
+      'onWhenOpened'?: (event: CustomEvent) => void;
+      'padding'?: number;
       'position'?: string;
+      'triggerElement'?: HTMLElement | string;
       'triggerOn'?: string;
     }
   }

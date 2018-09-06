@@ -1,4 +1,16 @@
+/** @desc renders a styled checkbox component */
 export class NvCheckbox {
+    constructor() {
+        /** @desc value for the checkbox */
+        this.value = true;
+        /** @desc text for the label */
+        this.label = '';
+        /** @desc whether or not the checkbox is disabled */
+        this.disabled = false;
+        /** @desc if part of a checkbox array, whether or not the parent checkbox is disabled */
+        this.parentDisabled = false;
+    }
+    /** @desc determines the checkbox's state */
     get state() {
         switch (this.value) {
             case `mixed`:
@@ -11,12 +23,14 @@ export class NvCheckbox {
                 return `check_box_outline_blank`;
         }
     }
+    /** @desc determines the checkbox's tabIndex */
     get tabIndex() {
         if (this.disabled || this.parentDisabled) {
             return -1;
         }
         return 0;
     }
+    /** @desc toggles the checkbox's state */
     toggle() {
         if (this.disabled || this.parentDisabled) {
             return false;
@@ -30,12 +44,17 @@ export class NvCheckbox {
         this.change.emit(updateData);
         this.onClick();
     }
+    /**
+     * @desc handles the enter key press
+     * @param e keyboard event
+     */
     keyPress(e) {
         if (e.key === `Enter`) {
             e.preventDefault();
             this.toggle();
         }
     }
+    /** @desc handles hover state */
     mouseOverBox() {
         this.hoverBox.classList.add(`pulseIn`);
         this.hoverBox.classList.add(`pulseOut`);
@@ -43,6 +62,13 @@ export class NvCheckbox {
             this.hoverBox.classList.toggle(`pulseOut`);
         }, 1200);
     }
+    /** @desc handles hover leave state */
+    mouseLeaveBox() {
+        clearInterval(this.pulseTimer);
+        this.hoverBox.classList.remove(`pulseIn`);
+        this.hoverBox.classList.remove(`pulseOut`);
+    }
+    /** @desc handles click and updates state */
     onClick() {
         const cleanUp = () => {
             clearTimeout(this.rippleTimer);
@@ -74,11 +100,7 @@ export class NvCheckbox {
             }, 200);
         }, 10);
     }
-    mouseLeaveBox() {
-        clearInterval(this.pulseTimer);
-        this.hoverBox.classList.remove(`pulseIn`);
-        this.hoverBox.classList.remove(`pulseOut`);
-    }
+    /** @desc renders the element */
     render() {
         return (h("div", { ref: (el) => this.container = el, class: { 'nv-checkbox-container': true, selected: !!this.value && this.value !== `false`, 'nv-component-disabled': this.disabled || this.parentDisabled }, onClick: () => this.toggle(), onKeyPress: ev => this.keyPress(ev) },
             h("div", { class: "nv-checkbox-box", onMouseEnter: () => this.mouseOverBox(), onMouseLeave: () => this.mouseLeaveBox() },

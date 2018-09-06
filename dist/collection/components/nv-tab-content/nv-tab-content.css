@@ -1,5 +1,17 @@
 @font-face {
   font-family: "Roboto";
+  src: url(assets/fonts/Roboto-Light.ttf) format("truetype");
+  font-weight: 100;
+  font-style: normal; }
+
+@font-face {
+  font-family: "Roboto";
+  src: url(assets/fonts/Roboto-LightItalic.ttf) format("truetype");
+  font-weight: 100;
+  font-style: italic; }
+
+@font-face {
+  font-family: "Roboto";
   src: url(assets/fonts/Roboto-Regular.ttf) format("truetype");
   font-weight: 400;
   font-style: normal; }
@@ -73,12 +85,12 @@
   font-size: 14px;
   font-family: "Roboto", sans-serif;
   font-weight: normal;
-  line-height: 1.4em;
+  line-height: 24px;
   color: rgba(255, 255, 255, 0.75); }
   .nv-tab-content.nv-tab-active, .nv-tab-content.nv-tab-activating {
     height: auto;
     max-height: 100vh;
-    padding: 32px;
+    padding: 32px 0px;
     opacity: 1;
     pointer-events: all; }
   .nv-tab-content.nv-tab-active {

@@ -3,45 +3,68 @@
     height: 0px;
     position: relative;
     pointer-events: none;
+    z-index: 1;
 }
 
 .tooltip-container {
     position: fixed;
     top: 0px;
     height: 0px;
-    transition: left 0.2s, right 0.2s, top 0.2s, bottom 0.2s, transform 0.3s ease-in-out, opacity 0.2s ease-in-out 0.1s;
-    transform: scale3d(0, 0, 0);
+    transition: opacity 0.2s ease-in-out 0.1s;
     display: flex;
     align-items: center;
     justify-content: center;
-    transform-origin: 50% 100%;
     opacity: 0;
+    pointer-events: none;
+    backface-visibility: hidden;
 
     &.open {
-        transform: scale3d(1, 1, 1);
         opacity: 1;
+
+        .tooltip-content {
+            transform: scale(1, 1);
+        }
     }
 
     .tooltip-content {
-        display: inline-block;
-        background: $gray1;
-        padding: 0px 8px;
-        line-height: 32px;
+        transform: scale(0, 0);
+        transform-origin: 50% 50%;
+        display: flex;
         position: relative;
-        top: calc(100% + 10px);
         font-size: $fontSize - 4px;
         font-family: $fontFamily;
         font-weight: $fontWeight;
         line-height: 24px;
         color: $lightGray2;
+        pointer-events: none;
+        backface-visibility: hidden;
+        &.boxShadow{
+            box-shadow: 1px 2px 1px -2px rgba(0, 0, 0, 0.1), 1px 3px 5px 0px rgba(0, 0, 0, 0.1), 1px 3px 15px 0px rgba(0, 0, 0, 0.2);
+        }
     }
 
-    &[device="mobile"]{
+    .tooltip-content-inner {
+        display: inline-block;
+        overflow: auto;
+        background: $gray1;
+        padding: 0px 8px;
+        pointer-events: all;
+        backface-visibility: hidden;
+    }
+
+    .tooltip-content-inner-inner {
+        display: inline-block;
+    }
+
+    &[device="mobile"] {
         .tooltip-content {
             font-size: $fontSize;
             line-height: 32px;
-            padding: 0px 16px;
         }
+    }
+
+    &[position="bottom"] {
+        align-items: flex-end;
     }
 
     &[position="right"] {

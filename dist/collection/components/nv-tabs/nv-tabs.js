@@ -1,4 +1,10 @@
+/** @desc renders tabs to be used with nv-tab-content */
 export class NvTabs {
+    constructor() {
+        /** @desc initial tab to open */
+        this.initial = 0;
+    }
+    /** @desc activate a tab */
     doActivating(tab, index) {
         if (!tab || !tab.parentElement) {
             return false;
@@ -18,22 +24,29 @@ export class NvTabs {
             return;
         }
         for (let i = 0; i < tabContent.children.length; i++) {
-            if (activeContent && activeContent === tabContent.children[i]) {
-                tabContent.children[i].classList.add(`nv-tab-activating`);
-            }
-            else {
-                tabContent.children[i].classList.remove(`nv-tab-activating`);
-                tabContent.children[i].classList.remove(`nv-tab-active`);
+            if (tabContent.children[i]) {
+                if (activeContent && activeContent === tabContent.children[i]) {
+                    tabContent.children[i].classList.add(`nv-tab-activating`);
+                }
+                else {
+                    tabContent.children[i].classList.remove(`nv-tab-activating`);
+                    tabContent.children[i].classList.remove(`nv-tab-active`);
+                }
             }
         }
         for (let i = 0; i < tabs.length; i++) {
-            if (tab === tabs[i]) {
-                tabs[i].classList.add(`nv-tab-activating`);
+            if (tabs[i]) {
+                if (tab === tabs[i]) {
+                    tabs[i].classList.add(`nv-tab-activating`);
+                }
+                else {
+                    tabs[i].classList.remove(`nv-tab-activating`);
+                    tabs[i].classList.remove(`nv-tab-active`);
+                }
             }
-            else {
-                tabs[i].classList.remove(`nv-tab-activating`);
-                tabs[i].classList.remove(`nv-tab-active`);
-            }
+        }
+        if (!tab || !this.container) {
+            return;
         }
         tab.classList.add(`nv-tab-activating`);
         this.container.classList.add(`nv-tabs-activating`);
@@ -42,6 +55,9 @@ export class NvTabs {
         this.activeIndicator.style.left = `${box.left - parentBox.left}px`;
         this.activeTimer = setTimeout(() => {
             clearTimeout(this.activeTimer);
+            if (!activeContent || !tab || !this.activeIndicator || !this.container) {
+                return;
+            }
             this.activeIndicator.classList.remove('nv-tabs-activating');
             this.container.classList.remove(`nv-tabs-activating`);
             tab.classList.remove(`nv-tab-activating`);
@@ -50,6 +66,7 @@ export class NvTabs {
             activeContent.classList.add(`nv-tab-active`);
         }, 3000);
     }
+    /** @desc do ripple animation */
     doRipple(tab, e) {
         const box = tab.getBoundingClientRect();
         const ripple = tab.querySelector(`.nv-tabs-active-ripple`);
@@ -73,22 +90,37 @@ export class NvTabs {
             tab.classList.remove(`nv-tab-rippling`);
         }, 300);
     }
+    /** @desc start pulsing animation */
     doPulsing(tab) {
+        if (!tab) {
+            return;
+        }
         tab.classList.add(`nv-tab-pulsing-start`);
         setTimeout(() => {
+            if (!tab) {
+                return;
+            }
             tab.classList.add(`nv-tab-pulsing`);
         }, 300);
     }
+    /** @desc end pulsing animation */
     stopPulsing() {
         const pulsing = this.container.querySelectorAll(`.nv-tab-pulsing`);
         for (let i = 0; i < pulsing.length; i++) {
             const tab = pulsing[i];
+            if (!tab) {
+                return;
+            }
             tab.classList.remove(`nv-tab-pulsing`);
             setTimeout(() => {
+                if (!tab) {
+                    return;
+                }
                 tab.classList.remove(`nv-tab-pulsing-start`);
             }, 300);
         }
     }
+    /** @desc opens a tab */
     openTab(tab, e) {
         if (!tab || !tab.parentElement) {
             return false;
@@ -97,11 +129,12 @@ export class NvTabs {
         this.doActivating(tab, index);
         this.doRipple(tab, e);
     }
+    /** @desc sets up the slot content */
     initTabs() {
         const children = this.container.children;
         for (let i = 0; i < children.length; i++) {
             const child = children[i];
-            if (!child.classList.contains(`nv-tab`)) {
+            if (child && !child.classList.contains(`nv-tab`)) {
                 child.classList.add(`nv-tab`);
                 const activeTabIndicator = document.createElement(`div`);
                 activeTabIndicator.classList.add(`nv-tabs-active-tab-indicator`);
@@ -140,7 +173,11 @@ export class NvTabs {
             }
         }
     }
+    /** @desc intializes the content */
     init() {
+        if (!this.container) {
+            return;
+        }
         let initial = this.initial;
         const children = this.container.children;
         if (!initial || !children[initial]) {
@@ -150,7 +187,11 @@ export class NvTabs {
         this.container.classList.add(`nv-tabs-tabs`);
         this.openTab(children[this.initial || 0]);
     }
+    /** @desc sets the tab classes */
     setClasses() {
+        if (!this.container) {
+            return;
+        }
         if (this.element && this.element.getAttribute(`center`)) {
             this.container.classList.add(`nv-tabs-center`);
         }
@@ -158,10 +199,12 @@ export class NvTabs {
             this.container.classList.remove(`nv-tabs-center`);
         }
     }
+    /** @desc lifecycle hook for when component is updated */
     componentDidUpdate() {
         this.setClasses();
         this.initTabs();
     }
+    /** @desc lifecycle hook for when component is ready */
     componentDidLoad() {
         this.setClasses();
         this.initTabs();
@@ -169,6 +212,7 @@ export class NvTabs {
             this.init();
         });
     }
+    /** @desc lifecycle hook for when component is rendered */
     render() {
         return (h("div", { class: "nv-tabs-wrapper" },
             h("div", { class: "nv-tabs", ref: (el) => this.container = el },

@@ -1,5 +1,17 @@
 @font-face {
   font-family: "Roboto";
+  src: url(assets/fonts/Roboto-Light.ttf) format("truetype");
+  font-weight: 100;
+  font-style: normal; }
+
+@font-face {
+  font-family: "Roboto";
+  src: url(assets/fonts/Roboto-LightItalic.ttf) format("truetype");
+  font-weight: 100;
+  font-style: italic; }
+
+@font-face {
+  font-family: "Roboto";
   src: url(assets/fonts/Roboto-Regular.ttf) format("truetype");
   font-weight: 400;
   font-style: normal; }
@@ -61,38 +73,52 @@
   width: 0px;
   height: 0px;
   position: relative;
-  pointer-events: none; }
+  pointer-events: none;
+  z-index: 1; }
 
 .tooltip-container {
   position: fixed;
   top: 0px;
   height: 0px;
-  transition: left 0.2s, right 0.2s, top 0.2s, bottom 0.2s, transform 0.3s ease-in-out, opacity 0.2s ease-in-out 0.1s;
-  transform: scale3d(0, 0, 0);
+  transition: opacity 0.2s ease-in-out 0.1s;
   display: flex;
   align-items: center;
   justify-content: center;
-  transform-origin: 50% 100%;
-  opacity: 0; }
+  opacity: 0;
+  pointer-events: none;
+  backface-visibility: hidden; }
   .tooltip-container.open {
-    transform: scale3d(1, 1, 1);
     opacity: 1; }
+    .tooltip-container.open .tooltip-content {
+      transform: scale(1, 1); }
   .tooltip-container .tooltip-content {
-    display: inline-block;
-    background: #2c3338;
-    padding: 0px 8px;
-    line-height: 32px;
+    transform: scale(0, 0);
+    transform-origin: 50% 50%;
+    display: flex;
     position: relative;
-    top: calc(100% + 10px);
     font-size: 10px;
     font-family: "Roboto", sans-serif;
     font-weight: normal;
     line-height: 24px;
-    color: rgba(255, 255, 255, 0.75); }
+    color: rgba(255, 255, 255, 0.75);
+    pointer-events: none;
+    backface-visibility: hidden; }
+    .tooltip-container .tooltip-content.boxShadow {
+      box-shadow: 1px 2px 1px -2px rgba(0, 0, 0, 0.1), 1px 3px 5px 0px rgba(0, 0, 0, 0.1), 1px 3px 15px 0px rgba(0, 0, 0, 0.2); }
+  .tooltip-container .tooltip-content-inner {
+    display: inline-block;
+    overflow: auto;
+    background: #2c3338;
+    padding: 0px 8px;
+    pointer-events: all;
+    backface-visibility: hidden; }
+  .tooltip-container .tooltip-content-inner-inner {
+    display: inline-block; }
   .tooltip-container[device="mobile"] .tooltip-content {
     font-size: 14px;
-    line-height: 32px;
-    padding: 0px 16px; }
+    line-height: 32px; }
+  .tooltip-container[position="bottom"] {
+    align-items: flex-end; }
   .tooltip-container[position="right"] {
     justify-content: flex-start;
     transform-origin: 100% 50%; }

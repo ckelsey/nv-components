@@ -70,7 +70,11 @@
                 start: 0,
                 message: `Initializing`,
                 showCount: true
-            }
+            },
+            menu:[
+                'something',
+                'another'
+            ]
         }
 
         function changeIcon(e) {
@@ -108,6 +112,7 @@
         }
 
     </script>
+
     <div class="section">
         <div>
             <h2>nv-image</h2>
@@ -129,9 +134,9 @@
             <h2>nv-tooltip</h2>
         </div>
         <div style="height: 200px;overflow: auto;position: relative;">
-            <div style="height: 400px;padding-top:300px;">
-                <button><span style="font-size:14px;">HOVER OVER ME</span>
-                    <nv-tooltip id="tooltip" position="bottom" active="false" hide-after="0" delay="0">Test</nv-progress>
+            <div style="height: 400px;padding-top:300px;text-align: left;">
+                <button><span style="font-size:14px;">|-|-|-|-|-|-|-|-|-|</span>
+                    <nv-tooltip id="tooltip" position="right" active="false" hide-after="0" delay="0" trigger-on="click">Test</nv-progress>
                 </button>
             </div>
         </div>
@@ -200,6 +205,15 @@
             </div>
         </nv-tabs>
     </div>
+
+    <div class="section" style=" text-align: right">
+        <div>
+            <h2>nv-menu</h2>
+        </div>
+        <button id="menu-button">Click me</button>
+        <nv-menu id="menu" anchor="#menu-button" options='some,thing,<b>height</b>, 400px,padding-top,300px,,https,//,images,nvidia,com,swgf,190378974359060698,9048,RmluYWxfRmFudGF zeV9YVl9XaW5kb3dzX0VkaXRpb25fU3VwZXJfUmVzb2x1dGlvbl8yMDE4L'></nv-menu>
+    </div>
+    
     <div class="section">
         <div>
             <h2>nv-tab-content</h2>
@@ -224,6 +238,35 @@
     </div>
 
     <script>
+        var menu = document.getElementById('menu')
+
+        menu.addEventListener('whenOpened', function () {
+            menu.setAttribute('active', true)
+        })
+
+        menu.addEventListener('whenClosed', function () {
+            menu.setAttribute('active', false)
+        })
+
+        menu.whenActivated = function () {
+            console.log(`active`)
+        }
+
+        menu.whenDeactivated = function () {
+            console.log(`deactive`)
+        }
+
+        var menuButton = document.getElementById('menu-button')
+        menuButton.onclick = function () {
+            var menu = document.getElementById('menu')
+
+            if (menu.getAttribute('active') && menu.getAttribute('active') !== 'false') {
+                menu.setAttribute('active', false)
+            } else {
+                menu.setAttribute('active', true)
+            }
+        }
+
         function waitForImage() {
             var image = document.getElementById('image')
 

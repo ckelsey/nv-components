@@ -1,7 +1,18 @@
+/** @desc renders a material design icon with given color, size, and type */
 export class MaterialIcon {
-    get svgIcon() {
-        return this.getIcon(this.type) || ``;
+    constructor() {
+        /** @desc The key of the icon to use */
+        this.type = 'close';
+        /** @desc color of icon, defaults to inherited color */
+        this.color = `inherit`;
+        /** @desc size of icon */
+        this.size = `24px`;
     }
+    /** @desc The icon svg string */
+    get svgIcon() {
+        return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24">${this.getIcon(this.type) || ``}</svg>`;
+    }
+    /** @desc The styles object for the icon */
     get styles() {
         return {
             color: this.color || `inherit`,
@@ -9,27 +20,14 @@ export class MaterialIcon {
             width: this.size || `24px`
         };
     }
+    /** @desc renders the component markup */
     render() {
-        return (h("span", { class: "material-icon", innerHTML: `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24">${this.svgIcon}</svg>`, style: this.styles }));
+        return (h("span", { class: "material-icon", innerHTML: this.svgIcon, style: this.styles }));
     }
-    iconsToJson() {
-        console.log(JSON.stringify(this.icons()));
-    }
-    findDupes() {
-        var keys = Object.keys(this.icons());
-        var vals = {};
-        var dupes = {};
-        keys.forEach(key => {
-            if (vals[this.icons()[key]]) {
-                if (!dupes[this.icons()[key]]) {
-                    dupes[this.icons()[key]] = [];
-                }
-                dupes[this.icons()[key]].push(key);
-            }
-            vals[this.icons()[key]] = true;
-        });
-        console.log(dupes);
-    }
+    /**
+     * @desc As many of the material icons are the same but go by different names, this function maps them to one name to save on space
+     * @param key The key to get
+     * */
     getIcon(key) {
         switch (key) {
             case 'schedule':
@@ -144,6 +142,7 @@ export class MaterialIcon {
                 return this.icons()[key];
         }
     }
+    /** @desc Returns the icon data JSON */
     icons() {
         return this.iconJSON;
     }
@@ -154,9 +153,6 @@ export class MaterialIcon {
             "type": String,
             "attr": "color"
         },
-        "findDupes": {
-            "method": true
-        },
         "getIcon": {
             "method": true
         },
@@ -164,9 +160,6 @@ export class MaterialIcon {
             "context": "iconJSON"
         },
         "icons": {
-            "method": true
-        },
-        "iconsToJson": {
             "method": true
         },
         "size": {
@@ -180,3 +173,23 @@ export class MaterialIcon {
     }; }
     static get style() { return "/**style-placeholder:material-icon:**/"; }
 }
+// @Method()
+// iconsToJson() {
+//     console.log(JSON.stringify(this.icons()))
+// }
+// @Method()
+// findDupes() {
+//     var keys = Object.keys(this.icons());
+//     var vals = {};
+//     var dupes = {};
+//     keys.forEach(key => {
+//         if (vals[this.icons()[key]]) {
+//             if (!dupes[this.icons()[key]]) {
+//                 dupes[this.icons()[key]] = []
+//             }
+//             dupes[this.icons()[key]].push(key)
+//         }
+//         vals[this.icons()[key]] = true
+//     })
+//     console.log(dupes)
+// }

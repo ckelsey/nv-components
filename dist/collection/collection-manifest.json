@@ -31,16 +31,10 @@
       ],
       "methods": [
         {
-          "name": "findDupes"
-        },
-        {
           "name": "getIcon"
         },
         {
           "name": "icons"
-        },
-        {
-          "name": "iconsToJson"
         }
       ],
       "context": [
@@ -174,9 +168,78 @@
           "attr": "cover"
         },
         {
+          "name": "placeholder",
+          "type": "String",
+          "attr": "placeholder"
+        },
+        {
           "name": "url",
           "type": "String",
           "attr": "url"
+        }
+      ],
+      "shadow": true
+    },
+    {
+      "tag": "nv-menu",
+      "dependencies": [
+        "nv-tooltip"
+      ],
+      "componentClass": "NvMenu",
+      "componentPath": "components/nv-menu/nv-menu.js",
+      "styles": {
+        "$": {
+          "stylePaths": [
+            "components/nv-menu/nv-menu.scss"
+          ]
+        }
+      },
+      "props": [
+        {
+          "name": "active",
+          "type": "Boolean",
+          "attr": "active"
+        },
+        {
+          "name": "anchor",
+          "type": "String",
+          "attr": "anchor"
+        },
+        {
+          "name": "options",
+          "type": "String",
+          "attr": "options"
+        },
+        {
+          "name": "position",
+          "type": "String",
+          "attr": "position"
+        },
+        {
+          "name": "whenActivated",
+          "attr": "when-activated"
+        },
+        {
+          "name": "whenClicked",
+          "attr": "when-clicked"
+        },
+        {
+          "name": "whenDeactivated",
+          "attr": "when-deactivated"
+        }
+      ],
+      "hostElement": {
+        "name": "element"
+      },
+      "events": [
+        {
+          "event": "whenClosed"
+        },
+        {
+          "event": "whenOpened"
+        },
+        {
+          "event": "whenOptionClicked"
         }
       ],
       "shadow": true
@@ -300,7 +363,13 @@
         {
           "name": "active",
           "type": "Boolean",
+          "mutable": true,
           "attr": "active"
+        },
+        {
+          "name": "boxShadow",
+          "type": "Boolean",
+          "attr": "box-shadow"
         },
         {
           "name": "delay",
@@ -313,9 +382,19 @@
           "attr": "hide-after"
         },
         {
+          "name": "padding",
+          "type": "Number",
+          "attr": "padding"
+        },
+        {
           "name": "position",
           "type": "String",
           "attr": "position"
+        },
+        {
+          "name": "triggerElement",
+          "type": "String",
+          "attr": "trigger-element"
         },
         {
           "name": "triggerOn",
@@ -326,6 +405,14 @@
       "hostElement": {
         "name": "element"
       },
+      "events": [
+        {
+          "event": "whenClosed"
+        },
+        {
+          "event": "whenOpened"
+        }
+      ],
       "shadow": true
     }
   ],
@@ -447,5 +534,6 @@
     "version": "0.11.0",
     "typescriptVersion": "2.9.2"
   },
-  "bundles": []
+  "bundles": [],
+  "global": "global/index.js"
 }

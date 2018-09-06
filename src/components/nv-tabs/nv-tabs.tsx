@@ -1,20 +1,30 @@
 import { Component, Prop, Element } from '@stencil/core'
 
+/** @desc renders tabs to be used with nv-tab-content */
+
 @Component({
     tag: 'nv-tabs',
     styleUrl: 'nv-tabs.scss',
     shadow: false
 })
 export class NvTabs {
+    /** @desc container element */
     container: HTMLElement
+
+    /** @desc active bar element */
     activeIndicator: HTMLElement
+
+    /** @desc animation timer */
     activeTimer: any
 
+    /** @desc initial tab to open */
     @Prop()
-    initial: number
+    initial: number = 0
 
+    /** @desc component element */
     @Element() element: HTMLElement
 
+    /** @desc activate a tab */
     doActivating(tab: HTMLElement, index: number) {
         if (!tab || !tab.parentElement) {
             return false
@@ -40,21 +50,29 @@ export class NvTabs {
         }
 
         for (let i = 0; i < tabContent.children.length; i++) {
-            if (activeContent && activeContent === tabContent.children[i]) {
-                tabContent.children[i].classList.add(`nv-tab-activating`)
-            } else {
-                tabContent.children[i].classList.remove(`nv-tab-activating`)
-                tabContent.children[i].classList.remove(`nv-tab-active`)
+            if (tabContent.children[i]) {
+                if (activeContent && activeContent === tabContent.children[i]) {
+                    tabContent.children[i].classList.add(`nv-tab-activating`)
+                } else {
+                    tabContent.children[i].classList.remove(`nv-tab-activating`)
+                    tabContent.children[i].classList.remove(`nv-tab-active`)
+                }
             }
         }
 
         for (let i = 0; i < tabs.length; i++) {
-            if (tab === tabs[i]) {
-                tabs[i].classList.add(`nv-tab-activating`)
-            } else {
-                tabs[i].classList.remove(`nv-tab-activating`)
-                tabs[i].classList.remove(`nv-tab-active`)
+            if (tabs[i]) {
+                if (tab === tabs[i]) {
+                    tabs[i].classList.add(`nv-tab-activating`)
+                } else {
+                    tabs[i].classList.remove(`nv-tab-activating`)
+                    tabs[i].classList.remove(`nv-tab-active`)
+                }
             }
+        }
+
+        if (!tab || !this.container) {
+            return
         }
 
         tab.classList.add(`nv-tab-activating`)
@@ -66,6 +84,11 @@ export class NvTabs {
 
         this.activeTimer = setTimeout(() => {
             clearTimeout(this.activeTimer)
+
+            if (!activeContent || !tab || !this.activeIndicator || !this.container) {
+                return
+            }
+
             this.activeIndicator.classList.remove('nv-tabs-activating')
             this.container.classList.remove(`nv-tabs-activating`)
             tab.classList.remove(`nv-tab-activating`)
@@ -75,6 +98,7 @@ export class NvTabs {
         }, 3000)
     }
 
+    /** @desc do ripple animation */
     doRipple(tab: HTMLElement, e?: MouseEvent) {
         const box = tab.getBoundingClientRect()
         const ripple = tab.querySelector(`.nv-tabs-active-ripple`) as HTMLElement
@@ -101,25 +125,47 @@ export class NvTabs {
         }, 300)
     }
 
+    /** @desc start pulsing animation */
     doPulsing(tab: HTMLElement) {
+        if (!tab) {
+            return
+        }
+
         tab.classList.add(`nv-tab-pulsing-start`)
         setTimeout(() => {
+            if (!tab) {
+                return
+            }
+
             tab.classList.add(`nv-tab-pulsing`)
         }, 300)
     }
 
+    /** @desc end pulsing animation */
     stopPulsing() {
         const pulsing = this.container.querySelectorAll(`.nv-tab-pulsing`)
 
         for (let i = 0; i < pulsing.length; i++) {
             const tab = pulsing[i]
+
+            if (!tab) {
+                return
+            }
+
+
             tab.classList.remove(`nv-tab-pulsing`)
             setTimeout(() => {
+
+                if (!tab) {
+                    return
+                }
+
                 tab.classList.remove(`nv-tab-pulsing-start`)
             }, 300)
         }
     }
 
+    /** @desc opens a tab */
     openTab(tab: HTMLElement, e?: MouseEvent) {
         if (!tab || !tab.parentElement) {
             return false
@@ -131,6 +177,7 @@ export class NvTabs {
         this.doRipple(tab, e)
     }
 
+    /** @desc sets up the slot content */
     initTabs() {
         const children = this.container.children
 
@@ -138,7 +185,7 @@ export class NvTabs {
 
             const child = children[i] as HTMLElement
 
-            if (!child.classList.contains(`nv-tab`)) {
+            if (child && !child.classList.contains(`nv-tab`)) {
                 child.classList.add(`nv-tab`)
 
                 const activeTabIndicator = document.createElement(`div`)
@@ -190,7 +237,12 @@ export class NvTabs {
         }
     }
 
+    /** @desc intializes the content */
     init() {
+        if (!this.container) {
+            return
+        }
+
         let initial = this.initial
         const children = this.container.children
 
@@ -204,7 +256,12 @@ export class NvTabs {
         this.openTab(children[this.initial || 0] as HTMLElement)
     }
 
+    /** @desc sets the tab classes */
     setClasses() {
+        if (!this.container) {
+            return
+        }
+
         if (this.element && this.element.getAttribute(`center`)) {
             this.container.classList.add(`nv-tabs-center`)
         } else {
@@ -212,11 +269,13 @@ export class NvTabs {
         }
     }
 
+    /** @desc lifecycle hook for when component is updated */
     componentDidUpdate() {
         this.setClasses()
         this.initTabs()
     }
 
+    /** @desc lifecycle hook for when component is ready */
     componentDidLoad() {
         this.setClasses()
         this.initTabs()
@@ -226,13 +285,15 @@ export class NvTabs {
 
     }
 
+    /** @desc lifecycle hook for when component is rendered */
     render() {
         return (
             <div class="nv-tabs-wrapper">
                 <div class="nv-tabs" ref={(el: HTMLInputElement) => this.container = el}>
                     <slot />
                 </div>
-                <div ref={(el: HTMLInputElement) => this.activeIndicator = el} class="active-indicator"></div></div>
+                <div ref={(el: HTMLInputElement) => this.activeIndicator = el} class="active-indicator"></div>
+            </div>
         )
     }
 }

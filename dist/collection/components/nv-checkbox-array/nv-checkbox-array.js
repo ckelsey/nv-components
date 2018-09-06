@@ -1,10 +1,24 @@
+/** @desc renders an array of styled checkbox components */
 export class NvCheckboxArray {
     constructor() {
+        /** @desc last toggle state of this array */
         this.lastToggleState = false;
+        /** @desc an array of objects {values/value, label, disabled} to populate checkboxes with */
+        this.values = [];
+        /** @desc label for parent checkbox */
+        this.label = '';
+        /** @desc whether or not the array is disabled */
+        this.disabled = false;
+        /** @desc if part of a checkbox array, whether or not the parent checkbox is disabled */
+        this.parentDisabled = false;
+        /** @desc function that is called when the checkbox state changes */
+        this.whenUpdate = () => { };
     }
+    /** @desc determines whether or not this array is didabled */
     get isDisabled() {
         return this.parentDisabled || this.disabled;
     }
+    /** @desc determines the groups state based on child checkbox states */
     get groupState() {
         const getValues = (arr) => {
             let _isTrue = [];
@@ -29,8 +43,13 @@ export class NvCheckboxArray {
         }
         return getValues(this.values);
     }
-    setGroupState(val, arr) {
-        return arr.map(element => {
+    /**
+     * @desc sets all the childrens states
+     * @param val value to set
+     * @param children array of children
+     */
+    setGroupState(val, children) {
+        return children.map(element => {
             if (element.disabled || element.parentDisabled) {
                 return element;
             }
@@ -43,6 +62,7 @@ export class NvCheckboxArray {
             return element;
         });
     }
+    /** @desc updates the parent array */
     updateParent() {
         const state = this.groupState;
         const oldValue = this.values;
@@ -63,6 +83,10 @@ export class NvCheckboxArray {
         }
         this.change.emit(updateData);
     }
+    /**
+     * @desc update from a child checkbox
+     * @param data data from child
+     */
     updateChild(data) {
         const el = data.element.element;
         const oldValue = this.values;
@@ -81,9 +105,11 @@ export class NvCheckboxArray {
         }
         this.change.emit(updateData);
     }
+    /** @desc lifecycle hook for when component is ready */
     componentDidLoad() {
         this.lastToggleState = !!this.groupState;
     }
+    /** @desc lifecycle hook for when component is rendered */
     render() {
         if (!this.values) {
             return (h("div", null));

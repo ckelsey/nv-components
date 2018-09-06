@@ -3,39 +3,60 @@
  * center
  * spinner
  */
+/** @desc renders various progress bar and loading components */
 export class NvProgress {
     constructor() {
+        /** @desc whether or not the progress bar is animating */
         this.animate = true;
+        /** @desc stored bar position/scale */
         this.barPositions = {
             scale: 0,
             left: 0
         };
+        /** @desc main timer method, requestAnimationFrame or setTimeout */
         this.timer = `requestAnimationFrame`;
+        /** @desc state, either determinate or indeterminate */
         this.state = `determinate`;
+        /** @desc type of progress bar, current;ly only bar */
         this.type = `bar`;
+        /** @desc text to display above the progress */
         this.message = ``;
+        /** @desc whether or not to show progress value text */
         this.showCount = false;
+        /** @desc value of the progress, 0-100 */
         this.value = 0;
+        /** @desc start */
         this.start = 0;
+        /** @desc speed of animations */
         this.speed = 1;
     }
+    /** @desc resets the progress bar */
     reset() {
         this.animate = false;
         cancelAnimationFrame(this.animator);
         clearTimeout(this.animator);
         this.animateScale();
     }
+    /** @desc determines the start position of the progress bar */
     get _start() {
         return isNaN(this.start) ? 0 : this.start / 100;
     }
+    /** @desc determines the value of the progress bar */
     get _value() {
         let value = ((isNaN(this.value) ? 0 : this.value / 100) * (1 - (this._start / 1))) + this._start;
         value = value > 1 ? 1 : value < 0 ? 0 : value;
         return value;
     }
+    /** @desc determines the speed */
     get _speed() {
         return this.speed || 1;
     }
+    /**
+     * @desc returns an easing array between 2 values
+     * @param startValue the starting value
+     * @param endValue the ending value
+     * @param frames the number of frames as duration
+     */
     easeArray(startValue, endValue, frames) {
         if (startValue === endValue) {
             return [];
@@ -58,6 +79,7 @@ export class NvProgress {
         }
         return step();
     }
+    /** @desc timer function that updates the bar position/dimension settings */
     updateBarPositions() {
         cancelAnimationFrame(this.animator);
         clearTimeout(this.animator);
@@ -106,6 +128,11 @@ export class NvProgress {
             }, 16);
         }
     }
+    /**
+     * @desc updates the progress bar to the provided scale and position
+     * @param scale size, between 0-1
+     * @param left  left position, between 0-100
+     */
     update(scale, left) {
         if (this.countElement) {
             if ((!this.previousState || this.previousState === `determinate`) && (!this.state || this.state === `determinate`)) {
@@ -119,6 +146,7 @@ export class NvProgress {
         this.barElement.style.transform = `scale3d(${scale},1,1)`;
         this.barPositions = { scale, left };
     }
+    /** @desc animation for scale adjustment */
     animateScale() {
         const scaleEasingArray = this.easeArray(this.barPositions.scale, this._value, 30 * this._speed);
         const animate = () => {
@@ -141,6 +169,7 @@ export class NvProgress {
         };
         animate();
     }
+    /** @desc animation from indeterminate to determinate states */
     animateToDeterminate() {
         const leftEasingArray = this.easeArray(this.barPositions.left, 0, 30 * this._speed);
         const scaleEasingArray = this.easeArray(this.barPositions.scale, this._value, 30 * this._speed);
@@ -164,6 +193,7 @@ export class NvProgress {
         };
         animate();
     }
+    /** @desc lifecycle hook for when component is updated */
     componentDidUpdate() {
         if (this.previousState !== this.state) {
             if (this.animate) {
@@ -186,11 +216,13 @@ export class NvProgress {
         this.previousState = this.state;
         this.updateBarPositions();
     }
+    /** @desc lifecycle hook for when component is ready */
     componentDidLoad() {
         this.animate = true;
         this.previousState = this.state;
         this.updateBarPositions();
     }
+    /** @desc lifecycle hook for when component is rendered */
     render() {
         return (h("div", { class: "nv-progress" },
             (this.message && this.message.trim() !== ``) || this.showCount ?
