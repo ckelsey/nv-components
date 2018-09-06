@@ -1,0 +1,32 @@
+:host {
+    display: inline-block;
+}
+
+nv-tooltip {
+    pointer-events: all;
+}
+
+.menu-option {
+    font-size: $fontSize;
+    line-height: $lineHeight;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 14px 16px;
+    overflow: hidden;
+    pointer-events: all;
+    cursor: pointer;
+    text-align: left;
+    background-color: transparent;
+    transition: background-color 0.2s;
+
+    &:hover {
+        background-color: darken($color: $gray1, $amount: 2);
+    }
+}
+
+.menu-option-divider {
+    border-top: 1px solid darken($color: $gray1, $amount: 5);
+    padding: 0px;
+}

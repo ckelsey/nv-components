@@ -1,0 +1,29 @@
+@import './type.scss';
+@import './colors.scss';
+@import './style.scss';
+@import './layout.scss';
+@import './animations.scss';
+@import './mixins.scss';
+@import './modifiers.scss';
+
+html,body{
+    background: $gray2;
+    font-size: $fontSize;
+    font-family: $fontFamily;
+    font-weight: $fontWeight;
+    line-height: $lineHeight;
+    color: $lightGray2;
+    margin: 0px;
+}
+
+h1{
+    font-size: 48px;
+    font-weight: 100;
+    line-height: 64px;
+}
+
+h2{
+    font-size: 24px;
+    font-weight: normal;
+    line-height: 32px;
+}

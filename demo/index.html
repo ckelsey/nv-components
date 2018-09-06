@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
+    <link rel="stylesheet" href="nv-styles.css" type="text/css">
+    <link rel="stylesheet" href="demo-styles.css" type="text/css">
+    <script src="nv-components.js"></script>
+</head>
+
+<body>
+    <div id="page">
+        <div id="sidebar"></div>
+        <div id="content"></div>
+    </div>
+    <script>
+        var components = {}
+
+        function parseComponentArgs(component) {
+            return JSON.parse(component.decorators[0].arguments.opts
+                .split(' ').join('')
+                .split('\'').join('"')
+                .split('`').join('"')
+                .split("\n").join("")
+                .split("\r").join("")
+                .split('",').join('","')
+                .split(':').join('":')
+                .split('{').join('{"'))
+        }
+
+        function parseType(type) {
+            if (type.types) {
+                return type.types.map(function (t) {
+                    return t.name
+                }).join(', ')
+            } else if (type.name) {
+                return type.name
+            } else {
+                return type.type
+            }
+        }
+
+        function parseProperties(child) {
+            return {
+                name: child.name,
+                type: parseType(child.type),
+                defaultValue: child.defaultValue ? child.defaultValue.trim().split('').map(function (char, index) {
+                    if (!index || index === child.defaultValue.trim().length - 1) {
+                        if (char === '"' || char === '`' || char === "'") {
+                            return ''
+                        }
+                    }
+                    return char
+
+                }).join('') : '',
+                attributeProperty: !!child.decorators && child.decorators.length > 0 && child.decorators[0].name === 'Prop' && (!child.decorators[0].arguments.opts || (child.decorators[0].arguments.opts && child.decorators[0].arguments.opts.indexOf('context:') === -1)),
+                description: child.comment && child.comment.tags && (child.comment.tags[0].tag === 'desc' || child.comment.tags[0].tag === 'description') ? child.comment.tags[0].text : undefined
+            }
+        }
+
+        function parseAccessors(child) {
+            return {
+                name: child.name,
+                returns: child.getSignature && child.getSignature.type.declarations ?
+                    child.getSignature.type.declaration.children.map(function (dec) {
+                        var obj = {}
+                        obj[dec.name] = parseType(dec.type)
+                        return obj
+                    }) : parseType(child.getSignature.type),
+                description: child.comment && child.comment.tags && (child.comment.tags[0].tag === 'desc' || child.comment.tags[0].tag === 'description') ? child.comment.tags[0].text : undefined
+            }
+        }
+
+        function parseMethods(child) {
+            return {
+                name: child.name,
+                public: !!child.decorators && child.decorators.length > 0,
+                returns: parseType(child.signatures[0].type),
+                parameters: child.signatures[0].parameters ? child.signatures[0].parameters.map(function (param) {
+                    var obj = {
+                        name: param.name,
+                        type: parseType(param.type),
+                        description: param.comment ? param.comment.text : undefined,
+                        data: {}
+                    }
+
+                    obj.data[param.name] = parseType(param.type)
+
+                    return obj
+                }) : [],
+                description: child.signatures && child.signatures[0] && child.signatures[0].comment && child.signatures[0].comment.tags && (child.signatures[0].comment.tags[0].tag === 'desc' || child.signatures[0].comment.tags[0].tag === 'description') ? child.signatures[0].comment.tags[0].text : undefined
+            }
+        }
+
+        function parseGroup(group, children) {
+            return group.children.map(function (child) {
+                var _child = {}
+
+                for (var i = 0; i < children.length; i++) {
+                    if (child === children[i].id) {
+                        _child = children[i]
+                        break
+                    }
+                }
+
+                if (group.title === "Properties") {
+                    return parseProperties(_child)
+                }
+
+                if (group.title === "Accessors") {
+                    return parseAccessors(_child)
+                }
+
+                if (group.title === "Methods") {
+                    return parseMethods(_child)
+                }
+            })
+        }
+
+        function parseComponent(component) {
+            var args = parseComponentArgs(component)
+
+            var children = {}
+
+            component.groups.forEach(function (group) {
+                children[group.title] = parseGroup(group, component.children)
+            });
+
+            var componentData = {
+                description: component.comment && component.comment.tags && component.comment.tags[0] ? component.comment.tags[0].text : '',
+                id: component.id,
+                name: component.name,
+                tag: args.tag,
+                shadow: args.shadow,
+                styles: args.styleUrl,
+                children: children
+            }
+
+            return componentData
+        }
+
+        function addSidebarLinks() {
+            var sidebar = document.getElementById('sidebar')
+
+            Object.keys(components).sort().forEach(function (component, index) {
+                var link = document.createElement('div')
+                link.textContent = components[component].tag
+                link.className = components[component].name
+                link.onclick = function () {
+                    openDoc(components[component])
+                }
+                sidebar.appendChild(link)
+
+                if (!index) {
+                    link.click()
+                }
+            })
+        }
+
+        function propertyInput(propertyName, inputId, componentId, isJSON) {
+            var input = document.getElementById(inputId)
+            var component = document.getElementById(componentId)
+
+            if (component && input) {
+                if (!isJSON) {
+                    component.setAttribute(propertyName, input.value)
+                } else {
+                    try {
+                        component[propertyName] = JSON.parse(input.value)
+                    } catch (error) {}
+                }
+            }
+        }
+
+        function getPropertiesHtml(properties, componentId) {
+
+            properties.sort(function (a, b) {
+                if (a.attributeProperty && !b.attributeProperty) {
+                    return -1
+                }
+
+                if (b.attributeProperty && !a.attributeProperty) {
+                    return 1
+                }
+
+                return a.type > b.type ? 1 : a.type < b.type ? -1 : a.name > b.name
+            })
+
+            html = '<table><thead><tr><th>name</th><th>type</th><th>default</th><th>attribute</th><th>description</th><th>value</th></tr></thead><tbody>'
+
+            properties.forEach(function (property) {
+                var id = 'property-' + property.name + '-' + Math.round(Math.random() * 1000)
+                var input = ''
+                var defaultValue = property.defaultValue ? property.defaultValue : ''
+                var description = property.description ? property.description : ''
+
+                if (property.attributeProperty) {
+                    var textInput = '<input type="text" id="' + id + '" oninput="propertyInput(\'' + property.name + '\', \'' + id + '\', \'' + componentId + '\')" value=\'' + defaultValue + '\'>'
+                    var textArea = '<textarea id="' + id + '" oninput="propertyInput(\'' + property.name + '\', \'' + id + '\', \'' + componentId + '\', true)">' + defaultValue + '</textarea>'
+
+                    switch (property.type) {
+                    case 'boolean, string':
+                    case 'string, boolean':
+                    case 'string':
+                        input = textInput
+                        break
+                    case 'number':
+                        input = '<input type="number" id="' + id + '" oninput="propertyInput(\'' + property.name + '\', \'' + id + '\', \'' + componentId + '\')" value=\'' + defaultValue + '\'>'
+                        break
+                    case 'array':
+                    case 'object':
+                        input = textArea
+                        break
+
+                    case 'boolean':
+                        input = '<input type="text" id="' + id + '" oninput="propertyInput(\'' + property.name + '\', \'' + id + '\', \'' + componentId + '\')" value="' + defaultValue + '" checked="' + defaultValue + '">'
+                        break
+                    }
+
+                    if (input === '') {
+                        if (property.type.toLowerCase().indexOf('string') > -1) {
+                            input = textInput
+                        } else if (property.type.toLowerCase().indexOf('array') > -1) {
+                            input = textArea
+                        }
+                    }
+                }
+
+                html = html + '<tr><td>' + property.name + '</td><td>' + property.type + '</td><td>' + defaultValue + '</td><td>' + property.attributeProperty + '</td><td>' + description + '</td><td>' + input + '</td></tr>'
+            })
+
+            html = html + '</tbody></table>'
+            return html
+        }
+
+        function getAccessorsHtml(accessors) {
+            accessors.sort(function (a, b) {
+                return a.type > b.type ? 1 : a.type < b.type ? -1 : a.name > b.name
+            })
+
+            html = '<table><thead><tr><th>name</th><th>returns</th><th>description</th></tr></thead><tbody>'
+
+            accessors.forEach(function (accessor) {
+                html = html + '<tr><td>' + accessor.name + '</td><td>' + (accessor.returns ? '<pre>' + JSON.stringify(accessor.returns, null, '  ') + '</pre>' : '') + '</td><td>' + (accessor.description ? accessor.description : '') + '</td></tr>'
+            })
+
+            html = html + '</tbody></table>'
+            return html
+        }
+
+        function getMethodsHtml(methods) {
+            methods.sort(function (a, b) {
+                return a.type > b.type ? 1 : a.type < b.type ? -1 : a.name > b.name
+            })
+
+            html = '<table><thead><tr><th>name</th><th>public</th><th>parameters</th><th>returns</th><th>description</th></tr></thead><tbody>'
+
+            methods.forEach(function (method) {
+                html = html + '<tr><td>' + method.name + '</td><td>' + method.public + '</td><td>' + (method.parameters ? (method.parameters.map(function (p) {
+                    return '<div class="param-section"><div><b>' + Object.keys(p.data)[0] + '</b> - <pre style="display: inline-block;">' + JSON.stringify(p.data[Object.keys(p.data)[0]], null, '  ') + '</pre></div><div>' + (p.description ? p.description : '') + '</div></div>'
+                }).join("\n")) : '') + '</td><td>' + (method.returns ? '<pre>' + JSON.stringify(method.returns, null, '  ') + '</pre>' : '') + '</td><td>' + (method.description ? method.description : '') + '</td></tr>'
+            })
+
+            html = html + '</tbody></table>'
+            return html
+        }
+
+        function openDoc(component) {
+            var activeElement = document.querySelector('#sidebar .active')
+
+            if (activeElement) {
+                activeElement.classList.remove('active')
+            }
+
+            var id = 'component-' + component.id
+
+            var newActiveElement = document.querySelector('#sidebar .' + component.name)
+            newActiveElement.classList.add('active')
+
+            var content = document.getElementById('content')
+            content.innerHTML = '';
+
+            var title = document.createElement('h1')
+            title.textContent = component.tag
+            content.appendChild(title)
+
+            var desc = document.createElement('p')
+            desc.className = 'component-description'
+            desc.textContent = component.description
+            content.appendChild(desc)
+
+            var demoText = document.createElement('h2')
+            demoText.textContent = 'Example'
+            content.appendChild(demoText)
+
+            var demo = document.createElement('div')
+            demo.className = 'demo-section'
+            content.appendChild(demo)
+
+            var tag = document.createElement(component.tag)
+            tag.id = id
+
+            component.children.Properties.forEach(function (prop) {
+                if (prop.attributeProperty) {
+                    tag.setAttribute(prop.name, prop.defaultValue || '')
+                }
+            })
+            demo.appendChild(tag)
+
+            var tabid = Math.round(Math.random() * 10000)
+            var tabs = document.createElement('nv-tabs')
+            var tabContents = document.createElement('nv-tab-content')
+
+            tabs.setAttribute('tab-id', tabid)
+            tabContents.setAttribute('tab-id', tabid)
+
+            Object.keys(component.children).sort().reverse().forEach(function (key) {
+                var tab = document.createElement('div')
+                tab.textContent = key
+                tabs.appendChild(tab)
+
+                var tabContent = document.createElement('div')
+
+                if (key === "Properties") {
+                    tabContent.innerHTML = getPropertiesHtml(component.children[key], id)
+                }
+
+                if (key === "Accessors") {
+                    tabContent.innerHTML = getAccessorsHtml(component.children[key])
+                }
+
+                if (key === "Methods") {
+                    tabContent.innerHTML = getMethodsHtml(component.children[key])
+                }
+
+                tabContents.appendChild(tabContent)
+            })
+
+            content.appendChild(tabs)
+            content.appendChild(tabContents)
+        }
+
+        var xhr = new XMLHttpRequest()
+        xhr.open('GET', 'docs.json')
+        xhr.onload = function () {
+            var json = JSON.parse(xhr.responseText)
+
+            for (var i in json.children) {
+                if (json.children[i].groups && json.children[i].groups[0].kind === 128) {
+                    console.log(json.children[i].children[0])
+                    var componentData = parseComponent(json.children[i].children[0])
+                    components[componentData.name] = componentData
+                }
+            }
+
+            addSidebarLinks()
+        }
+        xhr.send()
+
+    </script>
+</body>
+
+</html>

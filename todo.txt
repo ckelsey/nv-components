@@ -1,0 +1,11 @@
+- nv-tabs
+    - slider tabs
+- nv-radio
+- nv-switch
+- nv-rotary
+
+- docs
+    - object literals
+    - test for methods
+    - input for slot content
+- nativescript
