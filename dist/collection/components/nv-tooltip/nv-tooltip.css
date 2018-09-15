@@ -34,6 +34,70 @@
   font-weight: 700;
   font-style: italic; }
 
+nv-tabs {
+  position: relative;
+  width: 100%;
+  height: auto;
+  outline: none !important;
+  font-size: 14px;
+  font-family: "Roboto", sans-serif;
+  font-weight: normal;
+  line-height: 24px;
+  color: rgba(255, 255, 255, 0.75);
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  opacity: 0;
+  transition: opacity 0.2s; }
+  nv-tabs.ready {
+    opacity: 1; }
+  nv-tabs[center="true"] {
+    justify-content: center; }
+  nv-tabs > * {
+    opacity: 0; }
+  nv-tabs > [nv-tab] {
+    position: relative;
+    cursor: pointer;
+    padding: 12px 24px;
+    box-sizing: border-box;
+    opacity: 0.625;
+    outline: none !important;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    flex-shrink: 0;
+    line-height: 2em;
+    transition: opacity 0.2s ease-in-out; }
+    nv-tabs > [nv-tab][nv-tab-active="activating"] {
+      opacity: 1; }
+    nv-tabs > [nv-tab][nv-tab-active="true"] {
+      opacity: 1; }
+      nv-tabs > [nv-tab][nv-tab-active="true"]:after {
+        content: "";
+        position: absolute;
+        height: 2px;
+        background: #76b900;
+        width: 100%;
+        pointer-events: none;
+        bottom: 0px; }
+  nv-tabs nv-wave {
+    opacity: 1; }
+  nv-tabs .active-indicator {
+    position: absolute;
+    height: 2px;
+    background: #76b900;
+    width: 0%;
+    pointer-events: none;
+    bottom: 0px;
+    transition: left 0.2s ease-in-out, width 0.3s ease-in-out;
+    opacity: 0; }
+    nv-tabs .active-indicator.nv-tabs-activating {
+      opacity: 1; }
+
 @keyframes fadeInOut {
   0% {
     opacity: 0; }
@@ -91,6 +155,8 @@
     opacity: 1; }
     .tooltip-container.open .tooltip-content {
       transform: scale(1, 1); }
+      .tooltip-container.open .tooltip-content .tooltip-content-inner {
+        pointer-events: all; }
   .tooltip-container .tooltip-content {
     transform: scale(0, 0);
     transform-origin: 50% 50%;
@@ -110,7 +176,7 @@
     overflow: auto;
     background: #2c3338;
     padding: 0px 8px;
-    pointer-events: all;
+    pointer-events: none;
     backface-visibility: hidden; }
   .tooltip-container .tooltip-content-inner-inner {
     display: inline-block; }

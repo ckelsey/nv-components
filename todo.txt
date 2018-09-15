@@ -7,5 +7,5 @@
 - docs
     - object literals
     - test for methods
-    - input for slot content
+    - example markup
 - nativescript

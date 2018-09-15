@@ -9,6 +9,9 @@ nv-tooltip {
 .menu-option {
     font-size: $fontSize;
     line-height: $lineHeight;
+    font-family: $fontFamily;
+    font-weight: $fontWeight;
+    color: $lightGray2;
     user-select: none;
     display: flex;
     align-items: center;
@@ -20,8 +23,10 @@ nv-tooltip {
     text-align: left;
     background-color: transparent;
     transition: background-color 0.2s;
+    pointer-events: none;
 
-    &:hover {
+    &:hover,
+    .focused {
         background-color: darken($color: $gray1, $amount: 2);
     }
 }
@@ -29,4 +34,10 @@ nv-tooltip {
 .menu-option-divider {
     border-top: 1px solid darken($color: $gray1, $amount: 5);
     padding: 0px;
+}
+
+.active.menu-container {
+    .menu-option {
+        pointer-events: all;
+    }
 }

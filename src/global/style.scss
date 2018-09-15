@@ -1,3 +1,84 @@
-// * {
-//     outline: none !important;
-// }
+nv-tabs {
+    position: relative;
+    width: 100%;
+    height: auto;
+    outline: none !important;
+    font-size: $fontSize;
+    font-family: $fontFamily;
+    font-weight: $fontWeight;
+    line-height: $lineHeight;
+    color: $lightGray2;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    opacity: 0;
+    transition: opacity 0.2s;
+
+    &.ready {
+        opacity: 1;
+    }
+
+    &[center="true"] {
+        justify-content: center;
+    }
+
+    &>* {
+        opacity: 0;
+    }
+
+    &>[nv-tab] {
+        position: relative;
+        cursor: pointer;
+        padding: 12px 24px;
+        box-sizing: border-box;
+        opacity: 0.625;
+        outline: none !important;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+        flex-shrink: 0;
+        line-height: 2em;
+        transition: opacity 0.2s ease-in-out;
+
+        &[nv-tab-active="activating"] {
+            opacity: 1;
+        }
+
+        &[nv-tab-active="true"] {
+            opacity: 1;
+
+            &:after {
+                content: "";
+                position: absolute;
+                height: 2px;
+                background: $highlight2;
+                width: 100%;
+                pointer-events: none;
+                bottom: 0px;
+            }
+        }
+    }
+
+    nv-wave{
+        opacity: 1;
+    }
+
+    .active-indicator {
+        position: absolute;
+        height: 2px;
+        background: $highlight2;
+        width: 0%;
+        pointer-events: none;
+        bottom: 0px;
+        transition: left 0.2s ease-in-out, width 0.3s ease-in-out;
+        opacity: 0;
+
+        &.nv-tabs-activating {
+            opacity: 1;
+        }
+    }
+}

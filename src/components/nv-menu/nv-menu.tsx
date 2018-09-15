@@ -1,4 +1,4 @@
-import { Component, Element, Prop, Event, EventEmitter } from '@stencil/core'
+import { Component, Element, Prop, Event, EventEmitter, Method } from '@stencil/core'
 
 /** @desc renders a popup menu component */
 
@@ -8,16 +8,18 @@ import { Component, Element, Prop, Event, EventEmitter } from '@stencil/core'
     shadow: true
 })
 export class NvMenu {
-     /** @desc component container element */
+    /** @desc component container element */
     container: HTMLElement
 
-     /** @desc component tooltip element */
+    /** @desc component tooltip element */
     tooltip: any
 
-     /** @desc component options proxy */
+    optionElements: Array<HTMLElement> = []
+
+    /** @desc component options proxy */
     _options: string[] = []
 
-     /** @desc component anchor proxy */
+    /** @desc component anchor proxy */
     _anchor: HTMLElement
 
     /** @desc component position proxy */
@@ -26,17 +28,29 @@ export class NvMenu {
     /** @desc component element */
     @Element() element: HTMLElement
 
-    /** @desc menu options, can be html */
+    /** @desc component element */
+    @Prop({ mutable: true }) focusedOption: number | undefined = undefined
+
+    /** @desc set width of menu */
+    @Prop() width: string = ``
+
+    /** 
+     * @desc menu options, can be html 
+     * @example ''
+     */
     @Prop() options: string | Array<string> = []
 
-    /** @desc position of the menu, bottom, top, left, right */
+    /** 
+     * @desc position of the menu, bottom, top, left, right 
+     * @example ''
+     */
     @Prop() position: string = `bottom`
 
     /** @desc whether or not the menu is open */
     @Prop() active: boolean = false
 
     /** @desc element or css selector string to element to anchor the menu to, defaults to self */
-    @Prop() anchor: string | HTMLElement
+    @Prop() anchor: string | HTMLElement = ``
 
     /** @desc function called when menu option is clicked */
     @Prop() whenClicked: Function
@@ -46,6 +60,12 @@ export class NvMenu {
 
     /** @desc function called when menu is closed */
     @Prop() whenDeactivated: Function
+
+    /** @desc object of styles to apply to each option */
+    @Prop() optionStyles: string | {} = {}
+
+    /** @desc object of styles to apply to each option on hover */
+    @Prop() optionHoverStyles: string | {} = {}
 
     /** @desc event for when menu option is clicked */
     @Event() whenOptionClicked: EventEmitter
@@ -75,13 +95,7 @@ export class NvMenu {
             index = index + 1
         }
 
-        this.whenOptionClicked.emit(index)
-
-        if (this.whenClicked && typeof this.whenClicked === `function`) {
-            this.whenClicked(index)
-        }
-
-        this.whenClosed.emit()
+        this.selectOption(index)
     }
 
     /** @desc updates the element properties and proxies */
@@ -89,6 +103,127 @@ export class NvMenu {
         this._position = this.position || this._position
         this._anchor = (this.anchor ? typeof this.anchor === `string` ? document.querySelector(this.anchor) : this.anchor : null) || this.element;
         this.tooltip.triggerElement = this._anchor
+
+        if (this.active) {
+            this.container.classList.add(`active`)
+        } else {
+            this.container.classList.remove(`active`)
+        }
+    }
+
+    /**
+     * @desc handles mouseenter event of an option
+     * @param el option element
+     */
+    mouseEnter(el) {
+        el.classList.add(`focused`)
+
+        this.focusedOption = this.optionElements.indexOf(el)
+
+        if (!this.optionHoverStyles) {
+            return
+        }
+
+        let optionstyles = {}
+        if (typeof this.optionHoverStyles === `string`) {
+            try {
+                optionstyles = JSON.parse(this.optionHoverStyles)
+            } catch (error) {}
+        }else{
+            optionstyles = this.optionHoverStyles
+        }
+
+        for (let i in optionstyles) {
+            el.style[i] = optionstyles[i]
+        }
+    }
+
+    /**
+     * @desc handles mouseleave event of an option
+     * @param el option element
+     */
+    mouseLeave(el) {
+        el.classList.remove(`focused`)
+
+        if (this.focusedOption === this.optionElements.indexOf(el)) {
+            this.focusedOption = undefined
+        }
+
+        if (!this.optionHoverStyles) {
+            return
+        }
+
+        let optionstyles = {}
+        if (typeof this.optionStyles === `string`) {
+            try {
+                optionstyles = JSON.parse(this.optionStyles)
+            } catch (error) {}
+        }else{
+            optionstyles = this.optionStyles
+        }
+
+        for (let i in optionstyles) {
+            if (optionstyles[i]) {
+                el.style[i] = optionstyles[i]
+            } else {
+                el.style.removeProperty(i)
+            }
+        }
+    }
+
+    /**
+     * @desc focuses the option at the supplied index
+     * @param index index of option
+     */
+    @Method()
+    focusOption(index: number | string) {
+        if (typeof index === `string`) {
+            index = parseInt(index)
+        }
+
+        console.log(index)
+
+        if (this.optionElements[index]) {
+            this.mouseEnter(this.optionElements[index])
+
+            this.optionElements.forEach((el, i) => {
+                if (i !== index) {
+                    this.mouseLeave(el)
+                }
+            })
+        }
+    }
+
+    /** @desc focuses the next option */
+    @Method()
+    focusNextOption() {
+        this.focusOption(this.focusedOption === undefined ? 0 : this.focusedOption + 1)
+    }
+
+    /** @desc focuses the previous option */
+    @Method()
+    focusPreviousOption() {
+        this.focusOption(this.focusedOption === undefined ? 0 : this.focusedOption - 1)
+    }
+
+    /** @desc clicks the option at the supplied index */
+    @Method()
+    selectOption(index: number | string) {
+        if (typeof index === `string`) {
+            index = parseInt(index)
+        }
+
+        if (!this.optionElements[index]) {
+            return
+        }
+
+        this.whenOptionClicked.emit(index)
+
+        if (this.whenClicked && typeof this.whenClicked === `function`) {
+            this.whenClicked(index)
+        }
+
+        this.whenClosed.emit()
     }
 
     /** @desc lifecycle hook for when component is updated */
@@ -133,10 +268,43 @@ export class NvMenu {
             this._options = []
         }
 
+        let optionstyles = {}
+        if(this.optionStyles){
+            if (typeof this.optionStyles === `string`) {
+                try {
+                    optionstyles = JSON.parse(this.optionStyles)
+                } catch (error) {}
+            }else{
+                optionstyles = this.optionStyles
+            }
+        }
+
         return (
             <div class="menu-container" ref={(el: HTMLElement) => this.container = el}>
-                <nv-tooltip ref={(el: any) => this.tooltip = el} padding={0} active={this.active} triggerOn="never" triggerElement={this._anchor} position={this._position} boxShadow={true}>
-                    {this._options.map((option: string) => option !== `` ? <div class="menu-option" onClick={this.optionClick} innerHTML={option}></div> : <div class="menu-option-divider"></div>)}
+                <nv-tooltip
+                    ref={(el: any) => this.tooltip = el}
+                    offset={0}
+                    padding={0}
+                    active={this.active}
+                    triggerOn="never"
+                    triggerElement={this._anchor}
+                    position={this._position}
+                    boxShadow={true}
+                    width={this.width}
+                >
+                    {
+                        this._options.map((option: string, index: number) => option.trim() !== `` ?
+                            <div
+                                class="menu-option"
+                                ref={(el: HTMLElement) => this.optionElements[index] = el}
+                                style={optionstyles}
+                                onMouseDown={this.optionClick}
+                                innerHTML={option}
+                                onMouseEnter={() => this.mouseEnter(this.optionElements[index])}
+                                onMouseLeave={() => this.mouseLeave(this.optionElements[index])}
+                            ></div> : <div class="menu-option-divider"></div>
+                        )
+                    }
                 </nv-tooltip>
             </div>
         );

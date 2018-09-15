@@ -1,0 +1,191 @@
+<div id="page">
+    <div id="sidebar">
+        <div v-for="(component, componentKey) in DOCS" :key="componentKey" :active="currentDoc === componentKey" :class="component.name"
+            @click="openDoc(componentKey)">{{component.tag}}</div>
+    </div>
+    <div id="content">
+        <h1>{{DOC().tag}}</h1>
+
+        <p class="component-description">{{DOC().description}}</p>
+
+        <h2>Example</h2>
+        <div class="demo-section">
+            <div class="demo-container" v-if="example" v-html="example()"></div>
+            <h2>Markup</h2>
+            <pre class="demo-code prettyprint" id="exampleCode"><code></code></pre>
+            <div class="slots-section" v-if="DOC().slots">
+                <h2>Inner HTML</h2>
+                <div class="slot-input">
+                    <nv-input multiline="true" @whenupdate="updateHTML($event)"></nv-input>
+                </div>
+            </div>
+        </div>
+
+        <nv-tabs tab-id="children-tabs">
+            <div v-for="(children, childrenKey) in DOC().children" :key="childrenKey">{{childrenKey}}</div>
+        </nv-tabs>
+
+        <nv-tab-content tab-id="children-tabs">
+            <div v-for="(children, childrenKey) in DOC().children" :key="childrenKey">
+                <div v-if="childrenKey === 'Attributes'">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>name</th>
+                                <th>type</th>
+                                <th>default</th>
+                                <th>description</th>
+                                <th>value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(child, childKey) in children" :key="childKey">
+                                <td>{{child.name}}</td>
+                                <td>{{child.type}}</td>
+                                <td>{{child.defaultValue}}</td>
+                                <td>{{child.description}}</td>
+                                <td>
+                                    <div v-if="child.type.indexOf('string') > -1">
+                                        <nv-input type="text" :value="child.demoValue && child.demoValue !== '\'\'' && child.demoValue !== 'undefined' && child.demoValue !== 'null' ? child.demoValue : ''"
+                                            @whenupdate="updateValue($event, childKey)"></nv-input>
+                                    </div>
+
+                                    <div v-if="child.type.indexOf('number') > -1 && child.type.indexOf('string') === -1">
+                                        <nv-input type="text" :value="child.demoValue && child.demoValue !== '\'\'' && child.demoValue !== 'undefined' && child.demoValue !== 'null' ? child.demoValue : ''"
+                                            @whenupdate="updateValue($event, childKey)"></nv-input>
+                                    </div>
+
+                                    <div v-if="(child.type.indexOf('reflection') > -1 || child.type.indexOf('array') > -1 || child.type.indexOf('Array') > -1) && child.type.indexOf('string') === -1 && child.type.indexOf('number') === -1 && child.type.indexOf('boolean') === -1">
+                                        <nv-input type="text" multiline="true" :value="child.demoValue && child.demoValue !== '\'\'' && child.demoValue !== 'undefined' && child.demoValue !== 'null' ? child.demoValue : ''"
+                                            @whenupdate="updateValue($event, childKey)"></nv-input>
+                                    </div>
+
+                                    <div v-if="child.type.indexOf('boolean') > -1 && child.type.indexOf('string') === -1 && child.type.indexOf('number') === -1 && child.type.indexOf('array') === -1">
+                                        <nv-checkbox :value="child.demoValue ? child.demoValue : child.defaultValue ? child.defaultValue : false"
+                                            @whenupdate="updateValue($event, childKey)"></nv-checkbox>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div v-if="childrenKey === 'Methods'">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>name</th>
+                                <th>parameters</th>
+                                <th>returns</th>
+                                <th>description</th>
+                                <th>action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(child, childKey) in children" :key="childKey">
+                                <td>{{child.name}}</td>
+                                <td>
+                                    <div v-if="child.parameters">
+                                        <div v-for="(param, paramKey) in child.parameters" :key="paramKey">
+                                            <div><span><span>{{Object.keys(param.data)[0]}}</span>: <span>{{param.data[Object.keys(param.data)[0]]}}</span></span></div>
+
+                                            <div v-if="param[Object.keys(param.data)[0]] === 'number'">
+                                                <nv-input type="number" :value="param.demoValue" @whenupdate="updateParam($event, childKey, paramKey)"></nv-input>
+                                            </div>
+                                            <div v-if="param[Object.keys(param.data)[0]] !== 'number'">
+                                                <nv-input type="text" multiline="true" :value="param.demoValue"
+                                                    @whenupdate="updateParam($event, childKey, paramKey)"></nv-input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{{child.returns}}</td>
+                                <td>{{child.description}}</td>
+                                <td>
+                                    <nv-button type="primary" @whenclick="runMethod(child.name, childKey)">try</nv-button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div v-if="childrenKey === 'Events'">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>name</th>
+                                    <th>description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(child, childKey) in children" :key="childKey">
+                                    <td>{{child.name}}</td>
+                                    <td>{{child.description}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                <div v-if="childrenKey === 'Private properties'">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>name</th>
+                                <th>type</th>
+                                <th>description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(child, childKey) in children" :key="childKey">
+                                <td>{{child.name}}</td>
+                                <td>{{child.type}}</td>
+                                <td>{{child.description}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div v-if="childrenKey === 'Private methods'">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>name</th>
+                                <th>parameters</th>
+                                <th>returns</th>
+                                <th>description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(child, childKey) in children" :key="childKey">
+                                <td>{{child.name}}</td>
+                                <td>
+                                    <div v-if="child.parameters">
+                                        <div v-for="(param, paramKey) in child.parameters" :key="paramKey">
+                                            <div><span><span>{{Object.keys(param.data)[0]}}</span>: <span>{{param.data[Object.keys(param.data)[0]]}}</span></span></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{{child.returns}}</td>
+                                <td>{{child.description}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div v-if="childrenKey === 'Private accessors'">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>name</th>
+                                <th>returns</th>
+                                <th>description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(child, childKey) in children" :key="childKey">
+                                <td>{{child.name}}</td>
+                                <td>{{child.returns}}</td>
+                                <td>{{child.description}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </nv-tab-content>
+    </div>
+</div>

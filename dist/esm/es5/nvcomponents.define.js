@@ -2,26 +2,42 @@
 import { defineCustomElement } from './nvcomponents.core.js';
 import {
   MaterialIcon,
+  NvButton,
   NvCheckbox,
   NvCheckboxArray,
   NvImage,
+  NvInput,
   NvMenu,
   NvProgress,
+  NvPulse,
+  NvRadio,
+  NvRipple,
+  NvSlider,
+  NvSwitch,
   NvTabContent,
   NvTabs,
-  NvTootltip
+  NvTootltip,
+  NvWave
 } from './nvcomponents.components.js';
 
 export function defineCustomElements(window, opts) {
   defineCustomElement(window, [
     MaterialIcon,
+    NvButton,
     NvCheckbox,
     NvCheckboxArray,
     NvImage,
+    NvInput,
     NvMenu,
     NvProgress,
+    NvPulse,
+    NvRadio,
+    NvRipple,
+    NvSlider,
+    NvSwitch,
     NvTabContent,
     NvTabs,
-    NvTootltip
+    NvTootltip,
+    NvWave
   ], opts);
 }

@@ -1,4 +1,5 @@
 import '../../stencil.core';
+import { EventEmitter } from '../../stencil.core';
 /** @desc gracefully renders an image with an optional placeholder */
 export declare class NvImage {
     /** @desc image container element */
@@ -13,6 +14,18 @@ export declare class NvImage {
     height: number;
     /** @desc timer for getting image dimensions */
     timer: any;
+    /** @desc called when image is loaded */
+    whenload: EventEmitter;
+    /** @desc called when image meta is loaded */
+    whenmeta: EventEmitter;
+    /** @desc called when an error occurs loading the image */
+    whenerror: EventEmitter;
+    /** @desc called when an error occurs loading the image */
+    whenError: Function | undefined;
+    /** @desc called when an error occurs loading the image */
+    whenMeta: Function | undefined;
+    /** @desc called when image is loaded */
+    whenLoad: Function | undefined;
     /** @desc whether or not the image should act like css background size cover */
     cover: boolean;
     /** @desc url to the image */

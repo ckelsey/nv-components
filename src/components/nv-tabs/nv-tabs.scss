@@ -1,149 +1,26 @@
-:host {
-    width: 100%;
-    height: auto;
-    display: block;
-}
-
-.nv-tabs-wrapper{
+:host{
     position: relative;
     width: 100%;
     height: auto;
-    display: block;
+    outline: none !important;
+    font-size: $fontSize;
+    font-family: $fontFamily;
+    font-weight: $fontWeight;
+    line-height: $lineHeight;
+    color: $lightGray2;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    opacity: 0;
+    transition: opacity 0.2s;
 
-    .nv-tabs {
-        display: none;
-        opacity: 0;
-        position: relative;
-        outline: none !important;
-        font-size: $fontSize;
-        font-family: $fontFamily;
-        font-weight: $fontWeight;
-        line-height: $lineHeight;
-        color: $lightGray2;
-        &.nv-tabs-ready {
-            opacity: 1;
-            display: block;
-        }
-        &.nv-tabs-tabs {
-            display: flex;
-            width: 100%;
-            flex-wrap: nowrap;
-            align-items: center;
-            justify-content: flex-start;
-            &.nv-tabs-center {
-                justify-content: center;
-            }
-        }
-        .nv-tab {
-            position: relative;
-            cursor: pointer;
-            padding: 12px 24px;
-            box-sizing: border-box;
-            opacity: 0.625;
-            outline: none !important;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            white-space: nowrap;
-            flex-shrink: 0;
-            line-height: 2em;
-            transition: opacity 0.2s ease-in-out;
-            .nv-tabs-active-ripple,
-            .nv-tabs-active-ripple2 {
-                width: 40px;
-                height: 40px;
-                margin: -20px;
-                top: calc(50% - 20px);
-                left: calc(50% - 20px);
-                opacity: 0;
-                position: absolute;
-                transform: scale3d(0, 0, 0);
-                transform-origin: 50% 50%;
-                transition: margin 0.5s ease-in-out 0.4s, transform .4s ease-in-out 0.2s, opacity .4s ease-in-out;
-                pointer-events: none;
-                border-radius: 50%;
-                background: radial-gradient(circle at center, $highlight2 80%, transparentize($color: $highlight2, $amount: 1) 80%);
-            }
-            .nv-tabs-active-ripple2 {
-                width: 30px;
-                height: 30px;
-                margin: -15px;
-                top: calc(50% - 15px);
-                left: calc(50% - 15px);
-                transition: margin 0.5s ease-in-out, transform .5s ease-in-out 0.5s, opacity .5s ease-in-out;
-            }
-            .nv-tabs-active-tab-indicator {
-                position: absolute;
-                height: 2px;
-                background: $highlight2;
-                width: 100%;
-                pointer-events: none;
-                bottom: 0px;
-                opacity: 0;
-            }
-            &:hover {
-                opacity: 0.75;
-            }
-            &.nv-tab-rippling,
-            &.nv-tab-pulsing,
-            &.nv-tab-activating,
-            &.nv-tab-active {
-                opacity: 1;
-            }
-            &.nv-tab-active {
-                animation: ripple 2s ease-in-out;
-                .nv-tabs-active-tab-indicator {
-                    opacity: 1;
-                }
-            }
-            &.nv-tab-pulsing-start {
-                .nv-tabs-active-ripple {
-                    opacity: 0.03;
-                    transform: scale3d(1.8, 1.8, 1.8);
-                    transition: all .4s;
-                    top: calc(50% - 20px) !important;
-                    left: calc(50% - 20px) !important;
-                    margin: 0px;
-                    background: radial-gradient(circle at center, $lightGray2 80%, transparentize($color: $lightGray2, $amount: 1) 80%);
-                }
-            }
-            &.nv-tab-pulsing {
-                .nv-tabs-active-ripple {
-                    animation-name: pulsing;
-                    animation-duration: 1.2s;
-                    animation-iteration-count: infinite;
-                    animation-direction: alternate;
-                }
-            }
-            &.nv-tab-rippling {
-                .nv-tabs-active-ripple {
-                    opacity: 0.05;
-                    transform: scale3d(5, 5, 5);
-                    transition: transform .4s ease-in-out 0s, opacity .4s ease-in-out;
-                }
-                .nv-tabs-active-ripple2 {
-                    opacity: 0.025;
-                    transform: scale3d(3, 3, 3);
-                    transition: transform .5s ease-in-out 0s, opacity .5s ease-in-out;
-                }
-            }
-        }
+    &.ready{
+        opacity: 1;
     }
 
-    .active-indicator {
-        position: absolute;
-        height: 2px;
-        background: $highlight2;
-        width: 0%;
-        pointer-events: none;
-        bottom: 0px;
-        transition: left 0.2s ease-in-out, width 0.3s ease-in-out;
-        opacity: 0;
 
-        &.nv-tabs-activating{
-            opacity: 1;
-        }
+    &[center="true"] {
+        justify-content: center;
     }
 }

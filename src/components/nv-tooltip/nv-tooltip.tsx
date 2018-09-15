@@ -1,8 +1,11 @@
 // fix bottom position if too big
 
-import { Component, Element, Prop, Event, EventEmitter } from '@stencil/core'
+import { Component, Element, Prop, Event, EventEmitter, Method } from '@stencil/core'
 
-/** @desc renders a tooltip */
+/** 
+ * @desc renders a tooltip 
+ * @yield slot
+ * */
 
 @Component({
     tag: 'nv-tooltip',
@@ -37,6 +40,8 @@ export class NvTootltip {
     /** @desc proxy reference to the active property */
     _active: boolean = false
 
+    scrollPosition: number = 0
+
     /** @desc available position keywords */
     positions = [
         'bottom',
@@ -48,25 +53,44 @@ export class NvTootltip {
     /** @desc component element */
     @Element() element: HTMLElement
 
-    /** @desc padding to give the tooltip */
+    /**
+     * @desc padding to give the tooltip
+     * @example ''
+     */
     @Prop() padding: number = 8
+
+    @Prop() width: string = ``
 
     /** @desc position of the tooltip */
     @Prop() position: string = ``
 
     /** @desc whether or not the tooltip is shown */
-    @Prop({ mutable: true }) active: boolean = false
+    @Prop({ mutable: true, reflectToAttr: true }) active: boolean = false
 
-    /** @desc what event to trigger the tooltip on, when 'never' the tooltip relies on the active property to be updated */
+    /** 
+     * @desc what event to trigger the tooltip on, when 'never' the tooltip relies on the active property to be updated 
+     * @example ''
+    */
     @Prop() triggerOn: string = `mouseenter`
 
     /** @desc element to anchor the tooltip as well as what to set the tigger events to */
     @Prop() triggerElement: HTMLElement | string = ''
 
-    /** @desc duration to hide the tooltip after */
+    /** 
+     * @desc duration to hide the tooltip after 
+     * @example undefined
+    */
+    @Prop() offset: number = 10
+
+    /** 
+     * @example undefined
+    */
     @Prop() hideAfter: number = 0
 
-    /** @desc duration to delay showing the tooltip */
+    /** 
+     * @desc duration to delay showing the tooltip 
+     * @example undefined
+     */
     @Prop() delay: number = 0
 
     /** @desc whether or not to show a css box-shadow */
@@ -80,6 +104,10 @@ export class NvTootltip {
 
     /** @desc sets the dimensions of the tooltip */
     setDimensions() {
+        if (!this.container) {
+            return
+        }
+
         const parentBox = this._triggerElement.getBoundingClientRect()
 
         this.container.style.width = `${this._triggerElement.offsetWidth}px`
@@ -96,44 +124,60 @@ export class NvTootltip {
 
     /** @desc sets the position of the tooltip */
     setPositions() {
+        if (!this.container) {
+            return
+        }
+
+        this.scrollPosition = this.contentInner.scrollTop
+
         let position = `bottom`
 
         if (this.position && this.positions.indexOf(this.position) > -1) {
             position = this.position
         }
 
+        if (this.width && this.width !== ``) {
+            this.contentInner.style.width = this.width
+            this.contentInnerInner.style.width = this.width
+            this.content.style.width = this.width
+        }
+
         this.container.setAttribute(`position`, position)
 
-        const offset = 10
         const containerBox = this.container.getBoundingClientRect()
         let width = this.contentInner.offsetWidth
         let height = this.contentInner.offsetHeight
         let x = 0
         let y = 0
 
+        if (height !== this.contentInnerInner.offsetHeight) {
+            this.contentInner.style.height = `${this.contentInnerInner.offsetHeight}px`
+            height = this.contentInner.offsetHeight
+        }
+
         if (width > window.innerWidth) {
-            this.contentInner.style.width = `${window.innerWidth - (offset * 2)}px`
+            this.contentInner.style.width = `${window.innerWidth - (this.offset * 2)}px`
             width = this.contentInner.offsetWidth
         }
 
         if (height > window.innerHeight) {
-            this.contentInner.style.height = `${(window.innerHeight - (offset * 2)) * 0.8}px`
+            this.contentInner.style.height = `${(window.innerHeight - (this.offset * 2)) * 0.8}px`
             height = this.contentInner.offsetHeight
         }
 
         const setY = () => {
             if (containerBox.top > window.innerHeight - containerBox.bottom) {
-                return -((height / 2) + (containerBox.height / 2) + offset)
+                return -((height / 2) + (containerBox.height / 2) + this.offset)
             } else {
-                return (height / 2) + (containerBox.height / 2) + offset
+                return (height / 2) + (containerBox.height / 2) + this.offset
             }
         }
 
         const adjustTopBottom = () => {
             const needsTopAdjustment = containerBox.top - (height / 2) < 0
             const needsBottomAdjustment = containerBox.bottom + (height / 2) > window.innerHeight
-            const amountToShiftDown = ((height / 2) - containerBox.top) + offset
-            const amountToShiftUp = window.innerHeight - ((height / 2) + containerBox.bottom + offset)
+            const amountToShiftDown = ((height / 2) - containerBox.top) + this.offset
+            const amountToShiftUp = window.innerHeight - ((height / 2) + containerBox.bottom + this.offset)
 
             if (needsTopAdjustment) {
                 y = amountToShiftDown
@@ -144,14 +188,14 @@ export class NvTootltip {
 
         switch (position) {
             case `left`:
-                if (containerBox.left - (width + offset) < 0) {
-                    if (containerBox.right + (width + offset) < window.innerWidth) {
-                        x = width + (offset * 2) + containerBox.width
+                if (containerBox.left - (width + this.offset) < 0) {
+                    if (containerBox.right + (width + this.offset) < window.innerWidth) {
+                        x = width + (this.offset * 2) + containerBox.width
 
                         adjustTopBottom()
                     } else {
                         y = setY()
-                        x = (width + offset) + ((containerBox.width / 2) - (width / 2))
+                        x = (width + this.offset) + ((containerBox.width / 2) - (width / 2))
                     }
                 } else {
                     adjustTopBottom()
@@ -160,14 +204,14 @@ export class NvTootltip {
                 break
 
             case `right`:
-                if (containerBox.right + (width + offset) > window.innerWidth) {
-                    if (containerBox.left - (width + offset) > 0) {
-                        x = -(width + (offset * 2) + containerBox.width)
+                if (containerBox.right + (width + this.offset) > window.innerWidth) {
+                    if (containerBox.left - (width + this.offset) > 0) {
+                        x = -(width + (this.offset * 2) + containerBox.width)
 
                         adjustTopBottom()
                     } else {
                         y = setY()
-                        x = -((width + offset) + ((containerBox.width / 2) - (width / 2)))
+                        x = -((width + this.offset) + ((containerBox.width / 2) - (width / 2)))
                     }
                 } else {
                     adjustTopBottom()
@@ -176,32 +220,32 @@ export class NvTootltip {
                 break
 
             case `top`:
-                if (containerBox.top - height - offset + window.pageYOffset < 0) {
-                    y = height + (offset * 2) + containerBox.height
+                if (containerBox.top - height - this.offset + window.pageYOffset < 0) {
+                    y = height + (this.offset * 2) + containerBox.height
                 }
 
                 break
 
             default:
-                y = height + offset
+                y = height + this.offset
 
-                if (containerBox.bottom + height + offset > window.innerHeight) {
+                if (containerBox.bottom + height + this.offset > window.innerHeight) {
 
-                    if ((containerBox.top + window.pageYOffset) - (height - (offset * 2)) > 0) {
-                        y = -(containerBox.height + offset)
+                    if ((containerBox.top + window.pageYOffset) - (height - (this.offset * 2)) > 0) {
+                        y = -(containerBox.height + this.offset)
                     } else {
-                        this.contentInner.style.height = `${(window.innerHeight - (offset * 2)) * 0.8}px`
+                        this.contentInner.style.height = `${(window.innerHeight - (this.offset * 2)) * 0.8}px`
                         height = this.contentInner.offsetHeight
 
                         if (containerBox.top > window.innerHeight - containerBox.bottom) {
-                            this.contentInner.style.height = `${containerBox.top - (offset * 2)}px`
+                            this.contentInner.style.height = `${containerBox.top - (this.offset * 2)}px`
                             height = this.contentInner.offsetHeight
 
-                            y = -((height / 2) + (containerBox.height / 2) + offset)
+                            y = -(height + this.offset)
                         } else {
-                            this.contentInner.style.height = `${(window.innerHeight - containerBox.bottom) - (offset * 2)}px`
+                            this.contentInner.style.height = `${(window.innerHeight - containerBox.bottom) - this.offset - 10}px`
                             height = this.contentInner.offsetHeight
-                            y = (height / 2) + (containerBox.height / 2) + offset
+                            y = height + this.offset
                         }
                     }
                 }
@@ -213,12 +257,14 @@ export class NvTootltip {
         const box = this.content.getBoundingClientRect()
 
         if (box.left < 0) {
-            x = -(box.left) + offset
+            x = -(box.left) + this.offset
             this.content.style.transform = `scale(1,1) translate(${x}px, ${y}px)`
         } else if (box.right > window.innerWidth) {
-            x = window.innerWidth - box.right - offset
+            x = window.innerWidth - box.right - this.offset
             this.content.style.transform = `scale(1,1) translate(${x}px, ${y}px)`
         }
+
+        this.contentInner.scrollTop = this.scrollPosition
     }
 
     /** @desc timer function that checks the dimensions/positions of the tooltip when active */
@@ -229,11 +275,12 @@ export class NvTootltip {
             return
         }
 
-        this.setDimensions()
+        if (!this.container) {
+            return
+        }
 
-        setTimeout(() => {
-            this.setPositions()
-        }, 1)
+        this.setDimensions()
+        this.setPositions()
 
         this.checkDimensionsTimer = setTimeout(() => {
             this.checkDimensions()
@@ -242,12 +289,20 @@ export class NvTootltip {
 
     /** @desc opens the tooltip */
     open() {
+        if (!this.container) {
+            return
+        }
+
         clearTimeout(this.openTimer)
 
         this.container.style.removeProperty(`transform-origin`)
         this.contentInner.style.width = this.contentInner.style.height = `auto`
 
         this.openTimer = setTimeout(() => {
+            if (!this.container) {
+                return
+            }
+
             if (this.triggerOn === `never`) {
                 if (!this.active) {
                     return
@@ -263,6 +318,9 @@ export class NvTootltip {
 
                 if (this.hideAfter) {
                     setTimeout(() => {
+                        if (!this.container) {
+                            return
+                        }
                         this.close()
                     }, this.hideAfter)
                 }
@@ -272,6 +330,9 @@ export class NvTootltip {
 
     /** @desc closes the tooltip */
     close() {
+        if (!this.container) {
+            return
+        }
 
         if (this.triggerOn === `never`) {
             if (this.active) {
@@ -285,18 +346,28 @@ export class NvTootltip {
 
         clearTimeout(this.openTimer)
 
-        if (this.container.classList.contains(`open`)) {
-            this.container.classList.remove(`open`)
-            this.content.removeAttribute(`style`)
+        try {
+            if (this.container.classList.contains(`open`)) {
+                this.container.classList.remove(`open`)
+                this.content.removeAttribute(`style`)
 
-            setTimeout(() => {
-                this.container.style.removeProperty(`transform-origin`)
-            }, 300)
-        }
+                setTimeout(() => {
+                    if (!this.container) {
+                        return
+                    }
+
+                    this.container.style.removeProperty(`transform-origin`)
+                }, 300)
+            }
+        } catch (error) { }
     }
 
     /** @desc closes the tooltip if scrolled out of view */
     handleIntersect(entries: any) {
+        if (!this.container) {
+            return
+        }
+
         if (this.active && !entries[0].isIntersecting) {
             this.close()
         }
@@ -304,6 +375,10 @@ export class NvTootltip {
 
     /** @desc triggers open */
     doOpen() {
+        if (!this.container) {
+            return
+        }
+
         if (this.active) {
             this.close()
         } else {
@@ -313,6 +388,10 @@ export class NvTootltip {
 
     /** @desc triggers close */
     doClose() {
+        if (!this.container) {
+            return
+        }
+
         if (!this.active) {
             this.close()
         }
@@ -320,6 +399,11 @@ export class NvTootltip {
 
     /** @desc handles click outside of tooltip */
     doBodyClick(e: Event) {
+        if (!this.container || !this._triggerElement || !this.element) {
+            window.document.body.removeEventListener(`click`, this.doBodyClick)
+            return
+        }
+
         const wasOnParent = e.target === this._triggerElement || this._triggerElement.contains((e.target as Node));
         const wasOnSelf = e.target === this.container || e.target === this.element || this.container.contains((e.target as Node)) || this.element.contains((e.target as Node));
 
@@ -365,6 +449,9 @@ export class NvTootltip {
             this.content.classList.remove(`boxShadow`)
         }
 
+        clearTimeout(this.checkDimensionsTimer)
+        this.checkDimensions()
+
         if (this.active === this._active) {
             return
         }
@@ -402,6 +489,35 @@ export class NvTootltip {
         this.update()
 
         window.document.body.addEventListener(`click`, this.doBodyClick)
+
+        const mutationObserver = new MutationObserver((mutations: Array<MutationRecord>) => {
+            for (let i = 0; i < mutations.length; i++) {
+                if (mutations[i].type === `childList`) {
+                    this.update()
+                    break;
+                }
+            }
+        })
+
+        mutationObserver.observe(this.element, {
+            attributes: true,
+            childList: true,
+            characterData: true
+        })
+    }
+
+    componentDidUnload() {
+        window.document.body.removeEventListener(`click`, this.doBodyClick)
+    }
+
+    /**
+    * @desc replaces current html with the provided
+    * @param html html to replace existing
+    */
+    @Method()
+    updateInnerHTML(html: string) {
+        this.container.innerHTML = html
+        this.update()
     }
 
     /** @desc lifecycle hook for when component is rendered */

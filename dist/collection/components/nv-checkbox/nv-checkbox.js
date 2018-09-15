@@ -1,6 +1,11 @@
 /** @desc renders a styled checkbox component */
 export class NvCheckbox {
     constructor() {
+        /**
+         * @desc Whether or not component can update active states. default is false as this should be handled by controller
+         * @example true
+         */
+        this.selfUpdate = false;
         /** @desc value for the checkbox */
         this.value = true;
         /** @desc text for the label */
@@ -41,8 +46,11 @@ export class NvCheckbox {
         if (this.whenUpdate && typeof this.whenUpdate === `function`) {
             this.whenUpdate(updateData);
         }
-        this.change.emit(updateData);
+        this.whenupdate.emit(updateData);
         this.onClick();
+        if (this.selfUpdate) {
+            this.value = newValue;
+        }
     }
     /**
      * @desc handles the enter key press
@@ -56,56 +64,25 @@ export class NvCheckbox {
     }
     /** @desc handles hover state */
     mouseOverBox() {
-        this.hoverBox.classList.add(`pulseIn`);
-        this.hoverBox.classList.add(`pulseOut`);
-        this.pulseTimer = setInterval(() => {
-            this.hoverBox.classList.toggle(`pulseOut`);
-        }, 1200);
+        this.pulseBox.startPulse();
     }
     /** @desc handles hover leave state */
     mouseLeaveBox() {
-        clearInterval(this.pulseTimer);
-        this.hoverBox.classList.remove(`pulseIn`);
-        this.hoverBox.classList.remove(`pulseOut`);
+        this.pulseBox.stopPulse();
     }
     /** @desc handles click and updates state */
     onClick() {
-        const cleanUp = () => {
-            clearTimeout(this.rippleTimer);
-            this.rippleBox.classList.remove(`rippling`);
-            this.rippleBox.classList.remove(`rippleIn`);
-            this.rippleBox.classList.remove(`rippleMiddle`);
-            this.rippleBox.classList.remove(`rippleOut`);
-            this.rippleBox.classList.remove(`rippleGrow`);
-        };
         if (!this.container.querySelector(`input:focus`)) {
-            clearInterval(this.pulseTimer);
-            this.hoverBox.classList.remove(`pulseIn`);
-            this.hoverBox.classList.remove(`pulseOut`);
+            this.pulseBox.stopPulse();
         }
-        this.rippleBox.classList.add(`rippling`);
-        this.rippleBox.classList.add(`rippleIn`);
-        this.rippleTimer = setTimeout(() => {
-            this.rippleBox.classList.add(`rippleGrow`);
-            this.rippleBox.classList.add(`rippleMiddle`);
-            this.rippleBox.classList.remove(`rippleIn`);
-            this.rippleTimer = setTimeout(() => {
-                this.rippleBox.classList.add(`rippleOut`);
-                this.rippleBox.classList.remove(`rippleMiddle`);
-                this.rippleTimer = setTimeout(() => {
-                    this.rippleBox.classList.remove(`rippling`);
-                    this.rippleBox.classList.remove(`rippleOut`);
-                    cleanUp();
-                }, 300);
-            }, 200);
-        }, 10);
+        this.rippleBox.doRipple();
     }
     /** @desc renders the element */
     render() {
         return (h("div", { ref: (el) => this.container = el, class: { 'nv-checkbox-container': true, selected: !!this.value && this.value !== `false`, 'nv-component-disabled': this.disabled || this.parentDisabled }, onClick: () => this.toggle(), onKeyPress: ev => this.keyPress(ev) },
             h("div", { class: "nv-checkbox-box", onMouseEnter: () => this.mouseOverBox(), onMouseLeave: () => this.mouseLeaveBox() },
-                h("div", { class: "nv-checkbox-box-hover", ref: (el) => this.hoverBox = el }),
-                h("div", { class: "nv-checkbox-box-ripple", ref: (el) => this.rippleBox = el }),
+                h("nv-pulse", { highlight: this.value === true || this.value === `true`, ref: (el) => this.pulseBox = el }),
+                h("nv-ripple", { highlight: this.value === true || this.value === `true`, ref: (el) => this.rippleBox = el }),
                 h("material-icon", { type: this.state })),
             h("label", { innerHTML: this.label }),
             h("input", { class: "nv-checkbox-checkbox-native", ref: (el) => this.nativeCheckbox = el, tabindex: this.tabIndex, type: "checkbox", name: this.label, value: this.label, onFocus: () => this.mouseOverBox(), onBlur: () => this.mouseLeaveBox() })));
@@ -128,12 +105,17 @@ export class NvCheckbox {
             "type": Boolean,
             "attr": "parent-disabled"
         },
+        "selfUpdate": {
+            "type": Boolean,
+            "attr": "self-update"
+        },
         "toggle": {
             "method": true
         },
         "value": {
             "type": "Any",
-            "attr": "value"
+            "attr": "value",
+            "mutable": true
         },
         "whenUpdate": {
             "type": "Any",
@@ -141,8 +123,8 @@ export class NvCheckbox {
         }
     }; }
     static get events() { return [{
-            "name": "change",
-            "method": "change",
+            "name": "whenupdate",
+            "method": "whenupdate",
             "bubbles": true,
             "cancelable": true,
             "composed": true

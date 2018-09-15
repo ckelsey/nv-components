@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
+    <link rel="stylesheet" href="dist/nv-styles/nv-styles.css" type="text/css">
+    <script src="dist/bundled/nv-components.js"></script>
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=sunburst"></script>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script src="demo/demo.js"></script>
+    <!--
+    <div id="page">
+        <div id="sidebar"></div>
+        <div id="content"></div>
+    </div>
+    <script>
+        function addSidebarLinks() {
+            var sidebar = document.getElementById('sidebar')
+
+            Object.keys(components).sort().forEach(function (component, index) {
+                var link = document.createElement('div')
+                link.textContent = components[component].tag
+                link.className = components[component].name
+                link.onclick = function () {
+                    docGenerator.openDoc(components[component])
+                }
+                sidebar.appendChild(link)
+
+                if (!index) {
+                    link.click()
+                }
+            })
+        }
+
+        var components = {}
+        var xhr = new XMLHttpRequest()
+        xhr.open('GET', 'docs.json')
+        xhr.onload = function () {
+            components = window.docParser(JSON.parse(xhr.responseText))
+            addSidebarLinks()
+        }
+        xhr.send()
+
+    </script>
+    -->
+</body>
+
+</html>

@@ -1,6 +1,9 @@
 import '../../stencil.core';
 import { EventEmitter } from '../../stencil.core';
-/** @desc renders a tooltip */
+/**
+ * @desc renders a tooltip
+ * @yield slot
+ * */
 export declare class NvTootltip {
     /** @desc parent element */
     parent: HTMLElement;
@@ -20,23 +23,41 @@ export declare class NvTootltip {
     _triggerElement: HTMLElement;
     /** @desc proxy reference to the active property */
     _active: boolean;
+    scrollPosition: number;
     /** @desc available position keywords */
     positions: string[];
     /** @desc component element */
     element: HTMLElement;
-    /** @desc padding to give the tooltip */
+    /**
+     * @desc padding to give the tooltip
+     * @example ''
+     */
     padding: number;
+    width: string;
     /** @desc position of the tooltip */
     position: string;
     /** @desc whether or not the tooltip is shown */
     active: boolean;
-    /** @desc what event to trigger the tooltip on, when 'never' the tooltip relies on the active property to be updated */
+    /**
+     * @desc what event to trigger the tooltip on, when 'never' the tooltip relies on the active property to be updated
+     * @example ''
+    */
     triggerOn: string;
     /** @desc element to anchor the tooltip as well as what to set the tigger events to */
     triggerElement: HTMLElement | string;
-    /** @desc duration to hide the tooltip after */
+    /**
+     * @desc duration to hide the tooltip after
+     * @example undefined
+    */
+    offset: number;
+    /**
+     * @example undefined
+    */
     hideAfter: number;
-    /** @desc duration to delay showing the tooltip */
+    /**
+     * @desc duration to delay showing the tooltip
+     * @example undefined
+     */
     delay: number;
     /** @desc whether or not to show a css box-shadow */
     boxShadow: boolean;
@@ -72,6 +93,12 @@ export declare class NvTootltip {
     componentDidUpdate(): void;
     /** @desc lifecycle hook for when component is ready */
     componentDidLoad(): void;
+    componentDidUnload(): void;
+    /**
+    * @desc replaces current html with the provided
+    * @param html html to replace existing
+    */
+    updateInnerHTML(html: string): void;
     /** @desc lifecycle hook for when component is rendered */
     render(): JSX.Element;
 }

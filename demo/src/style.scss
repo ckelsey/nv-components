@@ -1,0 +1,109 @@
+html,
+body {
+    height: 100%;
+}
+
+#page {
+    display: flex;
+    height: 100%;
+    overflow: hidden;
+}
+
+#sidebar {
+    width: 200px;
+    background: rgba(13, 17, 19, 0.5);
+    height: 100%;
+    overflow: auto;
+}
+
+#sidebar div {
+    cursor: pointer;
+    padding: 10px 20px;
+}
+
+#sidebar div[active="true"]{
+    background: rgba(31, 35, 37, 0.68);
+}
+
+#sidebar div:hover {
+    background: rgba(31, 35, 37, 0.42);
+}
+
+#content {
+    flex-grow: 1;
+    padding: 20px 3%;
+    overflow: auto;
+    width: calc(100% - 200px);
+}
+
+.demo-container{
+    background: #2c3338;
+    padding: 20px;
+    margin: 0px 0px 48px;
+    position: relative;
+}
+
+.demo-code{
+    width: 100%;
+    background: #1f2325;
+    padding: 20px;
+    box-sizing: border-box;
+    color: rgba(255,255,255,0.45);
+}
+
+.demo-container pre.prettyprint{
+    padding: 20px;
+    border: none;
+    border-radius: 0px;
+    margin: 20px 0px 0px;
+    width: 100%;
+    overflow: auto;
+}
+
+.param-section {
+    padding: 10px 0px;
+}
+
+.slots-section {
+    margin: 0px 0px 48px;
+}
+
+.slot-input {
+    background: #2c3338;
+    padding: 20px;
+}
+
+.component-description {
+    margin-bottom: 48px;
+}
+
+.nv-tab-content table {
+    width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+}
+
+.nv-tab-content table th {
+    background: #2c3338;
+}
+
+.nv-tab-content table tr:nth-child(even) td {
+    background: rgba(44, 51, 56, 0.25);
+}
+
+.nv-tab-content table th,
+.nv-tab-content table td {
+    padding: 14px;
+    vertical-align: text-top;
+}
+
+.nv-tab-content table td pre {
+    display: inline-block;
+    margin: 0px;
+}
+
+pre#exampleCode {
+    width: 100%;
+    margin: 0px 0px 48px;
+    border-radius: 0px;
+}

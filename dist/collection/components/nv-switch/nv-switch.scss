@@ -1,0 +1,71 @@
+:host {
+    width: auto;
+    height: auto;
+    display: inline-block;
+}
+
+.nv-switch-container {
+    display: flex;
+    align-items: center;
+    margin: 7px 0px;
+    outline: none !important;
+    font-size: $fontSize;
+    font-family: $fontFamily;
+    font-weight: $fontWeight;
+    line-height: $lineHeight;
+    color: $lightGray2;
+    cursor: pointer;
+
+    .nv-switch-box {
+        width: 32px;
+        height: 20px;
+        border-radius: 50%;
+        position: relative;
+
+        .nv-switch-track {
+            width: 100%;
+            height: 66%;
+            border-radius: 10px;
+            position: absolute;
+            background-color: #6b6b6b;
+            top: 17%;
+            transition: background-color 0.5s;
+        }
+
+        .nv-switch-ball {
+            width: 0px;
+            height: 0px;
+            padding: 31.25%;
+            border-radius: 50%;
+            position: relative;
+            left: -6%;
+            background-color: #d7d7d7;
+            transition: background-color 0.4s, left 0.3s;
+        }
+    }
+
+    &.selected {
+        .nv-switch-track {
+            background-color: #127000;
+        }
+
+        .nv-switch-ball {
+            left: 45.5%;
+            background-color: #76b900;
+        }
+    }
+
+    label {
+        padding: 0px 32px 0px 0px;
+        cursor: pointer;
+    }
+
+    .nv-switch-switch-native {
+        opacity: 0;
+        pointer-events: none;
+        position: absolute;
+        width: 0px;
+        height: 0px;
+        margin: 0px;
+    }
+}

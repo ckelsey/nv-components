@@ -50,10 +50,10 @@ module.exports = {
         extensions: ['.js']
     },
     plugins: [
-        new ConcatPlugin({
-            outputPath: '../../dist/bundled',
-            fileName: 'nv-components.js',
-            filesToConcat: ['./web_build/files/*.js']
-        })
+        // new ConcatPlugin({
+        //     outputPath: '../../dist/bundled',
+        //     fileName: 'nv-components.js',
+        //     filesToConcat: ['./web_build/files/*.js']
+        // })
     ]
 }

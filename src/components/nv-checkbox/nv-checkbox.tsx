@@ -12,22 +12,22 @@ export class NvCheckbox {
     nativeCheckbox: HTMLInputElement
 
     /** @desc element that displays hover state */
-    hoverBox: HTMLElement
+    pulseBox: any
 
     /** @desc element that displays ripple effect on check/uncheck */
-    rippleBox: HTMLElement
+    rippleBox: any
 
     /** @desc containing element */
     container: HTMLElement
 
-    /** @desc timer for hover state animation */
-    pulseTimer: any
-
-    /** @desc timer for ripple effect animation */
-    rippleTimer: any
+    /**
+     * @desc Whether or not component can update active states. default is false as this should be handled by controller
+     * @example true
+     */
+    @Prop() selfUpdate: boolean = false
 
     /** @desc value for the checkbox */
-    @Prop() value: boolean | string = true
+    @Prop({mutable:true}) value: boolean | string = true
 
     /** @desc text for the label */
     @Prop() label: string = ''
@@ -45,7 +45,7 @@ export class NvCheckbox {
     @Element() element: HTMLElement
 
     /** @desc an event called when the checkbox state changes */
-    @Event() change: EventEmitter
+    @Event() whenupdate: EventEmitter
 
     /** @desc determines the checkbox's state */
     get state(): string {
@@ -87,8 +87,12 @@ export class NvCheckbox {
             this.whenUpdate(updateData)
         }
 
-        this.change.emit(updateData)
+        this.whenupdate.emit(updateData)
         this.onClick()
+
+        if(this.selfUpdate){
+            this.value = newValue
+        }
     }
 
     /**
@@ -104,61 +108,21 @@ export class NvCheckbox {
 
     /** @desc handles hover state */
     mouseOverBox() {
-        this.hoverBox.classList.add(`pulseIn`)
-        this.hoverBox.classList.add(`pulseOut`)
-
-        this.pulseTimer = setInterval(() => {
-            this.hoverBox.classList.toggle(`pulseOut`)
-        }, 1200)
+        this.pulseBox.startPulse()
     }
 
     /** @desc handles hover leave state */
     mouseLeaveBox() {
-        clearInterval(this.pulseTimer)
-        this.hoverBox.classList.remove(`pulseIn`)
-        this.hoverBox.classList.remove(`pulseOut`)
+        this.pulseBox.stopPulse()
     }
 
     /** @desc handles click and updates state */
     onClick() {
-        const cleanUp = () => {
-            clearTimeout(this.rippleTimer)
-            this.rippleBox.classList.remove(`rippling`)
-            this.rippleBox.classList.remove(`rippleIn`)
-            this.rippleBox.classList.remove(`rippleMiddle`)
-            this.rippleBox.classList.remove(`rippleOut`)
-            this.rippleBox.classList.remove(`rippleGrow`)
-        }
-
         if (!this.container.querySelector(`input:focus`)) {
-            clearInterval(this.pulseTimer)
-            this.hoverBox.classList.remove(`pulseIn`)
-            this.hoverBox.classList.remove(`pulseOut`)
+            this.pulseBox.stopPulse()
         }
 
-        this.rippleBox.classList.add(`rippling`)
-        this.rippleBox.classList.add(`rippleIn`)
-
-        this.rippleTimer = setTimeout(() => {
-
-            this.rippleBox.classList.add(`rippleGrow`)
-            this.rippleBox.classList.add(`rippleMiddle`)
-
-            this.rippleBox.classList.remove(`rippleIn`)
-
-            this.rippleTimer = setTimeout(() => {
-
-                this.rippleBox.classList.add(`rippleOut`)
-                this.rippleBox.classList.remove(`rippleMiddle`)
-
-                this.rippleTimer = setTimeout(() => {
-                    this.rippleBox.classList.remove(`rippling`)
-                    this.rippleBox.classList.remove(`rippleOut`)
-
-                    cleanUp()
-                }, 300)
-            }, 200)
-        }, 10)
+        this.rippleBox.doRipple()
     }
 
     /** @desc renders the element */
@@ -166,8 +130,8 @@ export class NvCheckbox {
         return (
             <div ref={(el: HTMLInputElement) => this.container = el} class={{ 'nv-checkbox-container': true, selected: !!this.value && this.value !== `false`, 'nv-component-disabled': this.disabled || this.parentDisabled }} onClick={() => this.toggle()} onKeyPress={ev => this.keyPress(ev)}>
                 <div class="nv-checkbox-box" onMouseEnter={() => this.mouseOverBox()} onMouseLeave={() => this.mouseLeaveBox()}>
-                    <div class="nv-checkbox-box-hover" ref={(el: HTMLInputElement) => this.hoverBox = el}></div>
-                    <div class="nv-checkbox-box-ripple" ref={(el: HTMLInputElement) => this.rippleBox = el}></div>
+                    <nv-pulse highlight={this.value === true || this.value === `true`} ref={(el: any) => this.pulseBox = el}></nv-pulse>
+                    <nv-ripple highlight={this.value === true || this.value === `true`} ref={(el: any) => this.rippleBox = el}></nv-ripple>
                     <material-icon type={this.state}></material-icon>
                 </div>
                 <label innerHTML={this.label}></label>

@@ -1,6 +1,8 @@
 import { Component, Prop, Element, Event, EventEmitter } from '@stencil/core'
 
-/** @desc renders an array of styled checkbox components */
+/**
+ * @desc renders an array of styled checkbox components
+ */
 
 @Component({
     tag: 'nv-checkbox-array',
@@ -11,10 +13,22 @@ export class NvCheckboxArray {
     /** @desc last toggle state of this array */
     lastToggleState: boolean = false
 
-    /** @desc an array of objects {values/value, label, disabled} to populate checkboxes with */
-    @Prop() values: any[] = []
+    /**
+     * @desc an array of objects {values/value, label, disabled} to populate checkboxes with
+     * @example [{"value":true, "label":"A checkbox"}, {"value":true, "label":"Another checkbox"},{"values":[{"value":true, "label":"Cool stuff"},{"value":true, "label":"Free toys"}], "label":"A nested array"}]
+     */
+    @Prop({ mutable: true }) values: any[] | string = []
 
-    /** @desc label for parent checkbox */
+    /**
+     * @desc Whether or not component can update active states. default is false as this should be handled by controller
+     * @example true
+     */
+    @Prop() selfUpdate: boolean = false
+
+    /**
+    * @desc label for parent checkbox
+    * @example Checkbox array
+    */
     @Prop() label: string = ''
 
     /** @desc whether or not the array is disabled */
@@ -24,13 +38,28 @@ export class NvCheckboxArray {
     @Prop() parentDisabled: boolean = false
 
     /** @desc function that is called when the checkbox state changes */
-    @Prop() whenUpdate: Function = () => { }
-
+    @Prop() whenUpdate: Function
+    
     /** @desc the component element */
     @Element() element: HTMLElement
 
     /** @desc an event called when the checkbox state changes */
-    @Event() change: EventEmitter
+    @Event() whenupdate: EventEmitter
+
+    /** @desc parses values to an array if needed */
+    get _values(): any[] {
+        let values = this.values
+
+        try {
+            values = JSON.parse((this as any).values)
+        } catch (error) { }
+
+        if (!Array.isArray(values)) {
+            return []
+        }
+
+        return values
+    }
 
     /** @desc determines whether or not this array is didabled */
     get isDisabled(): boolean {
@@ -62,11 +91,11 @@ export class NvCheckboxArray {
             return hasTrue && !hasFalse ? true : !hasTrue && hasFalse ? false : `mixed`
         }
 
-        if (!Array.isArray(this.values)) {
+        if (!Array.isArray(this._values)) {
             return false
         }
 
-        return getValues(this.values)
+        return getValues(this._values)
     }
 
     /**
@@ -99,11 +128,11 @@ export class NvCheckboxArray {
         this.lastToggleState = !this.lastToggleState
 
         if (state === true) {
-            newValue = this.setGroupState(false, this.values)
+            newValue = this.setGroupState(false, this._values)
         } else if (state === `mixed`) {
-            newValue = this.setGroupState(this.lastToggleState, this.values)
+            newValue = this.setGroupState(this.lastToggleState, this._values)
         } else {
-            newValue = this.setGroupState(true, this.values)
+            newValue = this.setGroupState(true, this._values)
         }
 
         const updateData = { oldValue, newValue, element: this }
@@ -112,17 +141,21 @@ export class NvCheckboxArray {
             this.whenUpdate(updateData)
         }
 
-        this.change.emit(updateData)
+        this.whenupdate.emit(updateData)
+
+        if (this.selfUpdate) {
+            this.values = newValue
+        }
     }
 
-     /**
-      * @desc update from a child checkbox
-      * @param data data from child
-      */
+    /**
+     * @desc update from a child checkbox
+     * @param data data from child
+     */
     updateChild(data: any) {
         const el = data.element.element
         const oldValue = this.values
-        let newValue = JSON.parse(JSON.stringify(this.values))
+        let newValue = JSON.parse(JSON.stringify(this._values))
         var parent = el.parentNode.parentNode
         var index = Array.prototype.indexOf.call(parent.children, el.parentNode);
 
@@ -138,7 +171,11 @@ export class NvCheckboxArray {
             this.whenUpdate(updateData)
         }
 
-        this.change.emit(updateData)
+        this.whenupdate.emit(updateData)
+
+        if (this.selfUpdate) {
+            this.values = newValue
+        }
     }
 
     /** @desc lifecycle hook for when component is ready */
@@ -159,7 +196,7 @@ export class NvCheckboxArray {
                         <nv-checkbox class="nv-checkbox-array-parent-checkbox" label={this.label} value={this.groupState} disabled={this.isDisabled} whenUpdate={this.updateParent.bind(this)}></nv-checkbox>
                     </div>
                     <div class="nv-checkbox-array-children">
-                        {this.values.map((checkbox) =>
+                        {this._values.map((checkbox) =>
                             <div>
                                 {!checkbox.values ?
                                     <nv-checkbox label={checkbox.label} value={checkbox.value} disabled={this.isDisabled || checkbox.disabled} whenUpdate={this.updateChild.bind(this)}></nv-checkbox>

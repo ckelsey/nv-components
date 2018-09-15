@@ -194,6 +194,10 @@ export class NvProgress {
      */
     update(scale, left) {
 
+        if(!this.barElement){
+            return
+        }
+
         if (this.countElement) {
             if ((!this.previousState || this.previousState === `determinate`) && (!this.state || this.state === `determinate`)) {
                 this.countElement.textContent = `${Math.round(Math.max(scale, this._value) * 100)}%`
@@ -216,6 +220,10 @@ export class NvProgress {
                 this.previousState = this.state
                 this.animate = true
                 return this.updateBarPositions()
+            }
+
+            if(!this.barElement){
+                return
             }
 
             this.update(scaleEasingArray.shift(), 0)

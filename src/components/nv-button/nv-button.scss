@@ -1,0 +1,89 @@
+:host {
+    display: inline-block;
+    position: relative;
+}
+
+button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 64px;
+    font-size: $fontSize;
+    line-height: 36px;
+    font-family: $fontFamily;
+    font-weight: $fontWeight;
+    color: $lightGray2;
+    background: $gray0;
+    padding: 0px 16px;
+    border: none;
+    outline: none !important;
+    cursor: pointer;
+    position: relative;
+
+    .overlay {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        top: 0px;
+        left: 0px;
+        opacity: 0;
+        background: #fff;
+        transition: opacity 0.2s;
+    }
+
+    &.text {
+        background-color: transparent;
+        padding: 0px 8px;
+    }
+
+    &.primary {
+        background: $highlight2;
+        color: #fff;
+    }
+
+    &.disabled {
+        background: $gray0;
+        opacity: 0.38;
+
+        &.text {
+            background: transparent;
+        }
+    }
+
+    &.hover {
+        .overlay {
+            opacity: 0.08;
+        }
+
+        &.text {
+            .overlay {
+                opacity: 0.04;
+            }
+        }
+    }
+
+    &.focus {
+        .overlay {
+            opacity: 0.24;
+        }
+
+        &.text {
+            .overlay {
+                opacity: 0.12;
+            }
+        }
+    }
+
+    &.pressed {
+        .overlay {
+            opacity: 0.32;
+        }
+
+        &.text {
+            .overlay {
+                opacity: 0.16;
+            }
+        }
+    }
+}

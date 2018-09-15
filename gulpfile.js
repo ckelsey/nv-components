@@ -1,22 +1,16 @@
 "use strict";
 const gulp = require('gulp')
-const path = require("path")
 const spawn = require('child_process').spawn
 const fs = require("fs")
-const esprima = require('esprima')
-const espree = require("espree")
-const beautify = require('js-beautify').js
-const Linter = require("eslint").Linter
-const SourceCode = require("eslint").SourceCode
-const linter = new Linter()
 const exec = require('child_process').exec
 const browserSync = require('browser-sync').create();
-const input = path.join(__dirname, `web_build`, `files`, `nv-components.js`)
-const sass = require('node-sass');
+const sass = require('node-sass')
+const docParser = require('./doc-parser')
+const concat = require('concat')
 
 function fonts() {
     return new Promise(resolve => {
-        let child = spawn(`cp`, [`-r`, `./src/assets`, `dist/nv-styles`]);
+        let child = spawn(`cp`, [`-r`, `./src/assets`, `./dist/nv-styles`]);
 
         child.stdout.on('data', (data) => {
             console.log(`${data}`);
@@ -27,101 +21,75 @@ function fonts() {
         });
 
         child.on('exit', function (code, signal) {
-            let child = spawn(`cp`, [`-r`, `./src/assets`, `demo`]);
-
-            child.stdout.on('data', (data) => {
-                console.log(`${data}`);
-            });
-
-            child.stderr.on('data', (data) => {
-                console.error(`${data}`);
-            });
-
-            child.on('exit', function (code, signal) {
-                resolve()
-            });
+            resolve()
         });
     })
 }
 
-function sassRender() {
+function nvStyles() {
     return new Promise(resolve => {
         sass.render({
             file: "./src/global/nv-styles.scss"
         }, function (error, result) {
-            if (!error) {
-                fs.writeFileSync("./dist/nv-styles.css", result.css)
-                fs.writeFileSync("./demo/nv-styles.css", result.css)
+            if (!fs.existsSync(`./dist/nv-styles`)) {
+                fs.mkdirSync(`./dist/nv-styles`)
             }
 
-            resolve()
-        })
-    })
-}
+            if (!error) {
+                fs.writeFileSync("./dist/nv-styles/nv-styles.css", result.css)
+            }
 
-
-function lint() {
-    return new Promise(resolve => {
-        fs.readdirSync(path.join(__dirname, `web_build`, `files`)).forEach(file => {
-            const content = fs.readFileSync(path.join(__dirname, `web_build`, `files`, file), 'utf-8')
-            const output = linter.verifyAndFix(content, {
-                rules: {
-                    "quotes": [2, "single", "avoid-escape"],
-                    "no-unused-vars": 0,
-                    "indent": ["error", 2],
-                    "brace-style": [2, "1tbs", {
-                        "allowSingleLine": false
-                    }],
-                    curly: "all",
-                    "space-before-function-paren": [2, {
-                        "anonymous": "always",
-                        "named": "never"
-                    }],
-                    "key-spacing": [2, {
-                        "beforeColon": false
-                    }],
-                    "no-trailing-spaces": [2, {
-                        "skipBlankLines": true
-                    }],
-                    "max-len": ["error", {
-                        "code": 80
-                    }],
-                    "no-underscore-dangle": 0
-                }
-            })
-            fs.writeFileSync(path.join(__dirname, `web_build`, `files`, file), output.output)
+            fonts().then(resolve)
         })
     })
 }
 
 function pack() {
     return new Promise(resolve => {
-        const p = spawn(`npm`, [`run`, `pack`])
-        p.stdout.on('data', (data) => {
+        const s = spawn(`npm`, [`run`, `build`])
+        s.stdout.on('data', (data) => {
             console.log(`${data}`);
         })
-        p.stderr.on('data', (data) => {
+        s.stderr.on('data', (data) => {
             console.error(`${data}`);
         })
 
-        p.on('exit', function (code, signal) {
-            const c = spawn(`cp`, [`dist/bundled/nv-components.js`, `demo`])
-            c.stdout.on('data', (data) => {
-                console.log(`${data}`);
-            })
-            c.stderr.on('data', (data) => {
-                console.error(`${data}`);
-            })
-            c.on('exit', function (code, signal) {
-                resolve()
-            });
-        });
+        s.on('exit', function (code, signal) {
+            fs.writeFileSync(`./pack.js`, `import { defineCustomElements } from './dist/esm/index'; defineCustomElements(window);`)
+
+            setTimeout(() => {
+                const w = spawn(`webpack`, [`--config`, `./webpack.config.js`, `--progress`])
+                w.stdout.on('data', (data) => {
+                    console.log(`${data}`)
+                })
+                w.stderr.on('data', (data) => {
+                    console.error(`${data}`)
+                })
+
+                w.on('exit', function (code, signal) {
+                    fs.unlinkSync('./pack.js')
+
+                    setTimeout(() => {
+                        resolve()
+
+                        const files = fs.readdirSync('./web_build/files/')
+
+                        fs.mkdirSync(`./dist/bundled`)
+
+                        concat(files.map(f => `./web_build/files/${f}`)).then(result => {
+                            fs.writeFileSync(`./dist/bundled/nv-components.js`, result)
+                            resolve()
+                        })
+                    }, 500)
+                })
+            }, 1500)
+        })
     })
 }
 
 function docs() {
     return new Promise(resolve => {
-        const child = spawn(`typedoc`, [`--json`, `./demo/docs.json`])
+        const child = spawn(`typedoc`, [`--json`, `./docs/docs.json`])
         child.stdout.on('data', (data) => {
             console.log(`${data}`);
         })
@@ -130,6 +98,7 @@ function docs() {
         })
 
         child.on('exit', function (code, signal) {
+            fs.writeFileSync('./docs/docs.json', JSON.stringify(docParser(require('./docs/docs.json'))))
             resolve()
         });
     })
@@ -137,56 +106,83 @@ function docs() {
 
 function demo() {
     return new Promise(resolve => {
-        const child = spawn(`cp`, [`-r`, `src/assets`, `demo`]);
+        const w = spawn(`webpack`, [`--config`, `./demo/webpack.config.js`, `--progress`])
+        w.stdout.on('data', (data) => {
+            console.log(`${data}`)
+        })
+        w.stderr.on('data', (data) => {
+            console.error(`${data}`)
+        })
 
-        child.stdout.on('data', (data) => {
-            console.log(`${data}`);
-        });
-
-        child.stderr.on('data', (data) => {
-            console.error(`${data}`);
-        });
-
-        child.on('exit', function (code, signal) {
+        w.on('exit', function (code, signal) {
+            exec(`cp ./demo/src/index.html ./index.html`)
             resolve()
-        });
+        })
     })
 }
 
 function dev() {
     return new Promise(resolve => {
-        return pack()
+        return clean()
             .then(() => {
-                return sassRender()
+                return pack()
             })
             .then(() => {
-                return fonts()
+                return nvStyles()
             })
             .then(() => {
                 return docs()
             })
             .then(() => {
+                return demo()
+            })
+            .then(() => {
+                exec(`osascript -e 'display notification "Complete" with title "WEBPACK"'`)
                 return resolve()
             })
     })
 }
 
+function clean() {
+    return new Promise(resolve => {
+        exec(`rm -r ./dist`, () => {
+            exec(`rm -r ./web_build`, () => {
+                exec(`rm -r ./www`, () => {
+                    exec(`rm ./demo/demo.js`, () => {
+                        exec(`rm -r ./docs`, () => {
+                            resolve()
+                        })
+                    })
+                })
+            })
+        })
+    })
+}
+
+gulp.task('clean', function (cb) {
+    clean().then(cb)
+})
+
+gulp.task('docs', function (cb) {
+    docs().then(cb)
+})
+
 gulp.task('server', function () {
     browserSync.init({
-        serveStatic: ['./demo'],
-        port: 5656,
+        serveStatic: ['./'],
+        port: 5555,
         https: true,
         single: true
     })
-
-    gulp.watch("./src/**/**/*.*", ['dev'])
 })
 
 gulp.task('watch', function () {
-    gulp.watch("./src/**/**/*.*", ['dev']);
+    gulp.watch(["./src/**/**/*.*", "./demo/src/*.*"], ['dev']);
 })
 
 gulp.task('dev', dev)
+
+gulp.task('build', dev)
 
 gulp.task("default", [
     "watch",

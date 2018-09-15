@@ -21,371 +21,50 @@
 </head>
 
 <body>
-    <script>
-        window.settings = {
-            checkbox: {
-                value: true,
-                label: 'A box to check',
-                disabled: false,
-                whenUpdate: function (data) {
-                    window.settings.checkbox.value = data.element.element.value = data.newValue
-                }
-            },
-            checkboxArray: {
-                label: `A group`,
-                disabled: false,
-                whenUpdate: function (data) {
-                    window.settings.checkboxArray.values = data.element.element.values = data.newValue
-                },
-                values: [{
-                    label: 'item 1',
-                    value: true,
-                    disabled: false
-                }, {
-                    label: 'item 2',
-                    value: true,
-                    disabled: true
-                }, {
-                    label: 'item 3',
-                    value: true
-                }, {
-                    label: 'item 4',
-                    disabled: false,
-                    values: [{
-                        label: 'item 4-1',
-                        value: true
-                    }, {
-                        label: 'item 4-2',
-                        value: true
-                    }]
-                }, {
-                    label: 'item 5',
-                    value: true
-                }]
-            },
-            progress: {
-                value: 0,
-                state: 'indeterminate',
-                speed: 1,
-                start: 0,
-                message: `Initializing`,
-                showCount: true
-            },
-            menu:[
-                'something',
-                'another'
-            ]
-        }
-
-        function changeIcon(e) {
-            setIcon(e.target.selectedOptions[0].value)
-        }
-
-        function setIcon(type) {
-            var icon = document.getElementById('icon')
-            var iconTypesSelector = document.getElementById('iconTypes')
-            var icons = icon.icons()
-
-            iconTypesSelector.innerHTML = ''
-
-            for (var i in icons) {
-                var option = document.createElement('option')
-                option.value = option.textContent = i
-                iconTypesSelector.appendChild(option)
-            }
-
-            if (!type) {
-                type = Object.keys(icons)[0]
-            }
-
-            icon.type = type
-        }
-
-        function setIconColor(color) {
-            var icon = document.getElementById('icon')
-            icon.color = color
-        }
-
-        function setIconSize(size) {
-            var icon = document.getElementById('icon')
-            icon.size = size
-        }
-
-    </script>
 
     <div class="section">
-        <div>
-            <h2>nv-image</h2>
-        </div>
-        <div>
-            <nv-image id="image" url="https://images.nvidia.com/swgf/190378974359060698/9048/RmluYWxfRmFudGFzeV9YVl9XaW5kb3dzX0VkaXRpb25fU3VwZXJfUmVzb2x1dGlvbl8yMDE4LjA1LjA0X19fMDEuMTkuMDUuNzQ.png"></nv-image>
-        </div>
-    </div>
-
-    <div class="section">
-        <div>
-            <h2>nv-progress</h2>
-        </div>
-        <nv-progress id="progress"></nv-progress>
-
-    </div>
-    <div class="section">
-        <div>
-            <h2>nv-tooltip</h2>
-        </div>
-        <div style="height: 200px;overflow: auto;position: relative;">
-            <div style="height: 400px;padding-top:300px;text-align: left;">
-                <button><span style="font-size:14px;">|-|-|-|-|-|-|-|-|-|</span>
-                    <nv-tooltip id="tooltip" position="right" active="false" hide-after="0" delay="0" trigger-on="click">Test</nv-progress>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div class="section">
-        <div>
-            <div>
-                <h2>material-icon</h2>
-            </div>
-            <material-icon id="icon"></material-icon>
-        </div>
-        <div>
-            <label>type</label>
-            <select id="iconTypes"></select>
-        </div>
-        <div>
-            <label>color</label>
-            <input type="text" id="iconColor">
-        </div>
-        <div>
-            <label>size</label>
-            <input type="text" id="iconSize">
-        </div>
-    </div>
-
-    <div class="section">
-        <div>
-            <h2>nv-checkbox</h2>
-        </div>
-        <div>
-            <nv-checkbox id="checkbox"></nv-checkbox>
-        </div>
-    </div>
-
-    <div class="section">
-        <div>
-            <h2>nv-checkbox-array</h2>
-        </div>
-        <nv-checkbox-array id="checkboxArray">
-            </nv-checkbox>
-    </div>
-
-    <div class="section">
-        <div>
-            <h2>nv-tabs</h2>
-        </div>
-        <nv-tabs tab-id="1" center="true">
-            <div>
-                <material-icon type="check_box"></material-icon>A tab
-            </div>
-            <div>
-                <material-icon type="check_box_outline_blank"></material-icon>Another tab
-            </div>
-            <div>
-                <material-icon type="indeterminate_check_box"></material-icon>Yet another tab
-            </div>
-            <div>
-                <material-icon type="check_box_outline_blank"></material-icon>A tab2
-            </div>
-            <div>
-                <material-icon type="check_box"></material-icon>Another tab2
-            </div>
-            <div>
-                <material-icon type="indeterminate_check_box"></material-icon>Yet another tab2
-            </div>
+        <nv-tabs tab-id="test">
+            <div>Hi</div>
+            <div>Ho</div>
         </nv-tabs>
-    </div>
 
-    <div class="section" style=" text-align: right">
-        <div>
-            <h2>nv-menu</h2>
-        </div>
-        <button id="menu-button">Click me</button>
-        <nv-menu id="menu" anchor="#menu-button" options='some,thing,<b>height</b>, 400px,padding-top,300px,,https,//,images,nvidia,com,swgf,190378974359060698,9048,RmluYWxfRmFudGF zeV9YVl9XaW5kb3dzX0VkaXRpb25fU3VwZXJfUmVzb2x1dGlvbl8yMDE4L'></nv-menu>
-    </div>
-    
-    <div class="section">
-        <div>
-            <h2>nv-tab-content</h2>
-        </div>
-        <nv-tab-content tab-id="1">
-            <div>
-                <material-icon type="check_box"></material-icon> Hey a check box
-            </div>
-            <div>The value of slot-scope can actually accept any valid JavaScript expression that can appear in the argument position
-                of a function definition.</div>
-            <div>This means in supported environments (single-file components or statern browsers) you can also use ES2015 destructuring
-                in the expression</div>
-            <div>
-                <material-icon type="check_box"></material-icon> Hey a check box
-            </div>
-            <div>The value of slot-scope can actually accept any valid JavaScript expression that can appear in the argument position
-                of a function definition.</div>
-            <div>This means in supported environments (single-file components or statern browsers) you can also use ES2015 destructuring
-                in the expression</div>
+        <nv-tab-content tab-id="test">
+            <div>conte</div>
+            <div>nt</div>
         </nv-tab-content>
-
     </div>
 
     <script>
-        var menu = document.getElementById('menu')
+        // var input = document.getElementById(`input`)
+        // input.error = true
 
-        menu.addEventListener('whenOpened', function () {
-            menu.setAttribute('active', true)
-        })
+        // input.validator = function(value){
+        //     if(value && value.indexOf('a') === -1){
+        //         return false
+        //     }
 
-        menu.addEventListener('whenClosed', function () {
-            menu.setAttribute('active', false)
-        })
+        //     return true
+        // }
 
-        menu.whenActivated = function () {
-            console.log(`active`)
-        }
+        // input.addEventListener('whenerror', function(ev){
+        //     console.log(ev)
+        //     input.doError('needs to contain an "a" character')
+        // })
 
-        menu.whenDeactivated = function () {
-            console.log(`deactive`)
-        }
+        // input.addEventListener('whenfocus', function(){
+        //     input.assistiveText = 'heyoo'
+        // })
 
-        var menuButton = document.getElementById('menu-button')
-        menuButton.onclick = function () {
-            var menu = document.getElementById('menu')
+        // input.addEventListener('whenblur', function(){
+        //     input.assistiveText = ''
+        // })
 
-            if (menu.getAttribute('active') && menu.getAttribute('active') !== 'false') {
-                menu.setAttribute('active', false)
-            } else {
-                menu.setAttribute('active', true)
-            }
-        }
+        // var options = ["Alabama", "Alaska", "American Samoa", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Federated States of Micronesia", "Florida", "Georgia", "Guam", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Marshall Islands", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Northern Mariana Islands", "Ohio", "Oklahoma", "Oregon", "Palau", "Pennsylvania", "Puerto Rico", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virgin Island", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"]
+        // input.suggestions = []
 
-        function waitForImage() {
-            var image = document.getElementById('image')
-
-            setTimeout(() => {
-                if (image) {
-                    setTimeout(() => {
-                        image.src = 'https://images.nvidia.com/swgf/139217207039099731/18677/thumbnail_1534841860254_VGhlX1dpdGNoZXJfM18zNjBfMjAxOC4wNy4xNl9fXzE1LjM4LjAwLjA0.jpg'
-                        setTimeout(() => {
-                            image.src = 'https://images.nvidia.com/swgf/139217207039099731.jpg'
-                        }, 2000)
-                    }, 2000)
-                } else {
-                    waitForImage()
-                }
-            }, 1)
-        }
-
-        waitForImage()
-
-        function waitForIcons() {
-            var icon = document.getElementById('icon')
-
-            setTimeout(() => {
-                if (icon && icon.icons && typeof icon.icons === 'function' && icon.icons()) {
-                    setIcon()
-                } else {
-                    waitForIcons()
-                }
-            }, 1)
-        }
-
-        waitForIcons()
-
-        function waitForCheckbox() {
-            var checkbox = document.getElementById('checkbox')
-
-            setTimeout(() => {
-                if (checkbox) {
-                    checkbox.value = window.settings.checkbox.value
-                    checkbox.label = window.settings.checkbox.label
-                    checkbox.disabled = window.settings.checkbox.disabled
-                    checkbox.whenUpdate = window.settings.checkbox.whenUpdate
-                } else {
-                    waitForCheckbox()
-                }
-            }, 1)
-        }
-
-        waitForCheckbox()
-
-        function waitForCheckboxArray() {
-            var checkboxArray = document.getElementById('checkboxArray')
-
-            setTimeout(() => {
-                if (checkboxArray) {
-                    checkboxArray.values = window.settings.checkboxArray.values
-                    checkboxArray.label = window.settings.checkboxArray.label
-                    checkboxArray.disabled = window.settings.checkboxArray.disabled
-                    checkboxArray.whenUpdate = window.settings.checkboxArray.whenUpdate
-                } else {
-                    waitForCheckboxArray()
-                }
-            }, 1)
-        }
-
-        waitForCheckboxArray()
-
-        function waitForProgress() {
-            var progress = document.getElementById('progress')
-
-            setTimeout(() => {
-                if (progress) {
-                    progress.timer = `setTimeout`
-                    progress.state = window.settings.progress.state
-                    progress.message = window.settings.progress.message
-                    progress.showCount = window.settings.progress.showCount
-
-                    var interval = setInterval(function () {
-                        // if (progress.value === 10) {
-                        //     progress.value = window.settings.progress.value = 5
-                        //     progress.reset()
-                        //     return
-                        // }
-                        progress.value = window.settings.progress.value = window.settings.progress.value + 1
-                    }, 500)
-
-                    setTimeout(function () {
-                        progress.message = `Loading`
-                        progress.start = window.settings.progress.start
-                        progress.value = window.settings.progress.value
-                        progress.state = window.settings.progress.state = `determinate`
-
-                        // setTimeout(() => {
-                        //     clearInterval(interval)
-                        //     progress.message = `Indeterminate`
-                        //     progress.state = window.settings.progress.state = `indeterminate`
-                        // }, 12000)
-                    }, 3000)
-
-                } else {
-                    waitForProgress()
-                }
-            }, 1)
-        }
-
-        waitForProgress()
-
-        var iconTypesSelector = document.getElementById('iconTypes')
-        iconTypesSelector.addEventListener('change', changeIcon)
-
-        var iconColor = document.getElementById('iconColor')
-        iconColor.addEventListener('input', function (e) {
-            setIconColor(e.target.value)
-        })
-
-        var iconSize = document.getElementById('iconSize')
-        iconSize.addEventListener('input', function (e) {
-            setIconSize(e.target.value)
-        })
+        // setTimeout(() => {
+        //     input.options = ['Alabama', 'Wyoming']
+        // }, 2000)
 
     </script>
 

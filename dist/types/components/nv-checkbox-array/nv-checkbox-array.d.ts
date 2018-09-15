@@ -1,12 +1,25 @@
 import '../../stencil.core';
 import { EventEmitter } from '../../stencil.core';
-/** @desc renders an array of styled checkbox components */
+/**
+ * @desc renders an array of styled checkbox components
+ */
 export declare class NvCheckboxArray {
     /** @desc last toggle state of this array */
     lastToggleState: boolean;
-    /** @desc an array of objects {values/value, label, disabled} to populate checkboxes with */
-    values: any[];
-    /** @desc label for parent checkbox */
+    /**
+     * @desc an array of objects {values/value, label, disabled} to populate checkboxes with
+     * @example [{"value":true, "label":"A checkbox"}, {"value":true, "label":"Another checkbox"},{"values":[{"value":true, "label":"Cool stuff"},{"value":true, "label":"Free toys"}], "label":"A nested array"}]
+     */
+    values: any[] | string;
+    /**
+     * @desc Whether or not component can update active states. default is false as this should be handled by controller
+     * @example true
+     */
+    selfUpdate: boolean;
+    /**
+    * @desc label for parent checkbox
+    * @example Checkbox array
+    */
     label: string;
     /** @desc whether or not the array is disabled */
     disabled: boolean;
@@ -17,7 +30,9 @@ export declare class NvCheckboxArray {
     /** @desc the component element */
     element: HTMLElement;
     /** @desc an event called when the checkbox state changes */
-    change: EventEmitter;
+    whenupdate: EventEmitter;
+    /** @desc parses values to an array if needed */
+    readonly _values: any[];
     /** @desc determines whether or not this array is didabled */
     readonly isDisabled: boolean;
     /** @desc determines the groups state based on child checkbox states */

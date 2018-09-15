@@ -17,15 +17,12 @@
     font-weight: $fontWeight;
     line-height: $lineHeight;
     color: $lightGray2;
-    &.nv-tab-active,
-    &.nv-tab-activating {
+    &[nv-tab-active="true"] {
         height: auto;
         max-height: 100vh;
         padding: 32px 0px;
         opacity: 1;
         pointer-events: all;
-    }
-    &.nv-tab-active {
         max-height: 10000000000px;
     }
 }

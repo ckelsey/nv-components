@@ -46,9 +46,78 @@
       "shadow": true
     },
     {
+      "tag": "nv-button",
+      "dependencies": [],
+      "componentClass": "NvButton",
+      "componentPath": "components/nv-button/nv-button.js",
+      "styles": {
+        "$": {
+          "stylePaths": [
+            "components/nv-button/nv-button.scss"
+          ]
+        }
+      },
+      "props": [
+        {
+          "name": "type",
+          "type": "String",
+          "attr": "type"
+        }
+      ],
+      "methods": [
+        {
+          "name": "doBlur"
+        },
+        {
+          "name": "doClick"
+        },
+        {
+          "name": "doFocus"
+        },
+        {
+          "name": "doMouseDown"
+        },
+        {
+          "name": "doMouseEnter"
+        },
+        {
+          "name": "doMouseLeave"
+        },
+        {
+          "name": "doMouseUp"
+        }
+      ],
+      "events": [
+        {
+          "event": "whenblur"
+        },
+        {
+          "event": "whenclick"
+        },
+        {
+          "event": "whenfocus"
+        },
+        {
+          "event": "whenmousedown"
+        },
+        {
+          "event": "whenmouseenter"
+        },
+        {
+          "event": "whenmouseleave"
+        },
+        {
+          "event": "whenmouseup"
+        }
+      ],
+      "shadow": true
+    },
+    {
       "tag": "nv-checkbox",
       "dependencies": [
-        "material-icon"
+        "material-icon",
+        "nv-pulse",
+        "nv-ripple"
       ],
       "componentClass": "NvCheckbox",
       "componentPath": "components/nv-checkbox/nv-checkbox.js",
@@ -76,8 +145,14 @@
           "attr": "parent-disabled"
         },
         {
+          "name": "selfUpdate",
+          "type": "Boolean",
+          "attr": "self-update"
+        },
+        {
           "name": "value",
           "type": "Any",
+          "mutable": true,
           "attr": "value"
         },
         {
@@ -95,7 +170,7 @@
       },
       "events": [
         {
-          "event": "change"
+          "event": "whenupdate"
         }
       ],
       "shadow": true
@@ -131,7 +206,14 @@
           "attr": "parent-disabled"
         },
         {
+          "name": "selfUpdate",
+          "type": "Boolean",
+          "attr": "self-update"
+        },
+        {
           "name": "values",
+          "type": "String",
+          "mutable": true,
           "attr": "values"
         },
         {
@@ -144,7 +226,7 @@
       },
       "events": [
         {
-          "event": "change"
+          "event": "whenupdate"
         }
       ],
       "shadow": true
@@ -176,6 +258,215 @@
           "name": "url",
           "type": "String",
           "attr": "url"
+        },
+        {
+          "name": "whenError",
+          "attr": "when-error"
+        },
+        {
+          "name": "whenLoad",
+          "attr": "when-load"
+        },
+        {
+          "name": "whenMeta",
+          "attr": "when-meta"
+        }
+      ],
+      "events": [
+        {
+          "event": "whenerror"
+        },
+        {
+          "event": "whenload"
+        },
+        {
+          "event": "whenmeta"
+        }
+      ],
+      "shadow": true
+    },
+    {
+      "tag": "nv-input",
+      "dependencies": [
+        "material-icon",
+        "nv-menu"
+      ],
+      "componentClass": "NvInput",
+      "componentPath": "components/nv-input/nv-input.js",
+      "styles": {
+        "$": {
+          "stylePaths": [
+            "components/nv-input/nv-input.scss"
+          ]
+        }
+      },
+      "props": [
+        {
+          "name": "assistiveText",
+          "type": "String",
+          "attr": "assistive-text"
+        },
+        {
+          "name": "characterCount",
+          "type": "Boolean",
+          "attr": "character-count"
+        },
+        {
+          "name": "classes",
+          "type": "String",
+          "attr": "classes"
+        },
+        {
+          "name": "clear",
+          "type": "Boolean",
+          "attr": "clear"
+        },
+        {
+          "name": "error",
+          "type": "Boolean",
+          "attr": "error"
+        },
+        {
+          "name": "filterOptions",
+          "type": "Boolean",
+          "attr": "filter-options"
+        },
+        {
+          "name": "helpText",
+          "type": "String",
+          "mutable": true,
+          "attr": "help-text"
+        },
+        {
+          "name": "icon",
+          "type": "String",
+          "attr": "icon"
+        },
+        {
+          "name": "label",
+          "type": "String",
+          "attr": "label"
+        },
+        {
+          "name": "max",
+          "type": "Number",
+          "attr": "max"
+        },
+        {
+          "name": "min",
+          "type": "Number",
+          "attr": "min"
+        },
+        {
+          "name": "multiline",
+          "type": "Boolean",
+          "attr": "multiline"
+        },
+        {
+          "name": "options",
+          "type": "String",
+          "attr": "options"
+        },
+        {
+          "name": "required",
+          "type": "Boolean",
+          "attr": "required"
+        },
+        {
+          "name": "selfUpdate",
+          "type": "Boolean",
+          "attr": "self-update"
+        },
+        {
+          "name": "step",
+          "type": "Number",
+          "attr": "step"
+        },
+        {
+          "name": "type",
+          "type": "String",
+          "attr": "type"
+        },
+        {
+          "name": "validator",
+          "attr": "validator"
+        },
+        {
+          "name": "value",
+          "type": "Any",
+          "mutable": true,
+          "attr": "value"
+        },
+        {
+          "name": "whenBlur",
+          "attr": "when-blur"
+        },
+        {
+          "name": "whenError",
+          "attr": "when-error"
+        },
+        {
+          "name": "whenFocus",
+          "attr": "when-focus"
+        },
+        {
+          "name": "whenUpdate",
+          "attr": "when-update"
+        }
+      ],
+      "methods": [
+        {
+          "name": "doBlur"
+        },
+        {
+          "name": "doClick"
+        },
+        {
+          "name": "doError"
+        },
+        {
+          "name": "doFocus"
+        },
+        {
+          "name": "doInput"
+        },
+        {
+          "name": "optionClicked"
+        }
+      ],
+      "hostElement": {
+        "name": "element"
+      },
+      "events": [
+        {
+          "event": "whenblur"
+        },
+        {
+          "event": "whenclick"
+        },
+        {
+          "event": "whenerror"
+        },
+        {
+          "event": "whenfocus"
+        },
+        {
+          "event": "wheninput"
+        },
+        {
+          "event": "whenkeydown"
+        },
+        {
+          "event": "whenkeypress"
+        },
+        {
+          "event": "whenkeyup"
+        },
+        {
+          "event": "whensubmit"
+        },
+        {
+          "event": "whenupdate"
         }
       ],
       "shadow": true
@@ -206,9 +497,25 @@
           "attr": "anchor"
         },
         {
+          "name": "focusedOption",
+          "type": "Number",
+          "mutable": true,
+          "attr": "focused-option"
+        },
+        {
+          "name": "optionHoverStyles",
+          "type": "String",
+          "attr": "option-hover-styles"
+        },
+        {
           "name": "options",
           "type": "String",
           "attr": "options"
+        },
+        {
+          "name": "optionStyles",
+          "type": "String",
+          "attr": "option-styles"
         },
         {
           "name": "position",
@@ -226,6 +533,25 @@
         {
           "name": "whenDeactivated",
           "attr": "when-deactivated"
+        },
+        {
+          "name": "width",
+          "type": "String",
+          "attr": "width"
+        }
+      ],
+      "methods": [
+        {
+          "name": "focusNextOption"
+        },
+        {
+          "name": "focusOption"
+        },
+        {
+          "name": "focusPreviousOption"
+        },
+        {
+          "name": "selectOption"
         }
       ],
       "hostElement": {
@@ -309,6 +635,253 @@
       "shadow": true
     },
     {
+      "tag": "nv-pulse",
+      "dependencies": [],
+      "componentClass": "NvPulse",
+      "componentPath": "components/nv-pulse/nv-pulse.js",
+      "styles": {
+        "$": {
+          "stylePaths": [
+            "components/nv-pulse/nv-pulse.scss"
+          ]
+        }
+      },
+      "props": [
+        {
+          "name": "highlight",
+          "type": "Boolean",
+          "attr": "highlight"
+        }
+      ],
+      "methods": [
+        {
+          "name": "startPulse"
+        },
+        {
+          "name": "stopPulse"
+        }
+      ],
+      "hostElement": {
+        "name": "element"
+      },
+      "shadow": true
+    },
+    {
+      "tag": "nv-radio",
+      "dependencies": [],
+      "componentClass": "NvRadio",
+      "componentPath": "components/nv-radio/nv-radio.js",
+      "styles": {
+        "$": {
+          "stylePaths": [
+            "components/nv-radio/nv-radio.scss"
+          ]
+        }
+      },
+      "props": [
+        {
+          "name": "disabled",
+          "type": "Boolean",
+          "attr": "disabled"
+        },
+        {
+          "name": "options",
+          "type": "String",
+          "mutable": true,
+          "attr": "options"
+        },
+        {
+          "name": "selfUpdate",
+          "type": "Boolean",
+          "attr": "self-update"
+        },
+        {
+          "name": "whenUpdate",
+          "attr": "when-update"
+        }
+      ],
+      "hostElement": {
+        "name": "element"
+      },
+      "events": [
+        {
+          "event": "change"
+        }
+      ],
+      "shadow": true
+    },
+    {
+      "tag": "nv-ripple",
+      "dependencies": [],
+      "componentClass": "NvRipple",
+      "componentPath": "components/nv-ripple/nv-ripple.js",
+      "styles": {
+        "$": {
+          "stylePaths": [
+            "components/nv-ripple/nv-ripple.scss"
+          ]
+        }
+      },
+      "props": [
+        {
+          "name": "highlight",
+          "type": "Boolean",
+          "attr": "highlight"
+        }
+      ],
+      "methods": [
+        {
+          "name": "doRipple"
+        },
+        {
+          "name": "startRipple"
+        },
+        {
+          "name": "stopRipple"
+        }
+      ],
+      "hostElement": {
+        "name": "element"
+      },
+      "shadow": true
+    },
+    {
+      "tag": "nv-slider",
+      "dependencies": [
+        "nv-input",
+        "nv-pulse",
+        "nv-ripple"
+      ],
+      "componentClass": "NvSlider",
+      "componentPath": "components/nv-slider/nv-slider.js",
+      "styles": {
+        "$": {
+          "stylePaths": [
+            "components/nv-slider/nv-slider.scss"
+          ]
+        }
+      },
+      "props": [
+        {
+          "name": "disabled",
+          "type": "Boolean",
+          "attr": "disabled"
+        },
+        {
+          "name": "label",
+          "type": "String",
+          "attr": "label"
+        },
+        {
+          "name": "max",
+          "type": "Number",
+          "attr": "max"
+        },
+        {
+          "name": "min",
+          "type": "Number",
+          "attr": "min"
+        },
+        {
+          "name": "selfUpdate",
+          "type": "Boolean",
+          "attr": "self-update"
+        },
+        {
+          "name": "showInput",
+          "type": "Boolean",
+          "attr": "show-input"
+        },
+        {
+          "name": "step",
+          "type": "Number",
+          "attr": "step"
+        },
+        {
+          "name": "value",
+          "type": "Number",
+          "mutable": true,
+          "attr": "value"
+        },
+        {
+          "name": "values",
+          "type": "String",
+          "mutable": true,
+          "attr": "values"
+        },
+        {
+          "name": "whenUpdate",
+          "attr": "when-update"
+        }
+      ],
+      "hostElement": {
+        "name": "element"
+      },
+      "events": [
+        {
+          "event": "change"
+        }
+      ],
+      "shadow": true
+    },
+    {
+      "tag": "nv-switch",
+      "dependencies": [
+        "nv-pulse",
+        "nv-ripple"
+      ],
+      "componentClass": "NvSwitch",
+      "componentPath": "components/nv-switch/nv-switch.js",
+      "styles": {
+        "$": {
+          "stylePaths": [
+            "components/nv-switch/nv-switch.scss"
+          ]
+        }
+      },
+      "props": [
+        {
+          "name": "disabled",
+          "type": "Boolean",
+          "attr": "disabled"
+        },
+        {
+          "name": "label",
+          "type": "String",
+          "attr": "label"
+        },
+        {
+          "name": "selfUpdate",
+          "type": "Boolean",
+          "attr": "self-update"
+        },
+        {
+          "name": "value",
+          "type": "Any",
+          "mutable": true,
+          "attr": "value"
+        },
+        {
+          "name": "whenUpdate",
+          "attr": "when-update"
+        }
+      ],
+      "methods": [
+        {
+          "name": "toggle"
+        }
+      ],
+      "hostElement": {
+        "name": "element"
+      },
+      "events": [
+        {
+          "event": "change"
+        }
+      ],
+      "shadow": true
+    },
+    {
       "tag": "nv-tab-content",
       "dependencies": [],
       "componentClass": "NvTabContent",
@@ -341,6 +914,11 @@
           "name": "initial",
           "type": "Number",
           "attr": "initial"
+        }
+      ],
+      "methods": [
+        {
+          "name": "doOpen"
         }
       ],
       "hostElement": {
@@ -382,6 +960,11 @@
           "attr": "hide-after"
         },
         {
+          "name": "offset",
+          "type": "Number",
+          "attr": "offset"
+        },
+        {
           "name": "padding",
           "type": "Number",
           "attr": "padding"
@@ -400,6 +983,16 @@
           "name": "triggerOn",
           "type": "String",
           "attr": "trigger-on"
+        },
+        {
+          "name": "width",
+          "type": "String",
+          "attr": "width"
+        }
+      ],
+      "methods": [
+        {
+          "name": "updateInnerHTML"
         }
       ],
       "hostElement": {
@@ -413,6 +1006,47 @@
           "event": "whenOpened"
         }
       ],
+      "shadow": true
+    },
+    {
+      "tag": "nv-wave",
+      "dependencies": [],
+      "componentClass": "NvWave",
+      "componentPath": "components/nv-wave/nv-wave.js",
+      "styles": {
+        "$": {
+          "stylePaths": [
+            "components/nv-wave/nv-wave.scss"
+          ]
+        }
+      },
+      "props": [
+        {
+          "name": "highlight",
+          "type": "Boolean",
+          "attr": "highlight"
+        }
+      ],
+      "methods": [
+        {
+          "name": "doPulse"
+        },
+        {
+          "name": "doWave"
+        },
+        {
+          "name": "reset"
+        },
+        {
+          "name": "startWave"
+        },
+        {
+          "name": "stopWave"
+        }
+      ],
+      "hostElement": {
+        "name": "element"
+      },
       "shadow": true
     }
   ],
@@ -531,7 +1165,7 @@
   ],
   "compiler": {
     "name": "@stencil/core",
-    "version": "0.11.0",
+    "version": "0.11.4",
     "typescriptVersion": "2.9.2"
   },
   "bundles": [],

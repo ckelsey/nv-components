@@ -5,15 +5,16 @@ export declare class NvCheckbox {
     /** @desc For accessibility a hidden checkbox input */
     nativeCheckbox: HTMLInputElement;
     /** @desc element that displays hover state */
-    hoverBox: HTMLElement;
+    pulseBox: any;
     /** @desc element that displays ripple effect on check/uncheck */
-    rippleBox: HTMLElement;
+    rippleBox: any;
     /** @desc containing element */
     container: HTMLElement;
-    /** @desc timer for hover state animation */
-    pulseTimer: any;
-    /** @desc timer for ripple effect animation */
-    rippleTimer: any;
+    /**
+     * @desc Whether or not component can update active states. default is false as this should be handled by controller
+     * @example true
+     */
+    selfUpdate: boolean;
     /** @desc value for the checkbox */
     value: boolean | string;
     /** @desc text for the label */
@@ -27,7 +28,7 @@ export declare class NvCheckbox {
     /** @desc the component element */
     element: HTMLElement;
     /** @desc an event called when the checkbox state changes */
-    change: EventEmitter;
+    whenupdate: EventEmitter;
     /** @desc determines the checkbox's state */
     readonly state: string;
     /** @desc determines the checkbox's tabIndex */
