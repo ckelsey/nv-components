@@ -9,7 +9,7 @@ import { Component, Prop, Element, Event, EventEmitter } from '@stencil/core'
 })
 export class NvRadio {
     container: HTMLElement
-    _options: Array<RadioOption> = []
+    _options: Array<any> = []
 
     /**
      * @desc Whether or not component can update active states. default is false as this should be handled by controller
@@ -20,7 +20,7 @@ export class NvRadio {
     /**
      * @example [{"value":1, "label": "option 1", "selected":false}, {"value":2, "label": "option 2", "selected":true}, {"value":3, "label": "option 3", "selected":false}]
      */
-    @Prop({ mutable: true }) options: Array<RadioOption> | string = []
+    @Prop({ mutable: true }) options: Array<any> | string = []
 
     /** @desc whether or not the component is disabled */
     @Prop() disabled: boolean = false
@@ -43,7 +43,7 @@ export class NvRadio {
         return 0
     }
 
-    createOption(option): RadioOption {
+    createOption(option) {
         const optionContainer = document.createElement(`div`)
         optionContainer.className = `nv-radio-option`
 
@@ -224,7 +224,7 @@ export class NvRadio {
     /** @desc renders the element */
     render() {
         return (
-            <div ref={(el: HTMLInputElement) => this.container = el} class="nv-radio-container"></div>
+            <div ref={(el: HTMLElement) => this.container = el} class="nv-radio-container"></div>
         );
     }
 }

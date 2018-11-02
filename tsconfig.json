@@ -6,11 +6,11 @@
     "experimentalDecorators": true,
     "lib": [
       "dom",
-      "es2017"
+      "es2015"
     ],
     "moduleResolution": "node",
     "module": "es2015",
-    "target": "es2017",
+    "target": "es2015",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "jsx": "react",
@@ -19,7 +19,8 @@
   },
   "include": [
     "src",
-    "types/jsx.d.ts"
+    "types/jsx.d.ts",
+    "src/types.d.ts"
   ],
   "exclude": [
     "node_modules"

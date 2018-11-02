@@ -28,7 +28,7 @@ export class NvTabs {
     @Element() element: HTMLElement
 
     @Method()
-    doOpen(index: number, e?: Event) {
+    async doOpen(index: number, e?: Event) {
         this.checkActiveIndicator()
         this.checkWave()
         this.wave.stopWave()

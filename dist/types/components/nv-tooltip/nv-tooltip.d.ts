@@ -21,8 +21,8 @@ export declare class NvTootltip {
     openTimer: any;
     /** @desc proxy reference to the trigger element */
     _triggerElement: HTMLElement;
-    /** @desc proxy reference to the active property */
-    _active: boolean;
+    /** @desc proxy reference to the isActive property */
+    _isActive: boolean;
     scrollPosition: number;
     /** @desc available position keywords */
     positions: string[];
@@ -32,14 +32,14 @@ export declare class NvTootltip {
      * @desc padding to give the tooltip
      * @example ''
      */
-    padding: number;
+    paddingAmount: number;
     width: string;
     /** @desc position of the tooltip */
     position: string;
     /** @desc whether or not the tooltip is shown */
-    active: boolean;
+    isActive: boolean;
     /**
-     * @desc what event to trigger the tooltip on, when 'never' the tooltip relies on the active property to be updated
+     * @desc what event to trigger the tooltip on, when 'never' the tooltip relies on the isActive property to be updated
      * @example ''
     */
     triggerOn: string;
@@ -60,7 +60,7 @@ export declare class NvTootltip {
      */
     delay: number;
     /** @desc whether or not to show a css box-shadow */
-    boxShadow: boolean;
+    showBoxShadow: boolean;
     /** @desc event when tooltip opens */
     whenOpened: EventEmitter;
     /** @desc event when tooltip closes */
@@ -69,7 +69,7 @@ export declare class NvTootltip {
     setDimensions(): void;
     /** @desc sets the position of the tooltip */
     setPositions(): void;
-    /** @desc timer function that checks the dimensions/positions of the tooltip when active */
+    /** @desc timer function that checks the dimensions/positions of the tooltip when isActive */
     checkDimensions(): void;
     /** @desc opens the tooltip */
     open(): void;

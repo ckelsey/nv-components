@@ -74,7 +74,7 @@ export class NvCheckbox {
 
     /** @desc toggles the checkbox's state */
     @Method()
-    toggle() {
+    async toggle() {
         if (this.disabled || this.parentDisabled) {
             return false
         }
@@ -128,7 +128,7 @@ export class NvCheckbox {
     /** @desc renders the element */
     render() {
         return (
-            <div ref={(el: HTMLInputElement) => this.container = el} class={{ 'nv-checkbox-container': true, selected: !!this.value && this.value !== `false`, 'nv-component-disabled': this.disabled || this.parentDisabled }} onClick={() => this.toggle()} onKeyPress={ev => this.keyPress(ev)}>
+            <div ref={(el: HTMLElement) => this.container = el} class={{ 'nv-checkbox-container': true, selected: !!this.value && this.value !== `false`, 'nv-component-disabled': this.disabled || this.parentDisabled }} onClick={() => this.toggle()} onKeyPress={ev => this.keyPress(ev)}>
                 <div class="nv-checkbox-box" onMouseEnter={() => this.mouseOverBox()} onMouseLeave={() => this.mouseLeaveBox()}>
                     <nv-pulse highlight={this.value === true || this.value === `true`} ref={(el: any) => this.pulseBox = el}></nv-pulse>
                     <nv-ripple highlight={this.value === true || this.value === `true`} ref={(el: any) => this.rippleBox = el}></nv-ripple>

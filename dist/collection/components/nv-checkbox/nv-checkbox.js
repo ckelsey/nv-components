@@ -1,3 +1,11 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 /** @desc renders a styled checkbox component */
 export class NvCheckbox {
     constructor() {
@@ -37,20 +45,22 @@ export class NvCheckbox {
     }
     /** @desc toggles the checkbox's state */
     toggle() {
-        if (this.disabled || this.parentDisabled) {
-            return false;
-        }
-        const oldValue = this.value;
-        const newValue = this.value === `mixed` ? true : this.value === `false` ? true : this.value === `true` ? false : !this.value;
-        const updateData = { oldValue, newValue, element: this };
-        if (this.whenUpdate && typeof this.whenUpdate === `function`) {
-            this.whenUpdate(updateData);
-        }
-        this.whenupdate.emit(updateData);
-        this.onClick();
-        if (this.selfUpdate) {
-            this.value = newValue;
-        }
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this.disabled || this.parentDisabled) {
+                return false;
+            }
+            const oldValue = this.value;
+            const newValue = this.value === `mixed` ? true : this.value === `false` ? true : this.value === `true` ? false : !this.value;
+            const updateData = { oldValue, newValue, element: this };
+            if (this.whenUpdate && typeof this.whenUpdate === `function`) {
+                this.whenUpdate(updateData);
+            }
+            this.whenupdate.emit(updateData);
+            this.onClick();
+            if (this.selfUpdate) {
+                this.value = newValue;
+            }
+        });
     }
     /**
      * @desc handles the enter key press

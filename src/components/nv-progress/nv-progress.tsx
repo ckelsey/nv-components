@@ -67,7 +67,7 @@ export class NvProgress {
 
     /** @desc resets the progress bar */
     @Method()
-    reset() {
+    async reset() {
         this.animate = false
         cancelAnimationFrame(this.animator)
         clearTimeout(this.animator)
@@ -313,13 +313,13 @@ export class NvProgress {
                 {(this.message && this.message.trim() !== ``) || this.showCount ?
                     <div class="nv-progress-text">
                         {this.message && this.message.trim() !== `` ? <div class="nv-progress-message" innerHTML={this.message}></div> : ``}
-                        {this.showCount ? <div class="nv-progress-count" ref={(el: HTMLInputElement) => this.countElement = el}></div> : ``}
+                        {this.showCount ? <div class="nv-progress-count" ref={(el: HTMLElement) => this.countElement = el}></div> : ``}
                     </div>
                     :
                     ``
                 }
                 <div class="nv-progress-bar">
-                    <div class="nv-progress-bar-inner" ref={(el: HTMLInputElement) => this.barElement = el}></div>
+                    <div class="nv-progress-bar-inner" ref={(el: HTMLElement) => this.barElement = el}></div>
                 </div>
             </div>
         )

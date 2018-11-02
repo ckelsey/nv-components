@@ -5,8 +5,8 @@
  * */
 export class NvTootltip {
     constructor() {
-        /** @desc proxy reference to the active property */
-        this._active = false;
+        /** @desc proxy reference to the isActive property */
+        this._isActive = false;
         this.scrollPosition = 0;
         /** @desc available position keywords */
         this.positions = [
@@ -19,14 +19,14 @@ export class NvTootltip {
          * @desc padding to give the tooltip
          * @example ''
          */
-        this.padding = 8;
+        this.paddingAmount = 8;
         this.width = ``;
         /** @desc position of the tooltip */
         this.position = ``;
         /** @desc whether or not the tooltip is shown */
-        this.active = false;
+        this.isActive = false;
         /**
-         * @desc what event to trigger the tooltip on, when 'never' the tooltip relies on the active property to be updated
+         * @desc what event to trigger the tooltip on, when 'never' the tooltip relies on the isActive property to be updated
          * @example ''
         */
         this.triggerOn = `mouseenter`;
@@ -47,7 +47,7 @@ export class NvTootltip {
          */
         this.delay = 0;
         /** @desc whether or not to show a css box-shadow */
-        this.boxShadow = false;
+        this.showBoxShadow = false;
     }
     /** @desc sets the dimensions of the tooltip */
     setDimensions() {
@@ -190,10 +190,10 @@ export class NvTootltip {
         }
         this.contentInner.scrollTop = this.scrollPosition;
     }
-    /** @desc timer function that checks the dimensions/positions of the tooltip when active */
+    /** @desc timer function that checks the dimensions/positions of the tooltip when isActive */
     checkDimensions() {
         clearTimeout(this.checkDimensionsTimer);
-        if (!this.active) {
+        if (!this.isActive) {
             return;
         }
         if (!this.container) {
@@ -218,14 +218,14 @@ export class NvTootltip {
                 return;
             }
             if (this.triggerOn === `never`) {
-                if (!this.active) {
+                if (!this.isActive) {
                     return;
                 }
             }
             else {
-                this.active = true;
+                this.isActive = true;
             }
-            if (this.active) {
+            if (this.isActive) {
                 this.container.classList.add(`open`);
                 this.checkDimensions();
                 this.whenOpened.emit();
@@ -246,14 +246,14 @@ export class NvTootltip {
             return;
         }
         if (this.triggerOn === `never`) {
-            if (this.active) {
+            if (this.isActive) {
                 this.whenClosed.emit();
                 return;
             }
         }
         else {
             this.whenClosed.emit();
-            this.active = false;
+            this.isActive = false;
         }
         clearTimeout(this.openTimer);
         try {
@@ -275,7 +275,7 @@ export class NvTootltip {
         if (!this.container) {
             return;
         }
-        if (this.active && !entries[0].isIntersecting) {
+        if (this.isActive && !entries[0].isIntersecting) {
             this.close();
         }
     }
@@ -284,7 +284,7 @@ export class NvTootltip {
         if (!this.container) {
             return;
         }
-        if (this.active) {
+        if (this.isActive) {
             this.close();
         }
         else {
@@ -296,7 +296,7 @@ export class NvTootltip {
         if (!this.container) {
             return;
         }
-        if (!this.active) {
+        if (!this.isActive) {
             this.close();
         }
     }
@@ -308,7 +308,7 @@ export class NvTootltip {
         }
         const wasOnParent = e.target === this._triggerElement || this._triggerElement.contains(e.target);
         const wasOnSelf = e.target === this.container || e.target === this.element || this.container.contains(e.target) || this.element.contains(e.target);
-        if (this.active && !wasOnParent && !wasOnSelf) {
+        if (this.isActive && !wasOnParent && !wasOnSelf) {
             this.close();
         }
     }
@@ -336,7 +336,7 @@ export class NvTootltip {
         this.parent = this.element.parentElement;
         this._triggerElement = (this.triggerElement ? typeof this.triggerElement === `string` ? document.querySelector(this.triggerElement) : this.triggerElement : null) || this.parent;
         this.setEvents();
-        if (this.boxShadow) {
+        if (this.showBoxShadow) {
             this.content.classList.add(`boxShadow`);
         }
         else {
@@ -344,11 +344,11 @@ export class NvTootltip {
         }
         clearTimeout(this.checkDimensionsTimer);
         this.checkDimensions();
-        if (this.active === this._active) {
+        if (this.isActive === this._isActive) {
             return;
         }
-        this._active = this.active;
-        if (this.active) {
+        this._isActive = this.isActive;
+        if (this.isActive) {
             this.open();
         }
         else {
@@ -403,23 +403,13 @@ export class NvTootltip {
     render() {
         return (h("div", { class: "tooltip-container", ref: (el) => this.container = el },
             h("div", { class: "tooltip-content", ref: (el) => this.content = el },
-                h("div", { class: "tooltip-content-inner", style: { padding: `0px ${this.padding}px` }, ref: (el) => this.contentInner = el },
+                h("div", { class: "tooltip-content-inner", style: { padding: `0px ${this.paddingAmount}px` }, ref: (el) => this.contentInner = el },
                     h("div", { class: "tooltip-content-inner-inner", ref: (el) => this.contentInnerInner = el },
                         h("slot", null))))));
     }
     static get is() { return "nv-tooltip"; }
     static get encapsulation() { return "shadow"; }
     static get properties() { return {
-        "active": {
-            "type": Boolean,
-            "attr": "active",
-            "reflectToAttr": true,
-            "mutable": true
-        },
-        "boxShadow": {
-            "type": Boolean,
-            "attr": "box-shadow"
-        },
         "delay": {
             "type": Number,
             "attr": "delay"
@@ -431,17 +421,27 @@ export class NvTootltip {
             "type": Number,
             "attr": "hide-after"
         },
+        "isActive": {
+            "type": Boolean,
+            "attr": "is-active",
+            "reflectToAttr": true,
+            "mutable": true
+        },
         "offset": {
             "type": Number,
             "attr": "offset"
         },
-        "padding": {
+        "paddingAmount": {
             "type": Number,
-            "attr": "padding"
+            "attr": "padding-amount"
         },
         "position": {
             "type": String,
             "attr": "position"
+        },
+        "showBoxShadow": {
+            "type": Boolean,
+            "attr": "show-box-shadow"
         },
         "triggerElement": {
             "type": String,

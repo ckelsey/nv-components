@@ -37,8 +37,8 @@ export class NvTootltip {
     /** @desc proxy reference to the trigger element */
     _triggerElement: HTMLElement
 
-    /** @desc proxy reference to the active property */
-    _active: boolean = false
+    /** @desc proxy reference to the isActive property */
+    _isActive: boolean = false
 
     scrollPosition: number = 0
 
@@ -57,7 +57,7 @@ export class NvTootltip {
      * @desc padding to give the tooltip
      * @example ''
      */
-    @Prop() padding: number = 8
+    @Prop() paddingAmount: number = 8
 
     @Prop() width: string = ``
 
@@ -65,10 +65,10 @@ export class NvTootltip {
     @Prop() position: string = ``
 
     /** @desc whether or not the tooltip is shown */
-    @Prop({ mutable: true, reflectToAttr: true }) active: boolean = false
+    @Prop({ mutable: true, reflectToAttr: true }) isActive: boolean = false
 
     /** 
-     * @desc what event to trigger the tooltip on, when 'never' the tooltip relies on the active property to be updated 
+     * @desc what event to trigger the tooltip on, when 'never' the tooltip relies on the isActive property to be updated 
      * @example ''
     */
     @Prop() triggerOn: string = `mouseenter`
@@ -94,7 +94,7 @@ export class NvTootltip {
     @Prop() delay: number = 0
 
     /** @desc whether or not to show a css box-shadow */
-    @Prop() boxShadow: boolean = false
+    @Prop() showBoxShadow: boolean = false
 
     /** @desc event when tooltip opens */
     @Event() whenOpened: EventEmitter
@@ -267,11 +267,11 @@ export class NvTootltip {
         this.contentInner.scrollTop = this.scrollPosition
     }
 
-    /** @desc timer function that checks the dimensions/positions of the tooltip when active */
+    /** @desc timer function that checks the dimensions/positions of the tooltip when isActive */
     checkDimensions() {
         clearTimeout(this.checkDimensionsTimer)
 
-        if (!this.active) {
+        if (!this.isActive) {
             return
         }
 
@@ -304,14 +304,14 @@ export class NvTootltip {
             }
 
             if (this.triggerOn === `never`) {
-                if (!this.active) {
+                if (!this.isActive) {
                     return
                 }
             } else {
-                this.active = true
+                this.isActive = true
             }
 
-            if (this.active) {
+            if (this.isActive) {
                 this.container.classList.add(`open`)
                 this.checkDimensions()
                 this.whenOpened.emit()
@@ -335,13 +335,13 @@ export class NvTootltip {
         }
 
         if (this.triggerOn === `never`) {
-            if (this.active) {
+            if (this.isActive) {
                 this.whenClosed.emit()
                 return
             }
         } else {
             this.whenClosed.emit()
-            this.active = false
+            this.isActive = false
         }
 
         clearTimeout(this.openTimer)
@@ -368,7 +368,7 @@ export class NvTootltip {
             return
         }
 
-        if (this.active && !entries[0].isIntersecting) {
+        if (this.isActive && !entries[0].isIntersecting) {
             this.close()
         }
     }
@@ -379,7 +379,7 @@ export class NvTootltip {
             return
         }
 
-        if (this.active) {
+        if (this.isActive) {
             this.close()
         } else {
             this.open()
@@ -392,7 +392,7 @@ export class NvTootltip {
             return
         }
 
-        if (!this.active) {
+        if (!this.isActive) {
             this.close()
         }
     }
@@ -407,7 +407,7 @@ export class NvTootltip {
         const wasOnParent = e.target === this._triggerElement || this._triggerElement.contains((e.target as Node));
         const wasOnSelf = e.target === this.container || e.target === this.element || this.container.contains((e.target as Node)) || this.element.contains((e.target as Node));
 
-        if (this.active && !wasOnParent && !wasOnSelf) {
+        if (this.isActive && !wasOnParent && !wasOnSelf) {
             this.close()
         }
     }
@@ -443,7 +443,7 @@ export class NvTootltip {
 
         this.setEvents()
 
-        if (this.boxShadow) {
+        if (this.showBoxShadow) {
             this.content.classList.add(`boxShadow`)
         } else {
             this.content.classList.remove(`boxShadow`)
@@ -452,13 +452,13 @@ export class NvTootltip {
         clearTimeout(this.checkDimensionsTimer)
         this.checkDimensions()
 
-        if (this.active === this._active) {
+        if (this.isActive === this._isActive) {
             return
         }
 
-        this._active = this.active
+        this._isActive = this.isActive
 
-        if (this.active) {
+        if (this.isActive) {
             this.open()
         } else {
             this.close()
@@ -525,7 +525,7 @@ export class NvTootltip {
         return (
             <div class="tooltip-container" ref={(el: HTMLElement) => this.container = el}>
                 <div class="tooltip-content" ref={(el: HTMLElement) => this.content = el}>
-                    <div class="tooltip-content-inner" style={{ padding: `0px ${this.padding}px` }} ref={(el: HTMLElement) => this.contentInner = el}>
+                    <div class="tooltip-content-inner" style={{ padding: `0px ${this.paddingAmount}px` }} ref={(el: HTMLElement) => this.contentInner = el}>
                         <div class="tooltip-content-inner-inner" ref={(el: HTMLElement) => this.contentInnerInner = el}>
                             <slot></slot>
                         </div>

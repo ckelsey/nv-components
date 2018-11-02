@@ -12,9 +12,9 @@ export declare class NvPulse {
     /** @desc whether or not the color be the highlight color or gray */
     highlight: boolean;
     /** @desc starts the pulse animation */
-    startPulse(): void;
+    startPulse(): Promise<void>;
     /** @desc stops the pulse animation */
-    stopPulse(): void;
+    stopPulse(): Promise<void>;
     /** @desc lifecycle hook, renders the element */
     render(): JSX.Element;
 }

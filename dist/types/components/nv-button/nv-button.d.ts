@@ -24,19 +24,19 @@ export declare class NvButton {
     /** @desc called when the button loses hover */
     whenmouseleave: EventEmitter;
     /** @desc triggers hover */
-    doMouseEnter(): void;
+    doMouseEnter(): Promise<void>;
     /** @desc triggers the loss of hover */
-    doMouseLeave(): void;
+    doMouseLeave(): Promise<void>;
     /** @desc triggers click */
-    doClick(): void;
+    doClick(): Promise<void>;
     /** @desc triggers focus */
-    doFocus(): void;
+    doFocus(): Promise<void>;
     /** @desc triggers the loss of focus */
-    doBlur(): void;
+    doBlur(): Promise<void>;
     /** @desc triggers mousedown */
-    doMouseDown(): void;
+    doMouseDown(): Promise<void>;
     /** @desc triggers mouseup */
-    doMouseUp(): void;
+    doMouseUp(): Promise<void>;
     /** @desc lifecycle hook for when component is updated */
     componentDidUpdate(): void;
     /** @desc lifecycle hook for when component is ready */

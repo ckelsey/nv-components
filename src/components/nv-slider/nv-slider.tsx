@@ -378,7 +378,7 @@ export class NvSlider {
     render() {
         return (
             <div
-                ref={(el: HTMLInputElement) => this.container = el}
+                ref={(el: HTMLElement) => this.container = el}
                 class={{ 'nv-slider-container': true, 'nv-component-disabled': this.disabled }}
                 onMouseEnter={() => this.mouseOverBox()}
                 onMouseLeave={() => this.mouseLeaveBox()}
@@ -404,25 +404,25 @@ export class NvSlider {
                 }
                 <div
                     class="nv-slider-box"
-                    ref={(el: HTMLInputElement) => this.trackContainer = el}
+                    ref={(el: HTMLElement) => this.trackContainer = el}
                     onMouseDown={(e) => this.mouseDown(e)}
                 >
                     {this.step === undefined ?
                         <div class="nv-slider-track">
-                            <div class="nv-slider-track-inner" ref={(el: HTMLInputElement) => this.track = el}></div>
+                            <div class="nv-slider-track-inner" ref={(el: HTMLElement) => this.track = el}></div>
                         </div>
                         :
-                        <div class="nv-slider-track-steps" ref={(el: HTMLInputElement) => this.stepsElement = el}></div>
+                        <div class="nv-slider-track-steps" ref={(el: HTMLElement) => this.stepsElement = el}></div>
                     }
                     {this._values ?
-                        <div class="nv-slider-ball" ref={(el: HTMLInputElement) => this.ball1 = el}>
+                        <div class="nv-slider-ball" ref={(el: HTMLElement) => this.ball1 = el}>
                             <nv-pulse highlight={true} ref={(el: any) => this.pulseBox1 = el}></nv-pulse>
                             <nv-ripple highlight={true} ref={(el: any) => this.rippleBox1 = el}></nv-ripple>
                         </div>
                         :
                         ``
                     }
-                    <div class="nv-slider-ball" ref={(el: HTMLInputElement) => this.ball2 = el}>
+                    <div class="nv-slider-ball" ref={(el: HTMLElement) => this.ball2 = el}>
                         <nv-pulse highlight={true} ref={(el: any) => this.pulseBox2 = el}></nv-pulse>
                         <nv-ripple highlight={true} ref={(el: any) => this.rippleBox2 = el}></nv-ripple>
                     </div>

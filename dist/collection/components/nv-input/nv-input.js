@@ -1,6 +1,14 @@
 /*
 - required
  */
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 /** @desc renders an input component */
 export class NvInput {
     constructor() {
@@ -101,98 +109,108 @@ export class NvInput {
     }
     /** @desc focuses the input */
     doClick() {
-        this.whenclick.emit(this.updatedData);
-        this.inputElement.focus();
-        this.doFocus();
+        return __awaiter(this, void 0, void 0, function* () {
+            this.whenclick.emit(this.updatedData);
+            this.inputElement.focus();
+            this.doFocus();
+        });
     }
     /** @desc handles the input event */
     doInput(e) {
-        let cancel = false;
-        let errorMessage = ``;
-        if (!this.type || this.type === `text`) {
-            if (this.max && this.inputElement.value.length > this.max) {
-                cancel = true;
-                errorMessage = `${this.max} characters allowed`;
+        return __awaiter(this, void 0, void 0, function* () {
+            let cancel = false;
+            let errorMessage = ``;
+            if (!this.type || this.type === `text`) {
+                if (this.max && this.inputElement.value.length > this.max) {
+                    cancel = true;
+                    errorMessage = `${this.max} characters allowed`;
+                }
             }
-        }
-        if (this.type === `number`) {
-            if (isNaN(parseFloat(this.inputElement.value))) {
-                cancel = true;
-                errorMessage = `only numbers are allowed`;
+            if (this.type === `number`) {
+                if (isNaN(parseFloat(this.inputElement.value))) {
+                    cancel = true;
+                    errorMessage = `only numbers are allowed`;
+                }
+                if (this.max && parseFloat(this.inputElement.value) > this.max) {
+                    cancel = true;
+                    errorMessage = `${this.max} is the maximum`;
+                }
+                if (this.min !== undefined && parseFloat(this.inputElement.value) < this.min) {
+                    cancel = true;
+                    errorMessage = `${this.max} is the maximum`;
+                }
             }
-            if (this.max && parseFloat(this.inputElement.value) > this.max) {
-                cancel = true;
-                errorMessage = `${this.max} is the maximum`;
+            if (this.validator && typeof this.validator === `function`) {
+                let valid = this.validator(this.inputElement.value);
+                if (!valid) {
+                    cancel = true;
+                }
             }
-            if (this.min !== undefined && parseFloat(this.inputElement.value) < this.min) {
-                cancel = true;
-                errorMessage = `${this.max} is the maximum`;
+            if (cancel) {
+                if (errorMessage && errorMessage !== ``) {
+                    this.doError(errorMessage);
+                }
+                this.whenerror.emit(this.updatedData);
+                if (this.whenError && typeof this.whenError === `function`) {
+                    this.whenError(this.updatedData);
+                }
+                this.inputElement.value = this.value.toString();
+                if (e) {
+                    e.preventDefault();
+                }
+                return false;
             }
-        }
-        if (this.validator && typeof this.validator === `function`) {
-            let valid = this.validator(this.inputElement.value);
-            if (!valid) {
-                cancel = true;
+            this.inputElement.focus();
+            this.whenupdate.emit(this.updatedData);
+            this.wheninput.emit(this.updatedData);
+            if (this.whenUpdate && typeof this.whenUpdate === `function`) {
+                this.whenUpdate(this.updatedData);
             }
-        }
-        if (cancel) {
-            if (errorMessage && errorMessage !== ``) {
-                this.doError(errorMessage);
+            if (this.selfUpdate) {
+                this.characterCountElement.textContent = this.characterCountText;
+                this.value = this.updatedData.newValue;
+                this.setClasses();
+                this.setHeight();
             }
-            this.whenerror.emit(this.updatedData);
-            if (this.whenError && typeof this.whenError === `function`) {
-                this.whenError(this.updatedData);
-            }
-            this.inputElement.value = this.value.toString();
-            if (e) {
-                e.preventDefault();
-            }
-            return false;
-        }
-        this.inputElement.focus();
-        this.whenupdate.emit(this.updatedData);
-        this.wheninput.emit(this.updatedData);
-        if (this.whenUpdate && typeof this.whenUpdate === `function`) {
-            this.whenUpdate(this.updatedData);
-        }
-        if (this.selfUpdate) {
-            this.characterCountElement.textContent = this.characterCountText;
-            this.value = this.updatedData.newValue;
-            this.setClasses();
-            this.setHeight();
-        }
+        });
     }
     /** @desc focuses the input */
     doFocus() {
-        this.container.classList.add(`active`);
-        this.whenfocus.emit(this.updatedData);
-        if (this.whenFocus && typeof this.whenFocus === `function`) {
-            this.whenFocus(this.updatedData);
-        }
-        if (this._options.length) {
-            this.menu.setAttribute(`active`, `true`);
-        }
+        return __awaiter(this, void 0, void 0, function* () {
+            this.container.classList.add(`active`);
+            this.whenfocus.emit(this.updatedData);
+            if (this.whenFocus && typeof this.whenFocus === `function`) {
+                this.whenFocus(this.updatedData);
+            }
+            if (this._options.length) {
+                this.menu.setAttribute(`active`, `true`);
+            }
+        });
     }
     /** @desc blurs the input */
     doBlur() {
-        this.container.classList.remove(`active`);
-        this.whenblur.emit(this.updatedData);
-        if (this.whenBlur && typeof this.whenBlur === `function`) {
-            this.whenBlur(this.updatedData);
-        }
-        this.menu.setAttribute(`active`, `false`);
+        return __awaiter(this, void 0, void 0, function* () {
+            this.container.classList.remove(`active`);
+            this.whenblur.emit(this.updatedData);
+            if (this.whenBlur && typeof this.whenBlur === `function`) {
+                this.whenBlur(this.updatedData);
+            }
+            this.menu.setAttribute(`active`, `false`);
+        });
     }
     /** @desc errors the input */
     doError(message) {
-        this.container.classList.add(`showHelp`);
-        this.container.classList.add(`error`);
-        this.helpText = message;
-        setTimeout(() => {
-            this.container.classList.remove(`showHelp`);
-            if (!this.error) {
-                this.container.classList.remove(`error`);
-            }
-        }, 1500);
+        return __awaiter(this, void 0, void 0, function* () {
+            this.container.classList.add(`showHelp`);
+            this.container.classList.add(`error`);
+            this.helpText = message;
+            setTimeout(() => {
+                this.container.classList.remove(`showHelp`);
+                if (!this.error) {
+                    this.container.classList.remove(`error`);
+                }
+            }, 1500);
+        });
     }
     /** @desc shrinks the input to the space the text takes up */
     shrink() {
@@ -250,12 +268,14 @@ export class NvInput {
     }
     /** @desc handles the click of an option  */
     optionClicked(index) {
-        let options = this._options;
-        if (options[index]) {
-            this.inputElement.value = options[index].toString();
-        }
-        this.doInput();
-        this.inputElement.blur();
+        return __awaiter(this, void 0, void 0, function* () {
+            let options = this._options;
+            if (options[index]) {
+                this.inputElement.value = options[index].toString();
+            }
+            this.doInput();
+            this.inputElement.blur();
+        });
     }
     /** @desc sets the height of a multiline input */
     setHeight() {
@@ -317,7 +337,7 @@ export class NvInput {
             this.label ? h("label", { innerHTML: this.label }) : ``,
             this.icon ? h("material-icon", { class: "input-icon", type: this.icon, size: "24px", color: "inherit" }) : ``,
             this.clear ? h("material-icon", { class: "input-clear", type: "close", size: "24px", color: "inherit", onClick: () => this.clearValue() }) : ``,
-            h("nv-menu", { optionHoverStyles: { background: '#676767' }, optionStyles: { background: '#575757', padding: `0px 16px`, lineHeight: `24px`, fontSize: `12px` }, options: this._options.map(s => s.toString()), active: false, position: "bottom", anchor: this.element, width: `100%`, whenClicked: (index) => this.optionClicked(index), ref: (el) => this.menu = el })));
+            h("nv-menu", { optionHoverStyles: { background: '#676767' }, optionStyles: { background: '#575757', padding: `0px 16px`, lineHeight: `24px`, fontSize: `12px` }, options: this._options.map(s => s.toString()), isActive: false, position: "bottom", anchor: this.element, width: `100%`, whenClicked: (index) => this.optionClicked(index), ref: (el) => this.menu = el })));
     }
     static get is() { return "nv-input"; }
     static get encapsulation() { return "shadow"; }

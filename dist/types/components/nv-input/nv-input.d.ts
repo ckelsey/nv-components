@@ -5,7 +5,7 @@ export declare class NvInput {
     /** @desc the containing element */
     container: HTMLElement;
     /** @desc the input element */
-    inputElement: HTMLInputElement;
+    inputElement: any;
     /** @desc the menu element for options */
     menu: any;
     /** @desc the element for character count */
@@ -84,7 +84,7 @@ export declare class NvInput {
     /** @desc called when the input has an error */
     whenerror: EventEmitter;
     /** @desc returns the character count of the input */
-    readonly characterCountText: string;
+    readonly characterCountText: any;
     /** @desc returns the old and new value as well as the component data */
     readonly updatedData: any;
     /** @desc returns the parsed options */
@@ -92,15 +92,15 @@ export declare class NvInput {
     /** @desc returns the focused state */
     readonly isFocused: boolean;
     /** @desc focuses the input */
-    doClick(): void;
+    doClick(): Promise<void>;
     /** @desc handles the input event */
-    doInput(e?: Event): boolean;
+    doInput(e?: Event): Promise<boolean>;
     /** @desc focuses the input */
-    doFocus(): void;
+    doFocus(): Promise<void>;
     /** @desc blurs the input */
-    doBlur(): void;
+    doBlur(): Promise<void>;
     /** @desc errors the input */
-    doError(message: string): void;
+    doError(message: string): Promise<void>;
     /** @desc shrinks the input to the space the text takes up */
     shrink(): void;
     /** @desc clears the input value */
@@ -108,7 +108,7 @@ export declare class NvInput {
     /** @desc sets the state classes */
     setClasses(): void;
     /** @desc handles the click of an option  */
-    optionClicked(index: number): void;
+    optionClicked(index: number): Promise<void>;
     /** @desc sets the height of a multiline input */
     setHeight(): void;
     /** @desc updates the input */

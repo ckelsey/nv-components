@@ -47,7 +47,7 @@ export class MaterialIcon {
      * @param key The key to get
      * */
     @Method()
-    getIcon(key: string): string {
+    async getIcon(key: string) {
         switch (key) {
             case 'schedule':
             case 'query_builder':
@@ -214,7 +214,7 @@ export class MaterialIcon {
 
     /** @desc Returns the icon data JSON */
     @Method()
-    icons(): { [key: string]: string } {
+    async icons() {
         return this.iconJSON
     }
 }

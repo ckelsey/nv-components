@@ -30,7 +30,7 @@ export declare class NvMenu {
      */
     position: string;
     /** @desc whether or not the menu is open */
-    active: boolean;
+    isActive: boolean;
     /** @desc element or css selector string to element to anchor the menu to, defaults to self */
     anchor: string | HTMLElement;
     /** @desc function called when menu option is clicked */
@@ -70,13 +70,13 @@ export declare class NvMenu {
      * @desc focuses the option at the supplied index
      * @param index index of option
      */
-    focusOption(index: number | string): void;
+    focusOption(index: number | string): Promise<void>;
     /** @desc focuses the next option */
-    focusNextOption(): void;
+    focusNextOption(): Promise<void>;
     /** @desc focuses the previous option */
-    focusPreviousOption(): void;
+    focusPreviousOption(): Promise<void>;
     /** @desc clicks the option at the supplied index */
-    selectOption(index: number | string): void;
+    selectOption(index: number | string): Promise<void>;
     /** @desc lifecycle hook for when component is updated */
     componentDidUpdate(): void;
     /** @desc lifecycle hook for when component is ready */

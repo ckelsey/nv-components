@@ -1,3 +1,11 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 /**
  * @desc renders tabs to be used with nv-tab-content
  * @example <div><nv-tabs tab-id="demo-tabs"><div>tab 1</div><div>tab 2</div><div>tab 3</div></nv-tabs></div><div><nv-tab-content tab-id="demo-tabs"><div>tab 1 content</div><div>tab 2 content</div><div>tab 3 content</div></nv-tab-content></div>
@@ -9,62 +17,64 @@ export class NvTabs {
         this.initial = 0;
     }
     doOpen(index, e) {
-        this.checkActiveIndicator();
-        this.checkWave();
-        this.wave.stopWave();
-        const id = this.element.getAttribute(`tab-id`);
-        const tabs = this.element.querySelectorAll(`[nv-tab]`);
-        const tabContent = document.body.querySelector(`nv-tab-content[tab-id="${id}"]`);
-        let tab;
-        if (!tabContent) {
-            return false;
-        }
-        const activeContent = tabContent.children[index];
-        if (!activeContent) {
-            return;
-        }
-        for (let i = 0; i < tabContent.children.length; i++) {
-            if (tabContent.children[i]) {
-                if (activeContent && activeContent === tabContent.children[i]) {
-                    tabContent.children[i].setAttribute(`nv-tab-active`, `true`);
-                }
-                else {
-                    tabContent.children[i].setAttribute(`nv-tab-active`, `false`);
-                }
+        return __awaiter(this, void 0, void 0, function* () {
+            this.checkActiveIndicator();
+            this.checkWave();
+            this.wave.stopWave();
+            const id = this.element.getAttribute(`tab-id`);
+            const tabs = this.element.querySelectorAll(`[nv-tab]`);
+            const tabContent = document.body.querySelector(`nv-tab-content[tab-id="${id}"]`);
+            let tab;
+            if (!tabContent) {
+                return false;
             }
-        }
-        for (let i = 0; i < tabs.length; i++) {
-            if (tabs[i]) {
-                if (i === index) {
-                    tab = tabs[i];
-                    tabs[i].setAttribute(`nv-tab-active`, `activating`);
-                }
-                else {
-                    tabs[i].setAttribute(`nv-tab-active`, `false`);
-                }
-            }
-        }
-        if (!tab) {
-            return;
-        }
-        const box = tab.getBoundingClientRect();
-        const parentBox = this.element.getBoundingClientRect();
-        this.activeIndicator.classList.add('nv-tabs-activating');
-        this.activeIndicator.style.width = `${box.width}px`;
-        this.activeIndicator.style.left = `${box.left - parentBox.left}px`;
-        if (e) {
-            this.setWave(tab);
-            this.wave.highlight = true;
-            this.wave.doWave(e);
-        }
-        this.activeTimer = setTimeout(() => {
-            clearTimeout(this.activeTimer);
-            if (!activeContent || !tab || !this.activeIndicator) {
+            const activeContent = tabContent.children[index];
+            if (!activeContent) {
                 return;
             }
-            tab.setAttribute(`nv-tab-active`, `true`);
-            this.activeIndicator.classList.remove('nv-tabs-activating');
-        }, 310);
+            for (let i = 0; i < tabContent.children.length; i++) {
+                if (tabContent.children[i]) {
+                    if (activeContent && activeContent === tabContent.children[i]) {
+                        tabContent.children[i].setAttribute(`nv-tab-active`, `true`);
+                    }
+                    else {
+                        tabContent.children[i].setAttribute(`nv-tab-active`, `false`);
+                    }
+                }
+            }
+            for (let i = 0; i < tabs.length; i++) {
+                if (tabs[i]) {
+                    if (i === index) {
+                        tab = tabs[i];
+                        tabs[i].setAttribute(`nv-tab-active`, `activating`);
+                    }
+                    else {
+                        tabs[i].setAttribute(`nv-tab-active`, `false`);
+                    }
+                }
+            }
+            if (!tab) {
+                return;
+            }
+            const box = tab.getBoundingClientRect();
+            const parentBox = this.element.getBoundingClientRect();
+            this.activeIndicator.classList.add('nv-tabs-activating');
+            this.activeIndicator.style.width = `${box.width}px`;
+            this.activeIndicator.style.left = `${box.left - parentBox.left}px`;
+            if (e) {
+                this.setWave(tab);
+                this.wave.highlight = true;
+                this.wave.doWave(e);
+            }
+            this.activeTimer = setTimeout(() => {
+                clearTimeout(this.activeTimer);
+                if (!activeContent || !tab || !this.activeIndicator) {
+                    return;
+                }
+                tab.setAttribute(`nv-tab-active`, `true`);
+                this.activeIndicator.classList.remove('nv-tabs-activating');
+            }, 310);
+        });
     }
     checkWave() {
         this.wave = this.element.querySelector(`nv-wave`);

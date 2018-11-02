@@ -39,7 +39,7 @@ export class NvButton {
     @Event() whenmouseleave: EventEmitter
 
     /** @desc triggers hover */
-    @Method() doMouseEnter() {
+    @Method() async doMouseEnter() {
         if (!this.button) {
             return
         }
@@ -49,7 +49,7 @@ export class NvButton {
     }
 
     /** @desc triggers the loss of hover */
-    @Method() doMouseLeave() {
+    @Method() async doMouseLeave() {
         if (!this.button) {
             return
         }
@@ -59,7 +59,7 @@ export class NvButton {
     }
 
     /** @desc triggers click */
-    @Method() doClick() {
+    @Method() async doClick() {
         if (!this.button) {
             return
         }
@@ -70,7 +70,7 @@ export class NvButton {
     }
 
     /** @desc triggers focus */
-    @Method() doFocus() {
+    @Method() async doFocus() {
         if (!this.button) {
             return
         }
@@ -80,7 +80,7 @@ export class NvButton {
     }
 
     /** @desc triggers the loss of focus */
-    @Method() doBlur() {
+    @Method() async doBlur() {
         if (!this.button) {
             return
         }
@@ -92,7 +92,7 @@ export class NvButton {
     }
 
     /** @desc triggers mousedown */
-    @Method() doMouseDown() {
+    @Method() async doMouseDown() {
         if (!this.button) {
             return
         }
@@ -102,7 +102,7 @@ export class NvButton {
     }
 
     /** @desc triggers mouseup */
-    @Method() doMouseUp() {
+    @Method() async doMouseUp() {
         if (!this.button) {
             return
         }

@@ -16,7 +16,7 @@ export class NvInput {
     container: HTMLElement
 
     /** @desc the input element */
-    inputElement: HTMLInputElement
+    inputElement: any
 
     /** @desc the menu element for options */
     menu: any
@@ -147,7 +147,7 @@ export class NvInput {
         let value: string | number = this.inputElement.value
 
         if (this.type === `number`) {
-            value = parseFloat(value)
+            value = parseFloat(value as any)
         }
 
         return {
@@ -193,14 +193,14 @@ export class NvInput {
     }
 
     /** @desc focuses the input */
-    @Method() doClick() {
+    @Method() async doClick() {
         this.whenclick.emit(this.updatedData)
         this.inputElement.focus()
         this.doFocus()
     }
 
     /** @desc handles the input event */
-    @Method() doInput(e?: Event) {
+    @Method() async doInput(e?: Event) {
         let cancel = false
         let errorMessage = ``
 
@@ -274,7 +274,7 @@ export class NvInput {
     }
 
     /** @desc focuses the input */
-    @Method() doFocus() {
+    @Method() async doFocus() {
         this.container.classList.add(`active`)
         this.whenfocus.emit(this.updatedData)
 
@@ -288,7 +288,7 @@ export class NvInput {
     }
 
     /** @desc blurs the input */
-    @Method() doBlur() {
+    @Method() async doBlur() {
         this.container.classList.remove(`active`)
         this.whenblur.emit(this.updatedData)
 
@@ -300,7 +300,7 @@ export class NvInput {
     }
 
     /** @desc errors the input */
-    @Method() doError(message: string) {
+    @Method() async doError(message: string) {
         this.container.classList.add(`showHelp`)
         this.container.classList.add(`error`)
         this.helpText = message
@@ -375,7 +375,7 @@ export class NvInput {
 
     /** @desc handles the click of an option  */
     @Method()
-    optionClicked(index: number) {
+    async optionClicked(index: number) {
         let options = this._options
 
         if (options[index]) {
@@ -445,7 +445,7 @@ export class NvInput {
         return (
             <div
                 class="nv-input-container"
-                ref={(el: HTMLInputElement) => this.container = el}
+                ref={(el: HTMLElement) => this.container = el}
                 onClick={() => {
                     this.doClick()
                 }}
@@ -459,7 +459,7 @@ export class NvInput {
                         onFocus={() => this.doFocus()}
                         onKeyPress={() => this.whenkeypress.emit(this.updatedData)}
                         onKeyUp={() => this.whenkeyup.emit(this.updatedData)}
-                        ref={(el: HTMLInputElement) => this.inputElement = el}
+                        ref={(el: HTMLTextAreaElement) => this.inputElement = el}
                         required={this.required}
                     ></textarea>
                     :
@@ -486,7 +486,7 @@ export class NvInput {
                     optionHoverStyles={{ background: '#676767' }}
                     optionStyles={{ background: '#575757', padding: `0px 16px`, lineHeight: `24px`, fontSize: `12px` }}
                     options={this._options.map(s => s.toString())}
-                    active={false}
+                    isActive={false}
                     position="bottom"
                     anchor={this.element}
                     width={`100%`}

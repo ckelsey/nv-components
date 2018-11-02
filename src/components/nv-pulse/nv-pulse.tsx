@@ -25,7 +25,7 @@ export class NvPulse {
 
     /** @desc starts the pulse animation */
     @Method()
-    startPulse() {
+    async startPulse() {
         clearInterval(this.pulseTimer)
         
         if (!this.pulseBox) {
@@ -58,7 +58,7 @@ export class NvPulse {
 
     /** @desc stops the pulse animation */
     @Method()
-    stopPulse() {
+    async stopPulse() {
         clearInterval(this.pulseTimer)
 
         if (!this.pulseBox) {
@@ -84,7 +84,7 @@ export class NvPulse {
     /** @desc lifecycle hook, renders the element */
     render() {
         return (
-            <div class="nv-pulse" ref={(el: HTMLInputElement) => this.pulseBox = el}></div>
+            <div class="nv-pulse" ref={(el: HTMLElement) => this.pulseBox = el}></div>
         );
     }
 }

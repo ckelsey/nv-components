@@ -55,7 +55,7 @@ export class NvSwitch {
 
     /** @desc toggles the switch's state */
     @Method()
-    toggle() {
+    async toggle() {
         if (this.disabled) {
             return false
         }
@@ -109,7 +109,7 @@ export class NvSwitch {
     /** @desc renders the element */
     render() {
         return (
-            <div ref={(el: HTMLInputElement) => this.container = el} class={{ 'nv-switch-container': true, selected: !!this.value && this.value !== `false`, 'nv-component-disabled': this.disabled }} onClick={() => this.toggle()} onKeyPress={ev => this.keyPress(ev)}>
+            <div ref={(el: HTMLElement) => this.container = el} class={{ 'nv-switch-container': true, selected: !!this.value && this.value !== `false`, 'nv-component-disabled': this.disabled }} onClick={() => this.toggle()} onKeyPress={ev => this.keyPress(ev)}>
                 {this.label ? <label innerHTML={this.label}></label> : ``}
                 <div class="nv-switch-box" onMouseEnter={() => this.mouseOverBox()} onMouseLeave={() => this.mouseLeaveBox()}>
                     <div class="nv-switch-track"></div>

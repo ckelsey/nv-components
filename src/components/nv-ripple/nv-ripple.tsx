@@ -21,7 +21,7 @@ export class NvRipple {
     highlight: boolean = false
 
     @Method()
-    doRipple() {
+    async doRipple() {
         if (!this.rippleBox) {
             return
         }
@@ -33,7 +33,7 @@ export class NvRipple {
     }
 
     @Method()
-    startRipple() {
+    async startRipple() {
         if (!this.rippleBox) {
             return
         }
@@ -70,7 +70,7 @@ export class NvRipple {
     }
 
     @Method()
-    stopRipple() {
+    async stopRipple() {
         if (!this.rippleBox) {
             return
         }
@@ -114,7 +114,7 @@ export class NvRipple {
     /** @desc renders the element */
     render() {
         return (
-            <div class="nv-ripple" ref={(el: HTMLInputElement) => this.rippleBox = el}></div>
+            <div class="nv-ripple" ref={(el: HTMLElement) => this.rippleBox = el}></div>
         );
     }
 }

@@ -42,7 +42,7 @@ export declare class NvProgress {
     /** @desc speed of animations */
     speed: number;
     /** @desc resets the progress bar */
-    reset(): void;
+    reset(): Promise<void>;
     /** @desc determines the start position of the progress bar */
     readonly _start: number;
     /** @desc determines the value of the progress bar */

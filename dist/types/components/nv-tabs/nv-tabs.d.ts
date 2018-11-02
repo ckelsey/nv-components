@@ -14,7 +14,7 @@ export declare class NvTabs {
     initial: number;
     /** @desc component element */
     element: HTMLElement;
-    doOpen(index: number, e?: Event): boolean;
+    doOpen(index: number, e?: Event): Promise<boolean>;
     checkWave(): void;
     setWave(tab: any): void;
     checkActiveIndicator(): void;

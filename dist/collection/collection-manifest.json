@@ -487,11 +487,6 @@
       },
       "props": [
         {
-          "name": "active",
-          "type": "Boolean",
-          "attr": "active"
-        },
-        {
           "name": "anchor",
           "type": "String",
           "attr": "anchor"
@@ -501,6 +496,11 @@
           "type": "Number",
           "mutable": true,
           "attr": "focused-option"
+        },
+        {
+          "name": "isActive",
+          "type": "Boolean",
+          "attr": "is-active"
         },
         {
           "name": "optionHoverStyles",
@@ -939,17 +939,6 @@
       },
       "props": [
         {
-          "name": "active",
-          "type": "Boolean",
-          "mutable": true,
-          "attr": "active"
-        },
-        {
-          "name": "boxShadow",
-          "type": "Boolean",
-          "attr": "box-shadow"
-        },
-        {
           "name": "delay",
           "type": "Number",
           "attr": "delay"
@@ -960,19 +949,30 @@
           "attr": "hide-after"
         },
         {
+          "name": "isActive",
+          "type": "Boolean",
+          "mutable": true,
+          "attr": "is-active"
+        },
+        {
           "name": "offset",
           "type": "Number",
           "attr": "offset"
         },
         {
-          "name": "padding",
+          "name": "paddingAmount",
           "type": "Number",
-          "attr": "padding"
+          "attr": "padding-amount"
         },
         {
           "name": "position",
           "type": "String",
           "attr": "position"
+        },
+        {
+          "name": "showBoxShadow",
+          "type": "Boolean",
+          "attr": "show-box-shadow"
         },
         {
           "name": "triggerElement",
@@ -1165,7 +1165,7 @@
   ],
   "compiler": {
     "name": "@stencil/core",
-    "version": "0.11.4",
+    "version": "0.12.4",
     "typescriptVersion": "2.9.2"
   },
   "bundles": [],

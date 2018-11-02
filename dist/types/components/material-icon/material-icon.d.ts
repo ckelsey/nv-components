@@ -21,9 +21,9 @@ export declare class MaterialIcon {
      * @desc As many of the material icons are the same but go by different names, this function maps them to one name to save on space
      * @param key The key to get
      * */
-    getIcon(key: string): string;
+    getIcon(key: string): Promise<any>;
     /** @desc Returns the icon data JSON */
-    icons(): {
+    icons(): Promise<{
         [key: string]: string;
-    };
+    }>;
 }

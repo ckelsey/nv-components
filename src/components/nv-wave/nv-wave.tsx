@@ -172,7 +172,7 @@ export class NvWave {
     /** @desc renders the element */
     render() {
         return (
-            <div class="nv-wave" ref={(el: HTMLInputElement) => this.waveBox = el}></div>
+            <div class="nv-wave" ref={(el: HTMLElement) => this.waveBox = el}></div>
         );
     }
 }

@@ -47,7 +47,7 @@ export class NvMenu {
     @Prop() position: string = `bottom`
 
     /** @desc whether or not the menu is open */
-    @Prop() active: boolean = false
+    @Prop() isActive: boolean = false
 
     /** @desc element or css selector string to element to anchor the menu to, defaults to self */
     @Prop() anchor: string | HTMLElement = ``
@@ -104,7 +104,7 @@ export class NvMenu {
         this._anchor = (this.anchor ? typeof this.anchor === `string` ? document.querySelector(this.anchor) : this.anchor : null) || this.element;
         this.tooltip.triggerElement = this._anchor
 
-        if (this.active) {
+        if (this.isActive) {
             this.container.classList.add(`active`)
         } else {
             this.container.classList.remove(`active`)
@@ -176,7 +176,7 @@ export class NvMenu {
      * @param index index of option
      */
     @Method()
-    focusOption(index: number | string) {
+    async focusOption(index: number | string) {
         if (typeof index === `string`) {
             index = parseInt(index)
         }
@@ -196,19 +196,19 @@ export class NvMenu {
 
     /** @desc focuses the next option */
     @Method()
-    focusNextOption() {
+    async focusNextOption() {
         this.focusOption(this.focusedOption === undefined ? 0 : this.focusedOption + 1)
     }
 
     /** @desc focuses the previous option */
     @Method()
-    focusPreviousOption() {
+    async focusPreviousOption() {
         this.focusOption(this.focusedOption === undefined ? 0 : this.focusedOption - 1)
     }
 
     /** @desc clicks the option at the supplied index */
     @Method()
-    selectOption(index: number | string) {
+    async selectOption(index: number | string) {
         if (typeof index === `string`) {
             index = parseInt(index)
         }
@@ -284,12 +284,12 @@ export class NvMenu {
                 <nv-tooltip
                     ref={(el: any) => this.tooltip = el}
                     offset={0}
-                    padding={0}
-                    active={this.active}
+                    paddingAmount={0}
+                    isActive={this.isActive}
                     triggerOn="never"
                     triggerElement={this._anchor}
                     position={this._position}
-                    boxShadow={true}
+                    showBoxShadow={true}
                     width={this.width}
                 >
                     {

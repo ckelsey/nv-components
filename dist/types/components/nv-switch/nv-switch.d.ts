@@ -30,7 +30,7 @@ export declare class NvSwitch {
     /** @desc determines the switch's tabIndex */
     readonly tabIndex: number;
     /** @desc toggles the switch's state */
-    toggle(): boolean;
+    toggle(): Promise<boolean>;
     /**
      * @desc handles the enter key press
      * @param e keyboard event

@@ -3,6 +3,14 @@
  * center
  * spinner
  */
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 /** @desc renders various progress bar and loading components */
 export class NvProgress {
     constructor() {
@@ -32,10 +40,12 @@ export class NvProgress {
     }
     /** @desc resets the progress bar */
     reset() {
-        this.animate = false;
-        cancelAnimationFrame(this.animator);
-        clearTimeout(this.animator);
-        this.animateScale();
+        return __awaiter(this, void 0, void 0, function* () {
+            this.animate = false;
+            cancelAnimationFrame(this.animator);
+            clearTimeout(this.animator);
+            this.animateScale();
+        });
     }
     /** @desc determines the start position of the progress bar */
     get _start() {
@@ -68,7 +78,7 @@ export class NvProgress {
         let results = [];
         function step() {
             currentSinValue += sinValueIncrement;
-            currentValue += valueIncrement * (Math.sin(currentSinValue) ** 2) * 2;
+            currentValue += valueIncrement * (Math.pow(Math.sin(currentSinValue), 2)) * 2;
             if (currentSinValue < Math.PI) {
                 results.push(Math.round(currentValue * 10000) / 10000);
                 return step();

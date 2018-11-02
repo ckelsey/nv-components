@@ -1,3 +1,11 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 /** @desc renders a popup menu component */
 export class NvMenu {
     constructor() {
@@ -21,7 +29,7 @@ export class NvMenu {
          */
         this.position = `bottom`;
         /** @desc whether or not the menu is open */
-        this.active = false;
+        this.isActive = false;
         /** @desc element or css selector string to element to anchor the menu to, defaults to self */
         this.anchor = ``;
         /** @desc object of styles to apply to each option */
@@ -51,7 +59,7 @@ export class NvMenu {
         this._position = this.position || this._position;
         this._anchor = (this.anchor ? typeof this.anchor === `string` ? document.querySelector(this.anchor) : this.anchor : null) || this.element;
         this.tooltip.triggerElement = this._anchor;
-        if (this.active) {
+        if (this.isActive) {
             this.container.classList.add(`active`);
         }
         else {
@@ -118,40 +126,48 @@ export class NvMenu {
      * @param index index of option
      */
     focusOption(index) {
-        if (typeof index === `string`) {
-            index = parseInt(index);
-        }
-        console.log(index);
-        if (this.optionElements[index]) {
-            this.mouseEnter(this.optionElements[index]);
-            this.optionElements.forEach((el, i) => {
-                if (i !== index) {
-                    this.mouseLeave(el);
-                }
-            });
-        }
+        return __awaiter(this, void 0, void 0, function* () {
+            if (typeof index === `string`) {
+                index = parseInt(index);
+            }
+            console.log(index);
+            if (this.optionElements[index]) {
+                this.mouseEnter(this.optionElements[index]);
+                this.optionElements.forEach((el, i) => {
+                    if (i !== index) {
+                        this.mouseLeave(el);
+                    }
+                });
+            }
+        });
     }
     /** @desc focuses the next option */
     focusNextOption() {
-        this.focusOption(this.focusedOption === undefined ? 0 : this.focusedOption + 1);
+        return __awaiter(this, void 0, void 0, function* () {
+            this.focusOption(this.focusedOption === undefined ? 0 : this.focusedOption + 1);
+        });
     }
     /** @desc focuses the previous option */
     focusPreviousOption() {
-        this.focusOption(this.focusedOption === undefined ? 0 : this.focusedOption - 1);
+        return __awaiter(this, void 0, void 0, function* () {
+            this.focusOption(this.focusedOption === undefined ? 0 : this.focusedOption - 1);
+        });
     }
     /** @desc clicks the option at the supplied index */
     selectOption(index) {
-        if (typeof index === `string`) {
-            index = parseInt(index);
-        }
-        if (!this.optionElements[index]) {
-            return;
-        }
-        this.whenOptionClicked.emit(index);
-        if (this.whenClicked && typeof this.whenClicked === `function`) {
-            this.whenClicked(index);
-        }
-        this.whenClosed.emit();
+        return __awaiter(this, void 0, void 0, function* () {
+            if (typeof index === `string`) {
+                index = parseInt(index);
+            }
+            if (!this.optionElements[index]) {
+                return;
+            }
+            this.whenOptionClicked.emit(index);
+            if (this.whenClicked && typeof this.whenClicked === `function`) {
+                this.whenClicked(index);
+            }
+            this.whenClosed.emit();
+        });
     }
     /** @desc lifecycle hook for when component is updated */
     componentDidUpdate() {
@@ -206,16 +222,12 @@ export class NvMenu {
             }
         }
         return (h("div", { class: "menu-container", ref: (el) => this.container = el },
-            h("nv-tooltip", { ref: (el) => this.tooltip = el, offset: 0, padding: 0, active: this.active, triggerOn: "never", triggerElement: this._anchor, position: this._position, boxShadow: true, width: this.width }, this._options.map((option, index) => option.trim() !== `` ?
+            h("nv-tooltip", { ref: (el) => this.tooltip = el, offset: 0, paddingAmount: 0, isActive: this.isActive, triggerOn: "never", triggerElement: this._anchor, position: this._position, showBoxShadow: true, width: this.width }, this._options.map((option, index) => option.trim() !== `` ?
                 h("div", { class: "menu-option", ref: (el) => this.optionElements[index] = el, style: optionstyles, onMouseDown: this.optionClick, innerHTML: option, onMouseEnter: () => this.mouseEnter(this.optionElements[index]), onMouseLeave: () => this.mouseLeave(this.optionElements[index]) }) : h("div", { class: "menu-option-divider" })))));
     }
     static get is() { return "nv-menu"; }
     static get encapsulation() { return "shadow"; }
     static get properties() { return {
-        "active": {
-            "type": Boolean,
-            "attr": "active"
-        },
         "anchor": {
             "type": String,
             "attr": "anchor"
@@ -236,6 +248,10 @@ export class NvMenu {
         },
         "focusPreviousOption": {
             "method": true
+        },
+        "isActive": {
+            "type": Boolean,
+            "attr": "is-active"
         },
         "optionHoverStyles": {
             "type": String,

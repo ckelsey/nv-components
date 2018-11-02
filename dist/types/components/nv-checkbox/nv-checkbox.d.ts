@@ -34,7 +34,7 @@ export declare class NvCheckbox {
     /** @desc determines the checkbox's tabIndex */
     readonly tabIndex: number;
     /** @desc toggles the checkbox's state */
-    toggle(): boolean;
+    toggle(): Promise<boolean>;
     /**
      * @desc handles the enter key press
      * @param e keyboard event

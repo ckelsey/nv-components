@@ -1,5 +1,4 @@
 const path = require('path')
-const ConcatPlugin = require('webpack-concat-plugin')
 
 module.exports = {
     mode: 'production',
@@ -48,12 +47,5 @@ module.exports = {
     },
     resolve: {
         extensions: ['.js']
-    },
-    plugins: [
-        // new ConcatPlugin({
-        //     outputPath: '../../dist/bundled',
-        //     fileName: 'nv-components.js',
-        //     filesToConcat: ['./web_build/files/*.js']
-        // })
-    ]
+    }
 }

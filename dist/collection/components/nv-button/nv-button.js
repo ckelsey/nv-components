@@ -1,3 +1,11 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 /**
  * @desc renders a styled button
  * @yield slot
@@ -9,62 +17,76 @@ export class NvButton {
     }
     /** @desc triggers hover */
     doMouseEnter() {
-        if (!this.button) {
-            return;
-        }
-        this.button.classList.add('hover');
-        this.whenmouseenter.emit({ element: this });
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!this.button) {
+                return;
+            }
+            this.button.classList.add('hover');
+            this.whenmouseenter.emit({ element: this });
+        });
     }
     /** @desc triggers the loss of hover */
     doMouseLeave() {
-        if (!this.button) {
-            return;
-        }
-        this.doBlur();
-        this.whenmouseleave.emit({ element: this });
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!this.button) {
+                return;
+            }
+            this.doBlur();
+            this.whenmouseleave.emit({ element: this });
+        });
     }
     /** @desc triggers click */
     doClick() {
-        if (!this.button) {
-            return;
-        }
-        this.button.classList.add('pressed');
-        this.whenclick.emit({ element: this });
-        this.doBlur();
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!this.button) {
+                return;
+            }
+            this.button.classList.add('pressed');
+            this.whenclick.emit({ element: this });
+            this.doBlur();
+        });
     }
     /** @desc triggers focus */
     doFocus() {
-        if (!this.button) {
-            return;
-        }
-        this.button.classList.add('focus');
-        this.whenfocus.emit({ element: this });
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!this.button) {
+                return;
+            }
+            this.button.classList.add('focus');
+            this.whenfocus.emit({ element: this });
+        });
     }
     /** @desc triggers the loss of focus */
     doBlur() {
-        if (!this.button) {
-            return;
-        }
-        this.button.classList.remove('focus');
-        this.button.classList.remove('pressed');
-        this.button.classList.remove('hover');
-        this.whenblur.emit({ element: this });
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!this.button) {
+                return;
+            }
+            this.button.classList.remove('focus');
+            this.button.classList.remove('pressed');
+            this.button.classList.remove('hover');
+            this.whenblur.emit({ element: this });
+        });
     }
     /** @desc triggers mousedown */
     doMouseDown() {
-        if (!this.button) {
-            return;
-        }
-        this.button.classList.add('pressed');
-        this.whenmousedown.emit({ element: this });
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!this.button) {
+                return;
+            }
+            this.button.classList.add('pressed');
+            this.whenmousedown.emit({ element: this });
+        });
     }
     /** @desc triggers mouseup */
     doMouseUp() {
-        if (!this.button) {
-            return;
-        }
-        this.doBlur();
-        this.whenmouseup.emit({ element: this });
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!this.button) {
+                return;
+            }
+            this.doBlur();
+            this.whenmouseup.emit({ element: this });
+        });
     }
     /** @desc lifecycle hook for when component is updated */
     componentDidUpdate() {
